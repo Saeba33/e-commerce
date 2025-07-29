@@ -7,21 +7,22 @@
 {% block body %}
 	<div class="flex flex-col max-w-xl mx-auto my-8">
 		<h2 class="text-3xl font-bold text-center mb-20">Liste des catégories</h2>
-		<div class="shadow-2xl rounded-lg w-full p-6">
-			<table class="border-collapse border border-gray-400">
+		<div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+
+			<table class="table">
 				<thead>
 					<tr>
-						<th class="border border-gray-200">Id</th>
-						<th class="border border-gray-200 flex-1">Libellé</th>
-						<th class="border border-gray-200">Actions</th>
+						<th>Id</th>
+						<th>Libellé</th>
+						<th>Actions</th>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-gray-200">
+				<tbody>
 					{% for category in categories %}
 						<tr>
-							<td class="border border-gray-200">#{{ category.id }}</td>
-							<td class="border border-gray-200">{{ category.name }}</td>
-							<td class="border border-gray-200">
+							<td>#{{ category.id }}</td>
+							<td>{{ category.name }}</td>
+							<td>
 								<div class="flex gap-2">
 									<a href="{{ path('app_category_update', {'id': category.id}) }}" class="btn btn-outline btn-info">Modifier</a>
 									<a href="{{ path('app_category_delete', {'id': category.id}) }}" class="btn btn-error text-white">Supprimer</a>

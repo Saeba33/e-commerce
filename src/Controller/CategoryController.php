@@ -35,7 +35,7 @@ final class CategoryController extends AbstractController
             $emi->persist($category);
             $emi->flush();
 
-            $this->addFlash('message', 'Catégorie créée avec succès');
+            $this->addFlash('success', 'Catégorie créée avec succès');
             return $this->redirectToRoute('app_category');
 
         }
@@ -54,7 +54,7 @@ final class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $emi->flush();
 
-            $this->addFlash('message', 'Catégorie modifiée avec succès');
+            $this->addFlash('success', 'Catégorie modifiée avec succès');
             return $this->redirectToRoute('app_category');
         }
 
@@ -70,7 +70,7 @@ final class CategoryController extends AbstractController
         $emi->remove($category);
         $emi->flush();
 
-        $this->addFlash('message', 'Catégorie supprimée avec succès');
+        $this->addFlash('success', 'Catégorie supprimée avec succès');
         return $this->redirectToRoute('app_category');
     }
 
