@@ -44,4 +44,37 @@ final class CategoryController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+
+    #[Route('/category/update/{id}', name: 'app_category_update')]
+    public function updateCategroy(Request $request, EntityManagerInterface $emi, $id, CategoryRepository $repo): Response
+    {
+        $category = $repo->find($id);
+        $form = $this->createForm(CategoryFormType::class, $category);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $emi->persist($category);
+            $emi->flush();
+
+            $this->addFlash('notice', 'Catégorie modifiée avec succès');
+            return $this->redirectToRoute('app_category');
+        }
+
+        return $this->render('category/updateCategory.html.twig', [
+            'controller_name' => 'UserController',
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/category/delete/{id}', name: 'app_category_delete')]
+    public function deleteUser(EntityManagerInterface $emi, $id, CategoryRepository $repo): Response
+    {
+        $category = $repo->find($id);
+        $emi->remove($category);
+        $emi->flush();
+
+        $this->addFlash('notice', 'Catégorie supprimée avec succès');
+        return $this->redirectToRoute('app_category');
+    }
+
 }
