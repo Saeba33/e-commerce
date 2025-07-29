@@ -1,43 +1,43 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Register
+	Inscription
 {% endblock %}
 
 {% block body %}
 	<div class="flex flex-col max-w-xl mx-auto my-8">
-		<h1 class="text-3xl font-bold text-center mb-6">Register</h1>
+		<h1 class="text-3xl font-bold text-center mb-6">Inscription</h1>
 		<div class="flex flex-col gap-12">
 			{{ form_errors(registrationForm) }}
 			{{ form_start(registrationForm) }}
 			<div class="flex flex-col gap-6">
 				<div>
-					{{ form_label(registrationForm.firstname) }}
-					{{ form_widget(registrationForm.firstname, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Enter your first name'}}) }}
+					{{ form_label(registrationForm.firstname, 'Prénom') }}
+					{{ form_widget(registrationForm.firstname, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Renseignez votre prénom'}}) }}
 				</div>
 
 				<div>
-					{{ form_label(registrationForm.lastname) }}
-					{{ form_widget(registrationForm.lastname, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Enter your last name'}}) }}
+					{{ form_label(registrationForm.lastname,'Nom de famille') }}
+					{{ form_widget(registrationForm.lastname, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Renseignez votre nom de famille'}}) }}
 				</div>
 
 				<div>
-					{{ form_label(registrationForm.email) }}
-					{{ form_widget(registrationForm.email, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Enter your email'}}) }}
+					{{ form_label(registrationForm.email,'E-mail') }}
+					{{ form_widget(registrationForm.email, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Renseignez votre email'}}) }}
 
 				</div>
 
 				<div>
-					{{ form_label(registrationForm.plainPassword) }}
-					{{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Enter your password'}}) }}
+					{{ form_label(registrationForm.plainPassword,'Mot de passe') }}
+					{{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Entrez votre mot de passe'}}) }}
 				</div>
 
 				<div class="flex items-center gap-6">
 					{{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'checkbox checkbox-primary'}}) }}
-					{{ form_label(registrationForm.agreeTerms) }}
+					{{ form_label(registrationForm.agreeTerms,'Veuillez accepter les conditions générales') }}
 				</div>
 
-				<button type="submit" class="btn btn-primary">Register</button>
+				<button type="submit" class="btn btn-primary">Créer mon compte</button>
 			</div>
 
 			{{ form_end(registrationForm) }}

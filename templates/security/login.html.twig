@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Log in!
+	Connexion
 {% endblock %}
 
 {% block body %}
@@ -12,29 +12,30 @@
 		{% endif %}
 
 		{% if app.user %}
-			<div class="my-8 text-center">
-				You are logged in as
-				{{ app.user.userIdentifier }},
-				<a href="{{ path('app_logout') }}">Logout</a>
+			<div class="flex flex-col items-center gap-2 my-8 text-center">
+				Vous êtres connecté avec
+				{{ app.user.userIdentifier }}
+				<a href="{{ path('app_logout') }}" class="btn btn-soft w-fit">Décoonexion</a>
+
 			</div>
 		{% endif %}
 		<div class="flex flex-col max-w-xl mx-auto">
-			<h1 class="text-3xl font-bold text-center mb-6">Please Sign In</h1>
+			<h1 class="text-3xl font-bold text-center mb-6">Connexion</h1>
 			<div class="flex flex-col gap-6">
 				<div>
-					<label for="username">Email</label>
-					<input type="email" value="{{ last_username }}" name="_username" id="username" class="input input-bordered w-full mt-1" autocomplete="email" required autofocus placeholder="Enter your email">
+					<label for="username">E-mail</label>
+					<input type="email" value="{{ last_username }}" name="_username" id="username" class="input input-bordered w-full mt-1" autocomplete="email" required autofocus placeholder="Renseignez votre e-mail">
 				</div>
 
 				<div>
-					<label for="password">Password</label>
-					<input type="password" name="_password" id="password" class="input input-bordered w-full mt-1" autocomplete="current-password" required placeholder="Enter your password">
+					<label for="password">Mot de passe</label>
+					<input type="password" name="_password" id="password" class="input input-bordered w-full mt-1" autocomplete="current-password" required placeholder="Renseignez votre mot de passe">
 				</div>
 
 				<input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
 				<button class="btn btn-primary" type="submit">
-					Sign in
+					Se connecter
 				</button>
 			</div>
 		</form>
