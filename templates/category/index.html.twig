@@ -7,29 +7,32 @@
 {% block body %}
 	<div class="flex flex-col max-w-xl mx-auto my-8">
 		<h2 class="text-3xl font-bold text-center mb-20">Liste des catégories</h2>
-		<table class="w-full">
-			<thead>
-				<tr>
-					<td>Id</td>
-					<td>Libellé</td>
-					<td>Actions</td>
-				</tr>
-			</thead>
-			<tbody>
-				{% for category in categories %}
+		<div class="shadow-2xl rounded-lg w-full p-6">
+			<table class="border-collapse border border-gray-400">
+				<thead>
 					<tr>
-						<td>#{{ category.id }}</td>
-						<td>{{ category.name }}</td>
-						<td>
-							<div class="flex gap-2">
-								<a href="{{ path('app_category_update', {'id': category.id}) }}" class="btn btn-outline btn-info">Modifier</a>
-								<a href="{{ path('app_category_delete', {'id': category.id}) }}" class="btn btn-error text-white">Supprimer</a>
-							</div>
-						</td>
+						<th class="border border-gray-200">Id</th>
+						<th class="border border-gray-200 flex-1">Libellé</th>
+						<th class="border border-gray-200">Actions</th>
 					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+				</thead>
+				<tbody class="divide-y divide-gray-200">
+					{% for category in categories %}
+						<tr>
+							<td class="border border-gray-200">#{{ category.id }}</td>
+							<td class="border border-gray-200">{{ category.name }}</td>
+							<td class="border border-gray-200">
+								<div class="flex gap-2">
+									<a href="{{ path('app_category_update', {'id': category.id}) }}" class="btn btn-outline btn-info">Modifier</a>
+									<a href="{{ path('app_category_delete', {'id': category.id}) }}" class="btn btn-error text-white">Supprimer</a>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
 		<a href="{{ path('app_category_new') }}" class="btn btn-primary mt-4">Ajouter une nouvelle catégorie</a>
 	</div>
 {% endblock %}
