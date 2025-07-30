@@ -26,7 +26,7 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/category/new', name: 'app_category_new')]
+    #[Route('admin/category/new', name: 'app_category_new')]
     public function addCategory(EntityManagerInterface $emi, Request $request): Response
     {
         $category = new Category();
@@ -48,7 +48,7 @@ final class CategoryController extends AbstractController
     }
 
 
-    #[Route('/category/update/{id}', name: 'app_category_update')]
+    #[Route('admin/category/update/{id}', name: 'app_category_update')]
     public function updateCategroy(Request $request, EntityManagerInterface $emi, Category $category): Response
     {
         $form = $this->createForm(CategoryFormType::class, $category);
@@ -66,7 +66,7 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/category/delete/{id}', name: 'app_category_delete')]
+    #[Route('admin/category/delete/{id}', name: 'app_category_delete')]
     public function deleteUser(EntityManagerInterface $emi, Category $category): Response
     {
         $emi->remove($category);

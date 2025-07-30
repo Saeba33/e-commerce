@@ -1,16 +1,139 @@
 {% block body %}
-	<nav class="bg-red-500 flex gap-4">
-		<ul class="flex gap-4">
-			<li>
-				<a href="{{path('app_category')}}">Catégories</a>
-			</li>
-			<li>
-				<a href="{{path('app_register')}}">S'inscrire</a>
-			</li>
-			<li>
-				<a href="{{path('app_login')}}">Se connecter</a>
-			</li>
-		</ul>
-		<input type="text" placeholder="Rechercher">
-	</nav>
+	<div class="navbar bg-base-200 p-4">
+		<div
+			class="navbar-start">
+			{# Version Mobile #}
+			<div class="dropdown">
+				<div tabindex="0" role="button" class="btn btn-ghost flex items-center justify-center w-16 h-16 lg:hidden">
+					<svg class="w-16 h-16" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+					</svg>
+				</div>
+				<ul tabindex="0" class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] w-52 pr-2 shadow">
+					<li>
+						<a href="{{ path('app_home') }}">Accueil</a>
+					</li>
+
+					{% if categories is defined and categories|length > 0 %}
+						<li>
+							<details>
+								<summary>Catégories</summary>
+								<ul>
+									{% for category in categories %}
+										<li>
+											<a href="#">{{ category.name }}</a>
+										</li>
+									{% endfor %}
+								</ul>
+							</details>
+						</li>
+					{% endif %}
+
+					{% if is_granted("ROLE_ADMIN") %}
+						<li>
+							<details>
+								<summary>Admin</summary>
+								<ul>
+									<li><ahref="{{path('app_category')}}">Liste des catégories</a></li>
+									<li><ahref="{{path('app_category_new')}}">Ajouter une catégorie</a></li>
+								</ul>
+							</details>
+						</li>
+						<li>
+							<a href="{{ path('app_logout') }}" class="text-error">Se déconnecter</a>
+						</li>
+					{% endif %}
+
+					{% if app.user == false %}
+						<li>
+							<a href="{{ path('app_register') }}" class="text-success">S'inscrire</a>
+						</li>
+						<li>
+							<a href="{{ path('app_login') }}" class="text-info">Se connecter</a>
+						</li>
+					{% endif %}
+				</ul>
+			</div>
+			{# Nom du site #}
+			<a href="{{ path('app_home') }}" class="text-2xl font-bold text-gray-50 hover:text-gray-200">E-shop</a>
+		</div>
+
+		{# Version Desktop #}
+		<div class="navbar-center hidden lg:flex">
+			<ul class="menu lg:menu-horizontal rounded-box">
+				<li>
+					<a href="{{ path('app_home') }}" class="">
+						Accueil
+					</a>
+				</li>
+
+				{% if categories is defined and categories|length > 0 %}
+					<li>
+						<details>
+							<summary>
+								Catégories
+							</summary>
+							<ul class="w-48 whitespace-nowrap">
+								{% for category in categories %}
+									<li>
+										<a href="#" class="text-nowrap">
+											{{ category.name }}
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+						</details>
+					</li>
+				{% endif %}
+
+				{% if is_granted("ROLE_ADMIN") %}
+					<li>
+						<details>
+							<summary>
+								Admin
+							</summary>
+							<ul class="w-52 whitespace-nowrap">
+								<li>
+									<a href="{{ path('app_category') }}" class="text-nowrap">Liste des catégories</a>
+								</li>
+								<li>
+									<a href="{{ path('app_category_new') }}" class="text-nowrap">Ajouter une catégorie</a>
+								</li>
+							</ul>
+						</details>
+					</li>
+				{% endif %}
+			</ul>
+		</div>
+
+		{# Section droite : recherche et connexion #}
+		<div class="navbar-end">
+			<div
+				class="flex items-center gap-4">
+				{# Barre de recherche #}
+				<label class="input input-md">
+					<svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24">
+						<g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
+							<circle cx="11" cy="11" r="8"></circle>
+							<path d="m21 21-4.3-4.3"></path>
+						</g>
+					</svg>
+					<input type="search" required placeholder="Rechercher"/>
+				</label>
+
+
+				{# Boutons de connexion/déconnexion & inscription #}
+				{% if is_granted("ROLE_ADMIN") %}
+					<a href="{{ path('app_logout') }}" class="btn btn-soft btn-error">Se déconnecter</a>
+				{% endif %}
+
+				{% if app.user == false %}
+					<div class="hidden lg:flex gap-3 px-4">
+						<a href="{{ path('app_register') }}" class="btn btn-soft btn-success">S'inscrire</a>
+						<a href="{{ path('app_login') }}" class="btn btn-soft btn-info">Se connecter</a>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
 {% endblock %}

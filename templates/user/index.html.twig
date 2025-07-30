@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!
+{% endblock %}
+
+{% block body %}
+	<div>
+		<h2>Liste des utilisateurs</h2>
+
+		{% include 'layouts/_flash_message.html.twig' %}
+
+		<table>
+			<tr>
+				<th>ID</th>
+				<th>Prénom</th>
+				<th>Nom</th>
+				<th>E-mail</th>
+				<th>Rôle</th>
+				<th>Actions</th>
+			</tr>
+			{% for user in users %}
+				<tbody>
+					<tr>
+						<td>{{ user.id }}</td>
+						<td>{{ user.firstname }}</td>
+
+						<td>{{ user.lastname }}</td>
+
+						<td>{{ user.email }}</td>
+
+						<td>
+							{% for role in user.roles %}
+								{{ role }}
+							{% endfor %}
+						</td>
+						<td>Supprimer</td>
+					</tr>
+				</tbody>
+			{% endfor %}
+		</table>
+	</div>
+{% endblock %}
