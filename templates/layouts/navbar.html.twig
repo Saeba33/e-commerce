@@ -1,0 +1,16 @@
+{% block body %}
+	<nav class="bg-red-500 flex gap-4">
+		<ul class="flex gap-4">
+			<li>
+				<a href="{{path('app_category')}}">Catégories</a>
+			</li>
+			<li>
+				<a href="{{path('app_register')}}">S'inscrire</a>
+			</li>
+			<li>
+				<a href="{{path('app_login')}}">Se connecter</a>
+			</li>
+		</ul>
+		<input type="text" placeholder="Rechercher">
+	</nav>
+{% endblock %}
