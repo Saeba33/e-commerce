@@ -5,35 +5,45 @@
 {% endblock %}
 
 {% block body %}
-	<div class="flex flex-col max-w-xl mx-auto my-8">
-		<h2 class="text-3xl font-bold text-center mb-20">Liste des catégories</h2>
-		<div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-			{% include 'layouts/_flash_message.html.twig' %}
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Id</th>
-						<th>Libellé</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for category in categories %}
-						<tr>
-							<td>#{{ category.id }}</td>
-							<td>{{ category.name }}</td>
-							<td>
-								<div class="flex gap-2">
-									<a href="{{ path('app_category_update', {'id': category.id}) }}" class="btn btn-outline btn-info">Modifier</a>
-									<a onclick="return confirm('Voulez vous vraiment supprimler cette catégorie?')" href="{{ path('app_category_delete', {'id': category.id}) }}" class="btn btn-error text-white">Supprimer</a>
-								</div>
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
+	<div class="bg-base-100 py-8 px-4">
+		<div class="max-w-4xl mx-auto">
+			<h2 class="text-3xl font-bold text-center mb-8">Liste des catégories</h2>
 
-		<a href="{{ path('app_category_new') }}" class="btn btn-primary mt-4">Ajouter une nouvelle catégorie</a>
+			{% include 'layouts/_flash_message.html.twig' %}
+
+			<div class="card bg-base-200 shadow-xl">
+				<div class="card-body p-0">
+					<div class="overflow-x-auto">
+						<table class="table table-zebra">
+							<thead class="bg-base-300">
+								<tr>
+									<th class="text-center">Id</th>
+									<th>Libellé</th>
+									<th class="text-center">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for category in categories %}
+									<tr class="hover:bg-base-300 transition-colors duration-200">
+										<td class="text-center font-mono">#{{ category.id }}</td>
+										<td class="font-medium">{{ category.name }}</td>
+										<td>
+											<div class="flex justify-center gap-2">
+												<a href="{{ path('app_category_update', {'id': category.id}) }}" class="btn btn-soft btn-info btn-sm">Modifier</a>
+												<a onclick="return confirm('Voulez vous vraiment supprimler cette catégorie?')" href="{{ path('app_category_delete', {'id': category.id}) }}" class="btn btn-soft btn-error btn-sm">Supprimer</a>
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="flex justify-center mt-6">
+				<a href="{{ path('app_category_new') }}" class="btn btn-soft btn-success">Ajouter une nouvelle catégorie</a>
+			</div>
+		</div>
 	</div>
 {% endblock %}

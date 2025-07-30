@@ -34,17 +34,19 @@
 							<details>
 								<summary>Admin</summary>
 								<ul>
-									<li><ahref="{{path('app_category')}}">Liste des catégories</a></li>
-									<li><ahref="{{path('app_category_new')}}">Ajouter une catégorie</a></li>
+									<li><ahref="{{ path('app_category') }}">Liste des catégories</a></li>
+									<li><ahref="{{ path('app_category_new') }}">Ajouter une catégorie</a></li>
+									<li><ahref="{{ path('app_user') }}">Liste des utilisateurs</a></li>
 								</ul>
 							</details>
 						</li>
+					{% endif %}
+
+					{% if app.user %}
 						<li>
 							<a href="{{ path('app_logout') }}" class="text-error">Se déconnecter</a>
 						</li>
-					{% endif %}
-
-					{% if app.user == false %}
+					{% else %}
 						<li>
 							<a href="{{ path('app_register') }}" class="text-success">S'inscrire</a>
 						</li>
@@ -94,10 +96,10 @@
 							</summary>
 							<ul class="w-52 whitespace-nowrap">
 								<li>
-									<a href="{{ path('app_category') }}" class="text-nowrap">Liste des catégories</a>
+									<a href="{{ path('app_category') }}" class="text-nowrap">Gérer les catégories</a>
 								</li>
 								<li>
-									<a href="{{ path('app_category_new') }}" class="text-nowrap">Ajouter une catégorie</a>
+									<a href="{{ path('app_user') }}" class="text-nowrap">Gérer les utilisateurs</a>
 								</li>
 							</ul>
 						</details>
@@ -123,11 +125,10 @@
 
 
 				{# Boutons de connexion/déconnexion & inscription #}
-				{% if is_granted("ROLE_ADMIN") %}
+				{% if app.user %}
 					<a href="{{ path('app_logout') }}" class="btn btn-soft btn-error">Se déconnecter</a>
-				{% endif %}
 
-				{% if app.user == false %}
+				{% else %}
 					<div class="hidden lg:flex gap-3 px-4">
 						<a href="{{ path('app_register') }}" class="btn btn-soft btn-success">S'inscrire</a>
 						<a href="{{ path('app_login') }}" class="btn btn-soft btn-info">Se connecter</a>
