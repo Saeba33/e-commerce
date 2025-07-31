@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\SubCategory;
-use App\Form\SubCategoryType;
+use App\Form\SubCategoryFormType;
 use App\Repository\SubCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +26,7 @@ final class SubCategoryController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $subCategory = new SubCategory();
-        $form = $this->createForm(SubCategoryType::class, $subCategory);
+        $form = $this->createForm(SubCategoryFormType::class, $subCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +53,7 @@ final class SubCategoryController extends AbstractController
     #[Route('/{id}/edit', name: 'app_sub_category_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, SubCategory $subCategory, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(SubCategoryType::class, $subCategory);
+        $form = $this->createForm(SubCategoryFormType::class, $subCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
