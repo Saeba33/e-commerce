@@ -19,8 +19,9 @@ class ProductFormType extends AbstractType
             ->add('price')
             ->add('sub_category', EntityType::class, [
                 'class' => SubCategory::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'multiple' => true,
+                'expanded' => true,
             ])
         ;
     }

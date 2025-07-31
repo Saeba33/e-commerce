@@ -7,7 +7,10 @@
 {% block body %}
 	<div class="bg-base-100 py-8 px-4">
 		<div class="max-w-4xl mx-auto">
-			<h2 class="text-3xl font-bold text-center mb-8">Liste des catégories</h2>
+			<div class="flex justify-between items-center mb-8">
+				<h2 class="text-3xl font-bold">Liste des catégories</h2>
+				<a href="{{ path('app_category_new') }}" class="btn btn-soft btn-success">Ajouter une nouvelle catégorie</a>
+			</div>
 
 			{% include 'layouts/_flash_message.html.twig' %}
 
@@ -29,7 +32,7 @@
 										<td class="font-medium">{{ category.name }}</td>
 										<td>
 											<div class="flex justify-center gap-2">
-												<a href="{{ path('app_category_update', {'id': category.id}) }}" class="btn btn-soft btn-info btn-sm">Modifier</a>
+												<a href="{{ path('app_category_edit', {'id': category.id}) }}" class="btn btn-soft btn-info btn-sm">Modifier</a>
 												<a onclick="return confirm('Voulez vous vraiment supprimler cette catégorie?')" href="{{ path('app_category_delete', {'id': category.id}) }}" class="btn btn-soft btn-error btn-sm">Supprimer</a>
 											</div>
 										</td>
@@ -39,10 +42,6 @@
 						</table>
 					</div>
 				</div>
-			</div>
-
-			<div class="flex justify-center mt-6">
-				<a href="{{ path('app_category_new') }}" class="btn btn-soft btn-success">Ajouter une nouvelle catégorie</a>
 			</div>
 		</div>
 	</div>

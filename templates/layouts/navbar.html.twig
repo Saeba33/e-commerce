@@ -34,9 +34,10 @@
 							<details>
 								<summary>Admin</summary>
 								<ul>
-									<li><ahref="{{ path('app_category') }}">Liste des catégories</a></li>
-									<li><ahref="{{ path('app_category_new') }}">Ajouter une catégorie</a></li>
-									<li><ahref="{{ path('app_user') }}">Liste des utilisateurs</a></li>
+									<li><ahref="{{ path('app_category') }}">Gérer les catégories</a></li>
+									<li><ahref="{{ path('app_subcategory') }}">Gérer les sous-catégories</a></li>
+									<li><ahref="{{ path('app_product') }}">Gérer les produits</a></li>
+									<li><ahref="{{ path('app_user') }}">Gérer les utilisateurs</a></li>
 								</ul>
 							</details>
 						</li>
@@ -97,6 +98,12 @@
 							<ul class="w-52 whitespace-nowrap">
 								<li>
 									<a href="{{ path('app_category') }}" class="text-nowrap">Gérer les catégories</a>
+								</li>
+								<li>
+									<a href="{{ path('app_subcategory') }}" class="text-nowrap">Gérer les sous-catégories</a>
+								</li>
+								<li>
+									<a href="{{ path('app_product') }}" class="text-nowrap">Gérer les produits</a>
 								</li>
 								<li>
 									<a href="{{ path('app_user') }}" class="text-nowrap">Gérer les utilisateurs</a>

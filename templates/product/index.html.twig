@@ -1,39 +1,87 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product index{% endblock %}
+{% block title %}
+	Gestion des produits
+{% endblock %}
 
 {% block body %}
-    <h1>Product index</h1>
+	<div class="bg-base-100 py-8 px-4">
+		<div class="max-w-6xl mx-auto">
+			<div class="flex justify-between items-center mb-8">
+				<h2 class="text-3xl font-bold">Liste des produits</h2>
+				<a href="{{ path('app_product_new') }}" class="btn btn-soft btn-success">Ajouter un nouveau produit</a>
+			</div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
-            <tr>
-                <td>{{ product.id }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.description }}</td>
-                <td>{{ product.price }}</td>
-                <td>
-                    <a href="{{ path('app_product_show', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+			{% include 'layouts/_flash_message.html.twig' %}
 
-    <a href="{{ path('app_product_new') }}">Create new</a>
+			<div class="card bg-base-200 shadow-xl">
+				<div class="card-body p-0">
+					<div class="overflow-x-auto">
+						<table class="table table-zebra product-table">
+							<thead class="bg-base-300">
+								<tr>
+									<th class="text-center">Id</th>
+									<th>Nom</th>
+									<th>Description</th>
+									<th>Catégories</th>
+									<th>Sous-catégories</th>
+									<th class="text-center">Prix</th>
+									<th class="text-center">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for product in products %}
+									<tr class="hover:bg-base-300 transition-colors duration-200">
+										<td class="text-center font-mono">#{{ product.id }}</td>
+										<td class="font-medium">{{ product.name }}</td>
+										<td class="description-cell">
+											<div class="whitespace-normal break-words">{{ product.description }}</div>
+										</td>
+										<td class="category-column">
+											<div class="badge-container">
+												{% set categories = [] %}
+												{% for subCategory in product.subCategory %}
+													{% if subCategory.category.name not in categories %}
+														{% set categories = categories|merge([subCategory.category.name]) %}
+														<span class="badge badge-outline badge-secondary badge-sm">
+															{{ subCategory.category.name }}
+														</span>
+													{% endif %}
+												{% endfor %}
+												{% if categories is empty %}
+													<span class="text-gray-500 italic text-sm">Aucune catégorie</span>
+												{% endif %}
+											</div>
+										</td>
+										<td class="subcategory-column">
+											<div class="badge-container">
+												{% for subCategory in product.subCategory %}
+													<span class="badge badge-outline badge-primary badge-sm">
+														{{ subCategory.name }}
+													</span>
+												{% else %}
+													<span class="text-gray-500 italic text-sm">Aucune sous-catégorie</span>
+												{% endfor %}
+											</div>
+										</td>
+										<td class="text-center font-semibold">{{ product.price }} €</td>
+										<td>
+											<div class="flex justify-center gap-2">
+												<a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-soft btn-info btn-sm">Modifier</a>
+												<a onclick="return confirm('Voulez vous vraiment supprimer ce produit?')" href="{{ path('app_product_delete', {'id': product.id}) }}" class="btn btn-soft btn-error btn-sm">Supprimer</a>
+											</div>
+										</td>
+									</tr>
+								{% else %}
+									<tr>
+										<td colspan="7" class="text-center py-8 text-gray-500">Aucun produit trouvé</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

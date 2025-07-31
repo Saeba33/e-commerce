@@ -11,71 +11,64 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/sub/category')]
 final class SubCategoryController extends AbstractController
 {
-    #[Route(name: 'app_sub_category_index', methods: ['GET'])]
-    public function index(SubCategoryRepository $subCategoryRepository): Response
+    #[Route('admin/subcategory', name: 'app_subcategory')]
+    public function listSubCategories(SubCategoryRepository $repo): Response
     {
+        $subCategories = $repo->findAll();
+
         return $this->render('sub_category/index.html.twig', [
-            'sub_categories' => $subCategoryRepository->findAll(),
+            'controller_name' => 'SubCategoryController',
+            'sub_categories' => $subCategories
         ]);
     }
 
-    #[Route('/new', name: 'app_sub_category_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('admin/subcategory/new', name: 'app_subcategory_new')]
+    public function newSubCategory(EntityManagerInterface $emi, Request $request): Response
     {
         $subCategory = new SubCategory();
         $form = $this->createForm(SubCategoryFormType::class, $subCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($subCategory);
-            $entityManager->flush();
+            $emi->persist($subCategory);
+            $emi->flush();
 
-            return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Sous-catégorie créée avec succès');
+            return $this->redirectToRoute('app_subcategory');
         }
 
         return $this->render('sub_category/new.html.twig', [
-            'sub_category' => $subCategory,
-            'form' => $form,
+            'controller_name' => 'SubCategoryController',
+            'form' => $form->createView()
         ]);
     }
 
-    #[Route('/{id}', name: 'app_sub_category_show', methods: ['GET'])]
-    public function show(SubCategory $subCategory): Response
-    {
-        return $this->render('sub_category/show.html.twig', [
-            'sub_category' => $subCategory,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_sub_category_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, SubCategory $subCategory, EntityManagerInterface $entityManager): Response
+    #[Route('admin/subcategory/edit/{id}', name: 'app_subcategory_edit')]
+    public function editSubCategory(Request $request, EntityManagerInterface $emi, SubCategory $subCategory): Response
     {
         $form = $this->createForm(SubCategoryFormType::class, $subCategory);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $emi->flush();
 
-            return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Sous-catégorie modifiée avec succès.');
+            return $this->redirectToRoute('app_subcategory');
         }
 
         return $this->render('sub_category/edit.html.twig', [
-            'sub_category' => $subCategory,
-            'form' => $form,
+            'controller_name' => 'SubCategoryController',
+            'form' => $form->createView()
         ]);
-    }
-
-    #[Route('/{id}', name: 'app_sub_category_delete', methods: ['POST'])]
-    public function delete(Request $request, SubCategory $subCategory, EntityManagerInterface $entityManager): Response
+    }    #[Route('admin/subcategory/delete/{id}', name: 'app_subcategory_delete')]
+    public function deleteSubCategory(EntityManagerInterface $emi, SubCategory $subCategory): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$subCategory->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($subCategory);
-            $entityManager->flush();
-        }
+        $emi->remove($subCategory);
+        $emi->flush();
 
-        return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
+        $this->addFlash('error', 'Sous-catégorie supprimée avec succès.');
+        return $this->redirectToRoute('app_subcategory');
     }
 }

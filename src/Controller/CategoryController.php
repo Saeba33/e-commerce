@@ -11,14 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-
-
 final class CategoryController extends AbstractController
 {
     #[Route('admin/category', name: 'app_category')]
-    public function listCategories(CategoryRepository $repo): Response
+    public function listCategories(CategoryRepository $CategoryRepository): Response
     {
-        $categories = $repo->findAll();
+        $categories = $CategoryRepository->findAll();
 
         return $this->render('category/index.html.twig', [
             'controller_name' => 'CategoryController',
@@ -27,7 +25,7 @@ final class CategoryController extends AbstractController
     }
 
     #[Route('admin/category/new', name: 'app_category_new')]
-    public function addCategory(EntityManagerInterface $emi, Request $request): Response
+    public function newCategory(EntityManagerInterface $emi, Request $request): Response
     {
         $category = new Category();
         $form = $this->createForm(CategoryFormType::class, $category);
@@ -41,15 +39,15 @@ final class CategoryController extends AbstractController
             return $this->redirectToRoute('app_category');
 
         }
-        return $this->render('category/newCategory.html.twig', [
+        return $this->render('category/new.html.twig', [
             'controller_name' => 'CategoryController',
             'form' => $form->createView()
         ]);
     }
 
 
-    #[Route('admin/category/update/{id}', name: 'app_category_update')]
-    public function updateCategroy(Request $request, EntityManagerInterface $emi, Category $category): Response
+    #[Route('admin/category/edit/{id}', name: 'app_category_edit')]
+    public function editCategory(Request $request, EntityManagerInterface $emi, Category $category): Response
     {
         $form = $this->createForm(CategoryFormType::class, $category);
         $form->handleRequest($request);
@@ -60,14 +58,14 @@ final class CategoryController extends AbstractController
             return $this->redirectToRoute('app_category');
         }
 
-        return $this->render('category/updateCategory.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('category/edit.html.twig', [
+            'controller_name' => 'CategoryController',
             'form' => $form->createView()
         ]);
     }
 
     #[Route('admin/category/delete/{id}', name: 'app_category_delete')]
-    public function deleteUser(EntityManagerInterface $emi, Category $category): Response
+    public function deleteCategory(EntityManagerInterface $emi, Category $category): Response
     {
         $emi->remove($category);
         $emi->flush();

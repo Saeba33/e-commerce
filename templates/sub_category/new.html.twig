@@ -1,11 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New SubCategory{% endblock %}
+{% block title %}
+	Nouvelle sous-catégorie
+{% endblock %}
 
 {% block body %}
-    <h1>Create new SubCategory</h1>
+	<div class="flex flex-col max-w-xl mx-auto my-8">
 
-    {{ include('sub_category/_form.html.twig') }}
+		<h2 class="text-3xl font-bold text-center mb-20">Ajouter une sous-catégorie</h2>
 
-    <a href="{{ path('app_sub_category_index') }}">back to list</a>
+		{{ form_start(form) }}
+		<div class="flex flex-col gap-6">
+			{{ form_widget(form.name, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Nom de la sous-catégorie'}}) }}
+			{{ form_widget(form.category, {'attr': {'class': 'select select-bordered w-full mt-1'}}) }}
+
+			<button type="submit" class="btn btn-soft btn-success">Sauvegarder</button>
+		</div>
+		{{ form_end(form) }}
+	</div>
 {% endblock %}

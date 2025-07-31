@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class UserController extends AbstractController
 {
     #[Route('/admin/user', name: 'app_user')]
-    public function index(UserRepository $userRepository): Response
+    public function listUsers(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
@@ -20,7 +20,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/admin/user/{id}/to/editor', name: 'app_user_to_editor')]
-    public function changeRole(EntityManagerInterface $entityManager, User $user): Response
+    public function addRoleEditor(EntityManagerInterface $entityManager, User $user): Response
     {
         $user->setRoles(['ROLE_EDITOR', 'ROLE_USER']);
         $entityManager->flush();
@@ -42,7 +42,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/admin/user/{id}/remove', name: 'app_user_remove')]
-    public function userRemove(EntityManagerInterface $entityManager, $id, UserRepository $userRepository): Response
+    public function deleteUser(EntityManagerInterface $entityManager, $id, UserRepository $userRepository): Response
     {
         $user = $userRepository->find($id);
         $entityManager->remove($user);

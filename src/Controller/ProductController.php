@@ -11,71 +11,64 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/product')]
 final class ProductController extends AbstractController
 {
-    #[Route(name: 'app_product_index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
+    #[Route('admin/product', name: 'app_product')]
+    public function listProducts(ProductRepository $repo): Response
     {
+        $products = $repo->findAll();
+
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'controller_name' => 'ProductController',
+            'products' => $products
         ]);
     }
 
-    #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('admin/product/new', name: 'app_product_new')]
+    public function newProduct(EntityManagerInterface $emi, Request $request): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductFormType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($product);
-            $entityManager->flush();
+            $emi->persist($product);
+            $emi->flush();
 
-            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Produit créé avec succès');
+            return $this->redirectToRoute('app_product');
         }
 
         return $this->render('product/new.html.twig', [
-            'product' => $product,
-            'form' => $form,
+            'controller_name' => 'ProductController',
+            'form' => $form->createView()
         ]);
     }
 
-    #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
-    public function show(Product $product): Response
-    {
-        return $this->render('product/show.html.twig', [
-            'product' => $product,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
+    #[Route('admin/product/edit/{id}', name: 'app_product_edit')]
+    public function editProduct(Request $request, EntityManagerInterface $emi, Product $product): Response
     {
         $form = $this->createForm(ProductFormType::class, $product);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $emi->flush();
 
-            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Produit modifié avec succès.');
+            return $this->redirectToRoute('app_product');
         }
 
         return $this->render('product/edit.html.twig', [
-            'product' => $product,
-            'form' => $form,
+            'controller_name' => 'ProductController',
+            'form' => $form->createView()
         ]);
-    }
-
-    #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
-    public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
+    }    #[Route('admin/product/delete/{id}', name: 'app_product_delete')]
+    public function deleteProduct(EntityManagerInterface $emi, Product $product): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($product);
-            $entityManager->flush();
-        }
+        $emi->remove($product);
+        $emi->flush();
 
-        return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        $this->addFlash('error', 'Produit supprimé avec succès.');
+        return $this->redirectToRoute('app_product');
     }
 }
