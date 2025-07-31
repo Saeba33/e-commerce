@@ -32,7 +32,7 @@
 										<td class="font-medium">{{ user.firstname }}</td>
 										<td>{{ user.email }}</td>
 										<td class="text-center">
-											<span class="badge badge-outline badge-primary">
+											<span class="badge badge-outline badge-primary pt-1">
 												{% if 'ROLE_ADMIN' in user.roles %}
 													Administrateur
 												{% elseif 'ROLE_EDITOR' in user.roles %}
@@ -47,15 +47,15 @@
 												{% if 'ROLE_ADMIN' not in user.roles %}
 													{% if 'ROLE_EDITOR' not in user.roles %}
 														<a onclick="return confirm('Voulez vous vraiment affecter ce rôle à cet utilisateur ?')" class="btn btn-soft btn-success btn-sm" href="{{ path('app_user_to_editor', {'id': user.id}) }}">
-															Ajouter éditeur
+															Ajouter rôle éditeur
 														</a>
 													{% else %}
 														<a onclick="return confirm('Voulez vous vraiment retirer ce rôle à cet utilisateur ?')" class="btn btn-soft btn-warning btn-sm" href="{{ path('app_user_remove_editor_role', {'id': user.id}) }}">
-															Retirer éditeur
+															Retirer rôle éditeur
 														</a>
 													{% endif %}
 													<a onclick="return confirm('Voulez vous vraiment supprimer cet utilisateur ?')" href="{{ path('app_user_remove', {'id': user.id}) }}" class="btn btn-soft btn-error btn-sm">
-														Supprimer
+														Supprimer l'utilisateur
 													</a>
 												{% endif %}
 											</div>
