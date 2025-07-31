@@ -1,24 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	Gestion des produits
-{% endblock %}
+{% block title %}Gestion des produits{% endblock %}
 
 {% block body %}
 	<div class="bg-base-100 py-8 px-4">
 		<div class="max-w-6xl mx-auto">
 			<div class="flex justify-between items-center mb-8">
 				<h2 class="text-3xl font-bold">Liste des produits</h2>
-				<a href="{{ path('app_product_new') }}" class="btn btn-soft btn-success">Ajouter un nouveau produit</a>
+				<a href="{{ path('app_product_new') }}" class="btn btn-success">Ajouter un nouveau produit</a>
 			</div>
 
 			{% include 'layouts/_flash_message.html.twig' %}
 
-			<div class="card bg-base-200 shadow-xl">
+			<div class="card bg-base-100 shadow-xl">
 				<div class="card-body p-0">
 					<div class="overflow-x-auto">
-						<table class="table table-zebra product-table">
-							<thead class="bg-base-300">
+						<table class="table table-zebra">
+							<thead class="bg-base-200">
 								<tr>
 									<th class="text-center">Id</th>
 									<th>Nom</th>
@@ -31,50 +29,50 @@
 							</thead>
 							<tbody>
 								{% for product in products %}
-									<tr class="hover:bg-base-300 transition-colors duration-200">
+									<tr class="hover:bg-base-50 transition-colors duration-200">
 										<td class="text-center font-mono">#{{ product.id }}</td>
 										<td class="font-medium">{{ product.name }}</td>
-										<td class="description-cell">
-											<div class="whitespace-normal break-words">{{ product.description }}</div>
+										<td class="max-w-xs">
+											<div class="line-clamp-3">{{ product.description }}</div>
 										</td>
-										<td class="category-column">
+										<td>
 											<div class="badge-container">
 												{% set categories = [] %}
 												{% for subCategory in product.subCategory %}
 													{% if subCategory.category.name not in categories %}
 														{% set categories = categories|merge([subCategory.category.name]) %}
-														<span class="badge badge-outline badge-secondary badge-sm">
+														<span class="badge badge-secondary badge-sm">
 															{{ subCategory.category.name }}
 														</span>
 													{% endif %}
 												{% endfor %}
 												{% if categories is empty %}
-													<span class="text-gray-500 italic text-sm">Aucune catégorie</span>
+													<span class="text-base-content/50 italic text-sm">Aucune catégorie</span>
 												{% endif %}
 											</div>
 										</td>
-										<td class="subcategory-column">
+										<td>
 											<div class="badge-container">
 												{% for subCategory in product.subCategory %}
-													<span class="badge badge-outline badge-primary badge-sm">
+													<span class="badge badge-primary badge-sm">
 														{{ subCategory.name }}
 													</span>
 												{% else %}
-													<span class="text-gray-500 italic text-sm">Aucune sous-catégorie</span>
+													<span class="text-base-content/50 italic text-sm">Aucune sous-catégorie</span>
 												{% endfor %}
 											</div>
 										</td>
-										<td class="text-center font-semibold">{{ product.price }} €</td>
+										<td class="text-center font-semibold">{{ product.price }}€</td>
 										<td>
-											<div class="flex justify-center gap-2">
-												<a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-soft btn-info btn-sm">Modifier</a>
-												<a onclick="return confirm('Voulez vous vraiment supprimer ce produit?')" href="{{ path('app_product_delete', {'id': product.id}) }}" class="btn btn-soft btn-error btn-sm">Supprimer</a>
+											<div class="flex justify-center gap-3">
+												<a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-info btn-sm">Modifier</a>
+												<a onclick="return confirm('Voulez vous vraiment supprimer ce produit?')" href="{{ path('app_product_delete', {'id': product.id}) }}" class="btn btn-error btn-sm">Supprimer</a>
 											</div>
 										</td>
 									</tr>
 								{% else %}
 									<tr>
-										<td colspan="7" class="text-center py-8 text-gray-500">Aucun produit trouvé</td>
+										<td colspan="7" class="text-center py-8 text-base-content/70">Aucun produit trouvé</td>
 									</tr>
 								{% endfor %}
 							</tbody>

@@ -1,26 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	Gestion des sous-catégories
-{% endblock %}
+{% block title %}Gestion des sous-catégories{% endblock %}
 
 {% block body %}
 	<div class="bg-base-100 py-8 px-4">
 		<div class="max-w-5xl mx-auto">
 			<div class="flex justify-between items-center mb-8">
-				<h2 class="text-3xl font-bold">Liste des sous-catégories</h2>
-				<a href="{{ path('app_subcategory_new') }}" class="btn btn-soft btn-success">Ajouter une nouvelle sous-catégorie</a>
+				<h1 class="text-3xl font-bold">Liste des sous-catégories</h1>
+				<a href="{{ path('app_subcategory_new') }}" class="btn btn-success">Ajouter une nouvelle sous-catégorie</a>
 			</div>
 
 			{% include 'layouts/_flash_message.html.twig' %}
 
-			<div class="card bg-base-200 shadow-xl">
+			<div class="card bg-base-100 shadow-xl">
 				<div class="card-body p-0">
 					<div class="overflow-x-auto">
 						<table class="table table-zebra">
-							<thead class="bg-base-300">
+							<thead class="bg-base-200">
 								<tr>
-									<th class="text-center">Id</th>
+									<th class="text-center">ID</th>
 									<th>Catégorie</th>
 									<th>Sous-catégorie</th>
 									<th class="text-center">Actions</th>
@@ -28,20 +26,20 @@
 							</thead>
 							<tbody>
 								{% for sub_category in sub_categories %}
-									<tr class="hover:bg-base-300 transition-colors duration-200">
+									<tr class="hover:bg-base-50 transition-colors duration-200">
 										<td class="text-center font-mono">#{{ sub_category.id }}</td>
 										<td class="font-medium">{{ sub_category.category.name }}</td>
 										<td class="font-medium">{{ sub_category.name }}</td>
 										<td>
-											<div class="flex justify-center gap-2">
-												<a href="{{ path('app_subcategory_edit', {'id': sub_category.id}) }}" class="btn btn-soft btn-info btn-sm">Modifier</a>
-												<a onclick="return confirm('Voulez vous vraiment supprimer cette sous-catégorie?')" href="{{ path('app_subcategory_delete', {'id': sub_category.id}) }}" class="btn btn-soft btn-error btn-sm">Supprimer</a>
+											<div class="flex justify-center gap-3">
+												<a href="{{ path('app_subcategory_edit', {'id': sub_category.id}) }}" class="btn btn-info btn-sm">Modifier</a>
+												<a onclick="return confirm('Voulez-vous vraiment supprimer cette sous-catégorie?')" href="{{ path('app_subcategory_delete', {'id': sub_category.id}) }}" class="btn btn-error btn-sm">Supprimer</a>
 											</div>
 										</td>
 									</tr>
 								{% else %}
 									<tr>
-										<td colspan="4" class="text-center py-8 text-gray-500">Aucune sous-catégorie trouvée</td>
+										<td colspan="4" class="text-center py-8 text-base-content/70">Aucune sous-catégorie trouvée</td>
 									</tr>
 								{% endfor %}
 							</tbody>

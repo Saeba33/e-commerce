@@ -1,8 +1,8 @@
 {% for type, messages in app.flashes(['info','success','warning','error']) %}
 	{% for message in messages %}
 		<div>
-			<div class="alert alert-{{ type }} my-4">
-				{{ message }}
+			<div class="alert alert-{{ type }} shadow-lg mb-6">
+				<span>{{ message }}</span>
 			</div>
 		</div>
 	{% endfor %}

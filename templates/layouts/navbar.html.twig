@@ -1,15 +1,14 @@
 {% block body %}
-	<div class="navbar bg-base-200 p-4">
-		<div
-			class="navbar-start">
+	<div class="navbar bg-base-200 shadow-md px-6 py-4">
+		<div class="navbar-start">
 			{# Version Mobile #}
 			<div class="dropdown">
-				<div tabindex="0" role="button" class="btn btn-ghost flex items-center justify-center w-16 h-16 lg:hidden">
-					<svg class="w-16 h-16" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+				<div tabindex="0" role="button" class="btn btn-ghost btn-circle lg:hidden">
+					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
 					</svg>
 				</div>
-				<ul tabindex="0" class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] w-52 pr-2 shadow">
+				<ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 w-52 p-2 shadow-lg mt-3">
 					<li>
 						<a href="{{ path('app_home') }}">Accueil</a>
 					</li>
@@ -34,10 +33,10 @@
 							<details>
 								<summary>Admin</summary>
 								<ul>
-									<li><ahref="{{ path('app_category') }}">Gérer les catégories</a></li>
-									<li><ahref="{{ path('app_subcategory') }}">Gérer les sous-catégories</a></li>
-									<li><ahref="{{ path('app_product') }}">Gérer les produits</a></li>
-									<li><ahref="{{ path('app_user') }}">Gérer les utilisateurs</a></li>
+									<li><a href="{{ path('app_category') }}">Gérer les catégories</a></li>
+									<li><a href="{{ path('app_subcategory') }}">Gérer les sous-catégories</a></li>
+									<li><a href="{{ path('app_product') }}">Gérer les produits</a></li>
+									<li><a href="{{ path('app_user') }}">Gérer les utilisateurs</a></li>
 								</ul>
 							</details>
 						</li>
@@ -58,7 +57,7 @@
 				</ul>
 			</div>
 			{# Nom du site #}
-			<a href="{{ path('app_home') }}" class="text-2xl font-bold text-gray-50 hover:text-gray-200">E-shop</a>
+			<a href="{{ path('app_home') }}" class="text-2xl font-bold text-primary hover:text-primary-focus">E-shop</a>
 		</div>
 
 		{# Version Desktop #}
@@ -117,8 +116,7 @@
 
 		{# Section droite : recherche et connexion #}
 		<div class="navbar-end">
-			<div
-				class="flex items-center gap-4">
+			<div class="flex items-center gap-4">
 				{# Barre de recherche #}
 				<label class="input input-md">
 					<svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24">
@@ -130,15 +128,13 @@
 					<input type="search" required placeholder="Rechercher"/>
 				</label>
 
-
 				{# Boutons de connexion/déconnexion & inscription #}
 				{% if app.user %}
-					<a href="{{ path('app_logout') }}" class="btn btn-soft btn-error">Se déconnecter</a>
-
+					<a href="{{ path('app_logout') }}" class="btn btn-error">Se déconnecter</a>
 				{% else %}
 					<div class="hidden lg:flex gap-3 px-4">
-						<a href="{{ path('app_register') }}" class="btn btn-soft btn-success">S'inscrire</a>
-						<a href="{{ path('app_login') }}" class="btn btn-soft btn-info">Se connecter</a>
+						<a href="{{ path('app_register') }}" class="btn btn-success">S'inscrire</a>
+						<a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a>
 					</div>
 				{% endif %}
 			</div>
