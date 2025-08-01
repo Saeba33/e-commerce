@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des produits{% endblock %}
+{% block title %}Gestion des produits
+{% endblock %}
 
 {% block body %}
 	<div class="bg-base-100 py-8 px-4">
@@ -21,6 +22,7 @@
 									<th class="text-center">Id</th>
 									<th>Nom</th>
 									<th>Description</th>
+									<th>Image</th>
 									<th>Catégories</th>
 									<th>Sous-catégories</th>
 									<th class="text-center">Prix</th>
@@ -35,6 +37,7 @@
 										<td class="max-w-xs">
 											<div class="line-clamp-3">{{ product.description }}</div>
 										</td>
+										<td class="font-medium">{{ product.image }}</td>
 										<td>
 											<div class="badge-container">
 												{% set categories = [] %}

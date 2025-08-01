@@ -6,10 +6,12 @@ use App\Entity\Product;
 use App\Form\ProductFormType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 final class ProductController extends AbstractController
 {
@@ -24,14 +26,30 @@ final class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('admin/product/new', name: 'app_product_new')]
-    public function newProduct(EntityManagerInterface $emi, Request $request): Response
+    #[Route('admin/product/new', name: 'app_product_new', methods: ['GET', 'POST'])]
+    public function newProduct(EntityManagerInterface $emi, Request $request, SluggerInterface $slugger): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductFormType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $image = $form->get('image')->getData();
+
+            if ($image) {
+                $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeImageName = $slugger->slug($originalName);
+                $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension();
+
+                try {
+                    $image->move($this->getParameter('image_directory'), $newFileImageName);
+
+                } catch (FileException $exception) {
+                    //gestion du message d'erreur
+                }
+                    $product->setImage($newFileImageName);
+            }
+
             $emi->persist($product);
             $emi->flush();
 
@@ -50,7 +68,7 @@ final class ProductController extends AbstractController
     {
         $form = $this->createForm(ProductFormType::class, $product);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $emi->flush();
 
