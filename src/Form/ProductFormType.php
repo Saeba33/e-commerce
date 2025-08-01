@@ -19,6 +19,7 @@ class ProductFormType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('price')
+            ->add('stock')
             ->add('image', FileType::class, [
                 'label' => 'Image du produit',
                 'mapped' => false,
@@ -30,8 +31,9 @@ class ProductFormType extends AbstractType
                             'image/jpeg',
                             'image/png',
                             'image/jpg',
+                            'image/webp',
                         ],
-                        'mimeTypesMessage' => 'Veuillez choisir un format valide (jpeg, png, jpg)',
+                        'mimeTypesMessage' => 'Veuillez choisir un format valide (jpeg, png, jpg, webp)',
                     ])
                 ]
             ])

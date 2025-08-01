@@ -13,9 +13,11 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+
 final class ProductController extends AbstractController
 {
-    #[Route('admin/product', name: 'app_product')]
+    #region READ
+    #[Route('editor/product', name: 'app_product')]
     public function listProducts(ProductRepository $repo): Response
     {
         $products = $repo->findAll();
@@ -25,8 +27,10 @@ final class ProductController extends AbstractController
             'products' => $products
         ]);
     }
+    #endregion
 
-    #[Route('admin/product/new', name: 'app_product_new', methods: ['GET', 'POST'])]
+    #region CREATE
+    #[Route('editor/product/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function newProduct(EntityManagerInterface $emi, Request $request, SluggerInterface $slugger): Response
     {
         $product = new Product();
@@ -62,8 +66,10 @@ final class ProductController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+    #endregion
 
-    #[Route('admin/product/edit/{id}', name: 'app_product_edit')]
+    #region UPDATE
+    #[Route('editor/product/edit/{id}', name: 'app_product_edit')]
     public function editProduct(Request $request, EntityManagerInterface $emi, Product $product): Response
     {
         $form = $this->createForm(ProductFormType::class, $product);
@@ -80,7 +86,11 @@ final class ProductController extends AbstractController
             'controller_name' => 'ProductController',
             'form' => $form->createView()
         ]);
-    }    #[Route('admin/product/delete/{id}', name: 'app_product_delete')]
+    }    
+    #endregion
+    
+    #region DELETE
+    #[Route('editor/product/delete/{id}', name: 'app_product_delete')]
     public function deleteProduct(EntityManagerInterface $emi, Product $product): Response
     {
         $emi->remove($product);
@@ -89,4 +99,5 @@ final class ProductController extends AbstractController
         $this->addFlash('error', 'Produit supprimé avec succès.');
         return $this->redirectToRoute('app_product');
     }
+    #endregion
 }

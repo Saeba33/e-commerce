@@ -23,6 +23,7 @@
 									<th>Nom</th>
 									<th>Description</th>
 									<th>Image</th>
+									<th>Stock</th>
 									<th>Catégories</th>
 									<th>Sous-catégories</th>
 									<th class="text-center">Prix</th>
@@ -35,9 +36,20 @@
 										<td class="text-center font-mono">#{{ product.id }}</td>
 										<td class="font-medium">{{ product.name }}</td>
 										<td class="max-w-xs">
-											<div class="line-clamp-3">{{ product.description }}</div>
+											<div class="line-clamp-3">{{ product.description | slice(0,100) }}
+												...</div>
 										</td>
 										<td class="font-medium">{{ product.image }}</td>
+
+										<td>
+											{% if product.stock > 0 %}
+												<span class="font-medium">{{ product.stock }}</span>
+											{% else %}
+												<span>Stock épuisé</span>
+											{% endif %}
+										</td>
+
+
 										<td>
 											<div class="badge-container">
 												{% set categories = [] %}
@@ -70,6 +82,9 @@
 											<div class="flex justify-center gap-3">
 												<a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-info btn-sm">Modifier</a>
 												<a onclick="return confirm('Voulez vous vraiment supprimer ce produit?')" href="{{ path('app_product_delete', {'id': product.id}) }}" class="btn btn-error btn-sm">Supprimer</a>
+												<a href="{{ path('#', {'id': product.id}) }}" class="btn btn-info btn-sm">Ajouter du stock</a>
+
+
 											</div>
 										</td>
 									</tr>
