@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\ProductHistory;
 use App\Form\ProductFormType;
+use App\Form\ProductHistoryFormType;
 use App\Repository\ProductRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +15,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-
 
 final class ProductController extends AbstractController
 {
@@ -51,10 +53,17 @@ final class ProductController extends AbstractController
                 } catch (FileException $exception) {
                     //gestion du message d'erreur
                 }
-                    $product->setImage($newFileImageName);
+                $product->setImage($newFileImageName);
             }
 
             $emi->persist($product);
+            $emi->flush();
+
+            $stockHistory = new ProductHistory();
+            $stockHistory->setQuantity($product->getStock());
+            $stockHistory->setProduct($product);
+            $stockHistory->setCreatedAt(new DateTimeImmutable());
+            $emi->persist($stockHistory);
             $emi->flush();
 
             $this->addFlash('success', 'Produit créé avec succès');
@@ -86,9 +95,9 @@ final class ProductController extends AbstractController
             'controller_name' => 'ProductController',
             'form' => $form->createView()
         ]);
-    }    
+    }
     #endregion
-    
+
     #region DELETE
     #[Route('editor/product/delete/{id}', name: 'app_product_delete')]
     public function deleteProduct(EntityManagerInterface $emi, Product $product): Response
@@ -98,6 +107,19 @@ final class ProductController extends AbstractController
 
         $this->addFlash('error', 'Produit supprimé avec succès.');
         return $this->redirectToRoute('app_product');
+    }
+    #endregion
+
+
+    #region ADD STOCK
+    #[Route('add/product/{id}/', name: 'app_product_stock_add', methods: ['POST'])]
+    public function addStock(EntityManagerInterface $emi, $id, Request $request): Response
+    {
+        $stockAdd = new ProductHistory();
+        $form = $this->createForm(ProductHistoryFormType::class, $stockAdd);
+        $form->handleRequest($request);
+
+        return $this->render('product/addStock.html.twig', ['form' => $form->createView()]);
     }
     #endregion
 }
