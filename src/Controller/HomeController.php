@@ -9,13 +9,16 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class HomeController extends AbstractController
 {
+    #region READ
     #[Route('/', name: 'app_home')]
-    public function index(CategoryRepository $repo): Response
+    public function index(CategoryRepository $categoryRepository): Response
     {
+        $categories = $categoryRepository->findAll();
 
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
-            'categories' => $repo->findAll(),
+            'categories' => $categories,
         ]);
     }
+    #endregion
 }

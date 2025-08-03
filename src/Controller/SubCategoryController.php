@@ -13,18 +13,21 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SubCategoryController extends AbstractController
 {
+    #region READ
     #[Route('admin/subcategory', name: 'app_subcategory')]
-    public function listSubCategories(SubCategoryRepository $repo): Response
+    public function listSubCategories(SubCategoryRepository $subCategoryRepository): Response
     {
-        $subCategories = $repo->findAll();
+        $subCategories = $subCategoryRepository->findAll();
 
         return $this->render('sub_category/index.html.twig', [
             'controller_name' => 'SubCategoryController',
             'sub_categories' => $subCategories
         ]);
     }
+    #endregion
 
-    #[Route('admin/subcategory/new', name: 'app_subcategory_new')]
+    #region CREATE
+    #[Route('admin/subcategory/new', name: 'app_subcategory_new', methods: ['GET', 'POST'])]
     public function newSubCategory(EntityManagerInterface $emi, Request $request): Response
     {
         $subCategory = new SubCategory();
@@ -44,8 +47,10 @@ final class SubCategoryController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+    #endregion
 
-    #[Route('admin/subcategory/edit/{id}', name: 'app_subcategory_edit')]
+    #region UPDATE
+    #[Route('admin/subcategory/edit/{id}', name: 'app_subcategory_edit', methods: ['GET', 'POST'])]
     public function editSubCategory(Request $request, EntityManagerInterface $emi, SubCategory $subCategory): Response
     {
         $form = $this->createForm(SubCategoryFormType::class, $subCategory);
@@ -62,7 +67,11 @@ final class SubCategoryController extends AbstractController
             'controller_name' => 'SubCategoryController',
             'form' => $form->createView()
         ]);
-    }    #[Route('admin/subcategory/delete/{id}', name: 'app_subcategory_delete')]
+    }
+    #endregion
+
+    #region DELETE
+    #[Route('admin/subcategory/delete/{id}', name: 'app_subcategory_delete')]
     public function deleteSubCategory(EntityManagerInterface $emi, SubCategory $subCategory): Response
     {
         $emi->remove($subCategory);
@@ -71,4 +80,5 @@ final class SubCategoryController extends AbstractController
         $this->addFlash('error', 'Sous-catégorie supprimée avec succès.');
         return $this->redirectToRoute('app_subcategory');
     }
+    #endregion
 }

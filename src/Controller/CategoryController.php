@@ -13,18 +13,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class CategoryController extends AbstractController
 {
+    #region READ
     #[Route('admin/category', name: 'app_category')]
-    public function listCategories(CategoryRepository $CategoryRepository): Response
+    public function listCategories(CategoryRepository $categoryRepository): Response
     {
-        $categories = $CategoryRepository->findAll();
+        $categories = $categoryRepository->findAll();
 
         return $this->render('category/index.html.twig', [
             'controller_name' => 'CategoryController',
             'categories' => $categories
         ]);
     }
+    #endregion
 
-    #[Route('admin/category/new', name: 'app_category_new')]
+    #region CREATE
+    #[Route('admin/category/new', name: 'app_category_new', methods: ['GET', 'POST'])]
     public function newCategory(EntityManagerInterface $emi, Request $request): Response
     {
         $category = new Category();
@@ -37,20 +40,22 @@ final class CategoryController extends AbstractController
 
             $this->addFlash('success', 'Catégorie créée avec succès');
             return $this->redirectToRoute('app_category');
-
         }
+
         return $this->render('category/new.html.twig', [
             'controller_name' => 'CategoryController',
             'form' => $form->createView()
         ]);
     }
+    #endregion
 
-
-    #[Route('admin/category/edit/{id}', name: 'app_category_edit')]
+    #region UPDATE
+    #[Route('admin/category/edit/{id}', name: 'app_category_edit', methods: ['GET', 'POST'])]
     public function editCategory(Request $request, EntityManagerInterface $emi, Category $category): Response
     {
         $form = $this->createForm(CategoryFormType::class, $category);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $emi->flush();
 
@@ -63,7 +68,9 @@ final class CategoryController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+    #endregion
 
+    #region DELETE
     #[Route('admin/category/delete/{id}', name: 'app_category_delete')]
     public function deleteCategory(EntityManagerInterface $emi, Category $category): Response
     {
@@ -73,5 +80,5 @@ final class CategoryController extends AbstractController
         $this->addFlash('error', 'Catégorie supprimée avec succès.');
         return $this->redirectToRoute('app_category');
     }
-
+    #endregion
 }

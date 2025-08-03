@@ -20,9 +20,9 @@ final class ProductController extends AbstractController
 {
     #region READ
     #[Route('editor/product', name: 'app_product')]
-    public function listProducts(ProductRepository $repo): Response
+    public function listProducts(ProductRepository $productRepository): Response
     {
-        $products = $repo->findAll();
+        $products = $productRepository->findAll();
 
         return $this->render('product/index.html.twig', [
             'controller_name' => 'ProductController',
@@ -78,7 +78,7 @@ final class ProductController extends AbstractController
     #endregion
 
     #region UPDATE
-    #[Route('editor/product/edit/{id}', name: 'app_product_edit')]
+    #[Route('editor/product/edit/{id}', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function editProduct(Request $request, EntityManagerInterface $emi, Product $product): Response
     {
         $form = $this->createForm(ProductFormType::class, $product);
@@ -110,16 +110,35 @@ final class ProductController extends AbstractController
     }
     #endregion
 
-
     #region ADD STOCK
-    #[Route('add/product/{id}/', name: 'app_product_stock_add', methods: ['POST'])]
-    public function addStock(EntityManagerInterface $emi, $id, Request $request): Response
+    #[Route('admin/product/{id}/stock/add', name: 'app_product_stock_add', methods: ['GET', 'POST'])]
+    public function addStock(EntityManagerInterface $emi, Product $product, Request $request): Response
     {
-        $stockAdd = new ProductHistory();
-        $form = $this->createForm(ProductHistoryFormType::class, $stockAdd);
+        $stockHistory = new ProductHistory();
+        $form = $this->createForm(ProductHistoryFormType::class, $stockHistory);
         $form->handleRequest($request);
 
-        return $this->render('product/addStock.html.twig', ['form' => $form->createView()]);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $stockHistory->setProduct($product);
+            $stockHistory->setCreatedAt(new DateTimeImmutable());
+            
+            // Mettre à jour le stock du produit
+            $currentStock = $product->getStock();
+            $newStock = $currentStock + $stockHistory->getQuantity();
+            $product->setStock($newStock);
+            
+            $emi->persist($stockHistory);
+            $emi->flush();
+
+            $this->addFlash('success', 'Stock ajouté avec succès.');
+            return $this->redirectToRoute('app_product');
+        }
+
+        return $this->render('product/addStock.html.twig', [
+            'controller_name' => 'ProductController',
+            'form' => $form->createView(),
+            'product' => $product
+        ]);
     }
     #endregion
 }

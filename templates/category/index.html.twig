@@ -1,43 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CategoryController!{% endblock %}
+{% block title %}Hello CategoryController!
+{% endblock %}
 
 {% block body %}
 	<div class="bg-base-100 py-8 px-4">
 		<div class="max-w-4xl mx-auto">
-			<div class="flex justify-between items-center mb-8">
-				<h2 class="text-3xl font-bold">Liste des catégories</h2>
-				<a href="{{ path('app_category_new') }}" class="btn btn-success">Ajouter une nouvelle catégorie</a>
-			</div>
+			<div class="content-container">
+				<div class="flex justify-between items-center mb-8">
+					<h2 class="text-3xl font-bold">Liste des catégories</h2>
+					<a href="{{ path('app_category_new') }}" class="custom-btn new-btn">
 
-			{% include 'layouts/_flash_message.html.twig' %}
+						<ion-icon name="add-outline"></ion-icon>
+						Ajouter une nouvelle catégorie
+					</a>
+				</div>
 
-			<div class="card bg-base-100 shadow-xl">
-				<div class="card-body p-0">
-					<div class="overflow-x-auto">
-						<table class="table table-zebra">
-							<thead class="bg-base-200">
-								<tr>
-									<th class="text-center">Id</th>
-									<th>Libellé</th>
-									<th class="text-center">Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for category in categories %}
-									<tr class="hover:bg-base-50 transition-colors duration-200">
-										<td class="text-center font-mono">#{{ category.id }}</td>
-										<td class="font-medium">{{ category.name }}</td>
-										<td>
-											<div class="flex justify-center gap-3">
-												<a href="{{ path('app_category_edit', {'id': category.id}) }}" class="btn btn-info btn-sm">Modifier</a>
-												<a onclick="return confirm('Voulez vous vraiment supprimer cette catégorie?')" href="{{ path('app_category_delete', {'id': category.id}) }}" class="btn btn-error btn-sm">Supprimer</a>
-											</div>
-										</td>
+				{% include 'layouts/_flash_message.html.twig' %}
+
+				<div class="card bg-base-100 shadow-xl">
+					<div class="card-body p-0">
+						<div class="overflow-x-auto">
+							<table class="table table-zebra">
+								<thead class="bg-base-200">
+									<tr>
+										<th class="text-center">Id</th>
+										<th>Libellé</th>
+										<th class="text-center">Actions</th>
 									</tr>
-								{% endfor %}
-							</tbody>
-						</table>
+								</thead>
+								<tbody>
+									{% for category in categories %}
+										<tr class="hover:bg-base-50 transition-colors duration-200">
+											<td class="text-center font-mono">#{{ category.id }}</td>
+											<td class="font-medium">{{ category.name }}</td>
+											<td>
+												<div class="flex justify-center gap-3">
+													<a href="{{ path('app_category_edit', {'id': category.id}) }}" class="custom-btn edit-btn">
+
+														<ion-icon name="create-outline"></ion-icon>
+														Modifier
+													</a>
+													<a onclick="return confirm('Voulez vous vraiment supprimer cette catégorie?')" href="{{ path('app_category_delete', {'id': category.id}) }}" class="custom-btn delete-btn">
+
+														<ion-icon name="trash-outline"></ion-icon>
+														Supprimer
+													</a>
+												</div>
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>

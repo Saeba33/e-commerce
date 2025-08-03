@@ -4,13 +4,24 @@
 
 {% block body %}
 	<div class="flex flex-col max-w-xl mx-auto my-8">
-		<h2 class="text-3xl font-bold text-center mb-20">Éditer une catégorie</h2>
+		<div class="content-container">
+			<div class="flex justify-between items-center mb-8">
+				<h2 class="text-3xl font-bold">Éditer une catégorie</h2>
+				<a href="{{ path('app_category') }}" class="custom-btn back-btn">
+					<ion-icon name="return-down-back-outline"></ion-icon>
+					Retour
+				</a>
+			</div>
 
-		{{ form_start(form) }}
-		<div class="flex flex-col gap-6">
-			{{ form_widget(form.name, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Nom de la nouvelle catégorie'}}) }}
-			<button type="submit" class="btn btn-warning">Mettre à jour</button>
+			{{ form_start(form) }}
+			<div class="flex flex-col gap-6">
+				{{ form_widget(form.name, {'attr': {'class': 'input-style', 'placeholder': 'Nom de la catégorie'}}) }}
+				<button type="submit" class="custom-btn edit-btn">
+					<ion-icon name="create-outline"></ion-icon>
+					Mettre à jour
+				</button>
+			</div>
+			{{ form_end(form) }}
 		</div>
-		{{ form_end(form) }}
 	</div>
 {% endblock %}

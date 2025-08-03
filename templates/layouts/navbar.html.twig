@@ -1,6 +1,7 @@
 {% block body %}
-	<div class="navbar bg-base-200 shadow-md px-6 py-4">
-		<div class="navbar-start">
+	<div class="navbar bg-base-200 navbar-custom px-6 py-4">
+		<div
+			class="navbar-start">
 			{# Version Mobile #}
 			<div class="dropdown">
 				<div tabindex="0" role="button" class="btn btn-ghost btn-circle lg:hidden">
@@ -17,7 +18,7 @@
 						<li>
 							<details>
 								<summary>Catégories</summary>
-								<ul>
+								<ul class="z-[9999]">
 									{% for category in categories %}
 										<li>
 											<a href="#">{{ category.name }}</a>
@@ -32,11 +33,19 @@
 						<li>
 							<details>
 								<summary>Admin</summary>
-								<ul>
-									<li><a href="{{ path('app_category') }}">Gérer les catégories</a></li>
-									<li><a href="{{ path('app_subcategory') }}">Gérer les sous-catégories</a></li>
-									<li><a href="{{ path('app_product') }}">Gérer les produits</a></li>
-									<li><a href="{{ path('app_user') }}">Gérer les utilisateurs</a></li>
+								<ul class="z-[9999]">
+									<li>
+										<a href="{{ path('app_category') }}">Gérer les catégories</a>
+									</li>
+									<li>
+										<a href="{{ path('app_subcategory') }}">Gérer les sous-catégories</a>
+									</li>
+									<li>
+										<a href="{{ path('app_product') }}">Gérer les produits</a>
+									</li>
+									<li>
+										<a href="{{ path('app_user') }}">Gérer les utilisateurs</a>
+									</li>
 								</ul>
 							</details>
 						</li>
@@ -44,14 +53,26 @@
 
 					{% if app.user %}
 						<li>
-							<a href="{{ path('app_logout') }}" class="text-error">Se déconnecter</a>
+<a href="{{ path('app_logout') }}" class="custom-btn logout-btn">
+
+								<ion-icon name="log-out-outline"></ion-icon>
+								Se déconnecter
+							</a>
 						</li>
 					{% else %}
 						<li>
-							<a href="{{ path('app_register') }}" class="text-success">S'inscrire</a>
+<a href="{{ path('app_register') }}" class="custom-btn register-btn">
+
+								<ion-icon name="person-add-outline"></ion-icon>
+								S'inscrire
+							</a>
 						</li>
 						<li>
-							<a href="{{ path('app_login') }}" class="text-info">Se connecter</a>
+<a href="{{ path('app_login') }}" class="custom-btn login-btn">
+
+								<ion-icon name="log-in-outline"></ion-icon>
+								Se connecter
+							</a>
 						</li>
 					{% endif %}
 				</ul>
@@ -94,7 +115,7 @@
 							<summary>
 								Admin
 							</summary>
-							<ul class="w-52 whitespace-nowrap">
+							<ul class="w-52 whitespace-nowrap z-[9999]">
 								<li>
 									<a href="{{ path('app_category') }}" class="text-nowrap">Gérer les catégories</a>
 								</li>
@@ -116,25 +137,33 @@
 
 		{# Section droite : recherche et connexion #}
 		<div class="navbar-end">
-			<div class="flex items-center gap-4">
+			<div
+				class="flex items-center gap-4">
 				{# Barre de recherche #}
-				<label class="input input-md">
-					<svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24">
-						<g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
-							<circle cx="11" cy="11" r="8"></circle>
-							<path d="m21 21-4.3-4.3"></path>
-						</g>
-					</svg>
-					<input type="search" required placeholder="Rechercher"/>
+				<label class="search-style">
+					<ion-icon name="search-outline" class="search-icon"></ion-icon>
+					<input type="search" required placeholder="Rechercher" class="bg-transparent border-none outline-none flex-1"/>
 				</label>
 
 				{# Boutons de connexion/déconnexion & inscription #}
 				{% if app.user %}
-					<a href="{{ path('app_logout') }}" class="btn btn-error">Se déconnecter</a>
+<a href="{{ path('app_logout') }}" class="custom-btn logout-btn">
+
+						<ion-icon name="log-out-outline"></ion-icon>
+						Se déconnecter
+					</a>
 				{% else %}
 					<div class="hidden lg:flex gap-3 px-4">
-						<a href="{{ path('app_register') }}" class="btn btn-success">S'inscrire</a>
-						<a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a>
+<a href="{{ path('app_register') }}" class="custom-btn register-btn">
+
+							<ion-icon name="person-add-outline"></ion-icon>
+							S'inscrire
+						</a>
+<a href="{{ path('app_login') }}" class="custom-btn login-btn">
+
+							<ion-icon name="log-in-outline"></ion-icon>
+							Se connecter
+						</a>
 					</div>
 				{% endif %}
 			</div>

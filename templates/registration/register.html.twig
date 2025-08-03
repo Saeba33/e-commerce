@@ -6,42 +6,51 @@
 
 {% block body %}
 	<div class="flex flex-col max-w-xl mx-auto my-8">
-		<h1 class="text-3xl font-bold text-center mb-20">Inscription</h1>
-		<div class="flex flex-col gap-12">
-			{{ form_errors(registrationForm) }}
-			{{ form_start(registrationForm) }}
+		<div class="content-container">
+			<h1 class="text-3xl font-bold text-center mb-8">Inscription</h1>
 			<div class="flex flex-col gap-6">
-				<div>
-					{{ form_label(registrationForm.firstname, 'Prénom') }}
-					{{ form_widget(registrationForm.firstname, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Renseignez votre prénom'}}) }}
+				{{ form_errors(registrationForm) }}
+				{{ form_start(registrationForm) }}
+				<div class="flex flex-col gap-6">
+					<div>
+						{{ form_label(registrationForm.firstname, 'Prénom', {'label_attr': {'class': 'block text-sm font-medium mb-2'}}) }}
+						{{ form_widget(registrationForm.firstname, {'attr': {'class': 'input-style', 'placeholder': 'Renseignez votre prénom'}}) }}
+					</div>
+
+					<div>
+						{{ form_label(registrationForm.lastname,'Nom de famille', {'label_attr': {'class': 'block text-sm font-medium mb-2'}}) }}
+						{{ form_widget(registrationForm.lastname, {'attr': {'class': 'input-style', 'placeholder': 'Renseignez votre nom de famille'}}) }}
+					</div>
+
+					<div>
+						{{ form_label(registrationForm.email,'E-mail', {'label_attr': {'class': 'block text-sm font-medium mb-2'}}) }}
+						{{ form_widget(registrationForm.email, {'attr': {'class': 'input-style', 'placeholder': 'Renseignez votre email'}}) }}
+					</div>
+
+					<div>
+						{{ form_label(registrationForm.plainPassword,'Mot de passe', {'label_attr': {'class': 'block text-sm font-medium mb-2'}}) }}
+						{{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input-style', 'placeholder': 'Votre mot de passe doit contenir au moins 6 caractères'}}) }}
+					</div>
+
+					<div class="flex items-center gap-3">
+						{{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'checkbox-style'}}) }}
+						<label for="{{ registrationForm.agreeTerms.vars.id }}" class="text-sm">Veuillez accepter les conditions générales</label>
+					</div>
+
+<button type="submit" class="custom-btn register-btn">
+
+						<ion-icon name="person-add-outline"></ion-icon>
+						Créer mon compte
+					</button>
+
+					<div class="text-center mt-4">
+						<a href="{{ path('app_login') }}" class="text-blue-600 hover:text-blue-800 underline">
+							Déjà un compte ? Se connecter
+						</a>
+					</div>
 				</div>
-
-				<div>
-					{{ form_label(registrationForm.lastname,'Nom de famille') }}
-					{{ form_widget(registrationForm.lastname, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Renseignez votre nom de famille'}}) }}
-				</div>
-
-				<div>
-					{{ form_label(registrationForm.email,'E-mail') }}
-					{{ form_widget(registrationForm.email, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Renseignez votre email'}}) }}
-
-				</div>
-
-				<div>
-					{{ form_label(registrationForm.plainPassword,'Mot de passe') }}
-					{{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Votre mot de passe doit contenir au moins 6 caractères'}}) }}
-				</div>
-
-				<div class="flex items-center gap-6">
-					{{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'checkbox checkbox-success'}}) }}
-					{{ form_label(registrationForm.agreeTerms,'Veuillez accepter les conditions générales') }}
-				</div>
-
-				<button type="submit" class="btn btn-soft btn-success">Créer mon compte</button>
-
+				{{ form_end(registrationForm) }}
 			</div>
-
-			{{ form_end(registrationForm) }}
 		</div>
 	</div>
 {% endblock %}
