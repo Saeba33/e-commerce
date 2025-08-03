@@ -8,51 +8,49 @@
 	<div class="flex-1 flex items-center justify-center py-8">
 		<div class="flex flex-col max-w-xl mx-auto w-full px-4">
 			<div class="content-container">
-			<form method="post">
-				{% if error %}
-					<div class="alert alert-error mb-6">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-				{% endif %}
+				<form method="post">
+					{% if error %}
+						<div class="alert alert-error mb-6">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+					{% endif %}
 
-				{% if app.user %}
-					<div class="flex flex-col items-center gap-4 my-8 text-center">
-						<p class="text-lg">Vous êtes connecté avec
-							<strong>{{ app.user.userIdentifier }}</strong>
-						</p>
-<a href="{{ path('app_logout') }}" class="custom-btn logout-btn">
+					{% if app.user %}
+						<div class="flex flex-col items-center gap-4 my-8 text-center">
+							<p class="text-lg">Vous êtes connecté avec
+								<strong>{{ app.user.userIdentifier }}</strong>
+							</p>
+							<a href="{{ path('app_logout') }}" class="custom-btn logout-btn">
 
-							<ion-icon name="log-out-outline"></ion-icon>
-							Déconnexion
-						</a>
-					</div>
-				{% else %}
-					<h1 class="text-3xl font-bold text-center mb-8">Connexion</h1>
-					<div class="flex flex-col gap-6">
-						<div>
-							<label for="username" class="block text-sm font-medium mb-2">E-mail</label>
-							<input type="email" value="{{ last_username }}" name="_username" id="username" class="input-style" autocomplete="email" required autofocus placeholder="Renseignez votre e-mail">
-						</div>
-
-						<div>
-							<label for="password" class="block text-sm font-medium mb-2">Mot de passe</label>
-							<input type="password" name="_password" id="password" class="input-style" autocomplete="current-password" required placeholder="Renseignez votre mot de passe">
-						</div>
-
-						<input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-<button class="custom-btn login-btn" type="submit">
-
-							<ion-icon name="log-in-outline"></ion-icon>
-							Se connecter
-						</button>
-
-						<div class="text-center mt-4">
-							<a href="{{ path('app_register') }}" class="text-blue-600 hover:text-blue-800 underline">
-								Pas encore de compte ? S'inscrire
+								<ion-icon name="log-out-outline"></ion-icon>
+								Déconnexion
 							</a>
 						</div>
-					</div>
-				{% endif %}
-			</form>
+					{% else %}
+						<h1 class="text-3xl font-bold text-center mb-8">Connexion</h1>
+						<div class="flex flex-col gap-6">
+							<div>
+								<input type="email" value="{{ last_username }}" name="_username" id="username" class="input-style" autocomplete="email" required autofocus placeholder="E-mail">
+							</div>
+
+							<div>
+								<input type="password" name="_password" id="password" class="input-style" autocomplete="current-password" required placeholder="Mot de passe">
+							</div>
+
+							<input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+							<button class="custom-btn login-btn" type="submit">
+
+								<ion-icon name="log-in-outline"></ion-icon>
+								Se connecter
+							</button>
+
+							<div class="text-center mt-4">
+								<a href="{{ path('app_register') }}" class="text-blue-600 hover:text-blue-800 underline">
+									Pas encore de compte ? S'inscrire
+								</a>
+							</div>
+						</div>
+					{% endif %}
+				</form>
+			</div>
 		</div>
-	</div>
-{% endblock %}
+	{% endblock %}
