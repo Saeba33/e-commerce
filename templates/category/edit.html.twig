@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Éditer catégorie{% endblock %}
+{% block title %}Éditer catégorie
+{% endblock %}
 
 {% block body %}
 	<div class="flex flex-col max-w-xl mx-auto my-8">
 		<div class="content-container">
-			<div class="flex justify-between items-center mb-8">
+			<div class="flex justify-between items-center gap-6 mb-8">
 				<h2 class="text-3xl font-bold">Éditer une catégorie</h2>
-				<a href="{{ path('app_category') }}" class="custom-btn back-btn">
+				<a href="{{ path('app_category') }}" class="custom-btn-with-logo back-btn">
 					<ion-icon name="return-down-back-outline"></ion-icon>
 					Retour
 				</a>
@@ -15,9 +16,8 @@
 
 			{{ form_start(form) }}
 			<div class="flex flex-col gap-6">
-				{{ form_widget(form.name, {'attr': {'class': 'input-style', 'placeholder': 'Nom de la catégorie'}}) }}
+				{{ form_widget(form.name, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Nom de la catégorie'}}) }}
 				<button type="submit" class="custom-btn edit-btn">
-					<ion-icon name="create-outline"></ion-icon>
 					Mettre à jour
 				</button>
 			</div>
