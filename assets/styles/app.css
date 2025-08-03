@@ -151,6 +151,30 @@ ion-icon {
     box-shadow: 0 4px 8px rgba(75, 85, 99, 0.2);
 }
 
+/* SELECT */
+.select-style {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 2px solid #d1d5db;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    color: #374151;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+}
+
+.select-style:focus {
+    border: 2px solid #4b5563;
+    outline: none;
+}
+
 /* CHECKBOX */
 .checkbox-style {
     transform: scale(1.25);
@@ -248,15 +272,12 @@ ion-icon {
     color: #4b5563;
 }
 
-/* Responsive search bar */
 @media (max-width: 768px) {
     .search-style {
         min-width: 100%;
         max-width: 100%;
     }
 }
-
-/* Search button mobile - same height as search bar */
 .search-btn-mobile {
     height: auto;
     padding: 0.5rem;
