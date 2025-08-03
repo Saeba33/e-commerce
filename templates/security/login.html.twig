@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-	<div class="flex-1 flex items-center justify-center py-8">
+	<div class="flex-1 flex items-center justify-center m-2">
 		<div class="flex flex-col max-w-xl mx-auto w-full px-4">
 			<div class="content-container">
 				<form method="post">
@@ -19,30 +19,19 @@
 								<strong>{{ app.user.userIdentifier }}</strong>
 							</p>
 							<a href="{{ path('app_logout') }}" class="custom-btn logout-btn">
-
-								<ion-icon name="log-out-outline"></ion-icon>
-								Déconnexion
+								Se déconnecter
 							</a>
 						</div>
 					{% else %}
-						<h1 class="text-3xl font-bold text-center mb-8">Connexion</h1>
-						<div class="flex flex-col gap-6">
-							<div>
-								<input type="email" value="{{ last_username }}" name="_username" id="username" class="input-style" autocomplete="email" required autofocus placeholder="E-mail">
-							</div>
 
-							<div>
-								<input type="password" name="_password" id="password" class="input-style" autocomplete="current-password" required placeholder="Mot de passe">
-							</div>
+						<h1 class="text-3xl font-bold text-center mt-4 mb-12">Connexion</h1>
+						<div class="flex flex-col gap-6">
+							<input type="email" value="{{ last_username }}" name="_username" id="username" class="input-style input-style-login" autocomplete="email" required autofocus placeholder="E-mail">
+
+							<input type="password" name="_password" id="password" class="input-style input-style-login" autocomplete="current-password" required placeholder="Mot de passe">
 
 							<input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-							<button class="custom-btn login-btn" type="submit">
-
-								<ion-icon name="log-in-outline"></ion-icon>
-								Se connecter
-							</button>
-
+							<button class="custom-btn login-btn" type="submit">Se connecter</button>
 							<div class="text-center mt-4">
 								<a href="{{ path('app_register') }}" class="text-blue-600 hover:text-blue-800 underline">
 									Pas encore de compte ? S'inscrire
