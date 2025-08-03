@@ -46,11 +46,11 @@ details ul {
     background: #b45309;
 }
 
-.delete-btn .logout-btn {
+.delete-btn, .logout-btn {
     background: #ef4444;
 }
 
-.delete-btn:hover {
+.delete-btn:hover, .logout-btn:hover {
     background: #b91c1c;
 }
 
