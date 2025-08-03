@@ -53,7 +53,7 @@
 
 					{% if app.user %}
 						<li>
-<a href="{{ path('app_logout') }}" class="custom-btn logout-btn">
+							<a href="{{ path('app_logout') }}" class="custom-btn-with-logo logout-btn">
 
 								<ion-icon name="log-out-outline"></ion-icon>
 								Se déconnecter
@@ -61,14 +61,16 @@
 						</li>
 					{% else %}
 						<li>
-<a href="{{ path('app_register') }}" class="custom-btn register-btn">
+							<a href="{{ path('app_register') }}" class="custom-btn-with-logo register-btn">
+
 
 								<ion-icon name="person-add-outline"></ion-icon>
 								S'inscrire
 							</a>
 						</li>
 						<li>
-<a href="{{ path('app_login') }}" class="custom-btn login-btn">
+							<a href="{{ path('app_login') }}" class="custom-btn-with-logo login-btn">
+
 
 								<ion-icon name="log-in-outline"></ion-icon>
 								Se connecter
@@ -142,24 +144,27 @@
 				{# Barre de recherche #}
 				<label class="search-style">
 					<ion-icon name="search-outline" class="search-icon"></ion-icon>
-					<input type="search" required placeholder="Rechercher" class="bg-transparent border-none outline-none flex-1"/>
+					<input type="search" required placeholder="Rechercher ..." class="bg-transparent border-none outline-none flex-1"/>
 				</label>
 
 				{# Boutons de connexion/déconnexion & inscription #}
 				{% if app.user %}
-<a href="{{ path('app_logout') }}" class="custom-btn logout-btn">
+					<a href="{{ path('app_logout') }}" class="custom-btn-with-logo logout-btn">
+
 
 						<ion-icon name="log-out-outline"></ion-icon>
 						Se déconnecter
 					</a>
 				{% else %}
 					<div class="hidden lg:flex gap-3 px-4">
-<a href="{{ path('app_register') }}" class="custom-btn register-btn">
+						<a href="{{ path('app_register') }}" class="custom-btn-with-logo register-btn">
+
 
 							<ion-icon name="person-add-outline"></ion-icon>
 							S'inscrire
 						</a>
-<a href="{{ path('app_login') }}" class="custom-btn login-btn">
+						<a href="{{ path('app_login') }}" class="custom-btn-with-logo login-btn">
+
 
 							<ion-icon name="log-in-outline"></ion-icon>
 							Se connecter
