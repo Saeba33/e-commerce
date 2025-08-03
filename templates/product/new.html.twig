@@ -1,16 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	Nouveau produit
+{% block title %}Nouveau produit
 {% endblock %}
 
 {% block body %}
-	<div class="flex flex-col max-w-xl mx-auto my-8">
+	<div class="flex flex-col max-w-2xl mx-auto my-8">
 		<div class="content-container">
-			<div class="flex justify-between items-center mb-8">
+			<div class="flex justify-between items-center gap-6 mb-8">
 				<h2 class="text-3xl font-bold">Ajouter un produit</h2>
-<a href="{{ path('app_product') }}" class="custom-btn back-btn">
-
+				<a href="{{ path('app_product') }}" class="custom-btn-with-logo back-btn">
 					<ion-icon name="return-down-back-outline"></ion-icon>
 					Retour
 				</a>
@@ -20,12 +18,12 @@
 			<div class="flex flex-col gap-6">
 				<div>
 					{{ form_label(form.name, 'Nom du produit', {'label_attr': {'class': 'block text-sm font-medium mb-2'}}) }}
-					{{ form_widget(form.name, {'attr': {'class': 'input-style', 'placeholder': 'Nom du produit'}}) }}
+					{{ form_widget(form.name, {'attr': {'class': 'input-style input-style-neutral', 'placeholder': 'Nom du produit'}}) }}
 				</div>
 
 				<div>
 					{{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-medium mb-2'}}) }}
-					{{ form_widget(form.description, {'attr': {'class': 'input-style', 'placeholder': 'Description du produit', 'rows': 4}}) }}
+					{{ form_widget(form.description, {'attr': {'class': 'input-style input-style-neutral', 'placeholder': 'Description du produit', 'rows': 4}}) }}
 				</div>
 
 				<div>
@@ -40,12 +38,12 @@
 
 				<div>
 					{{ form_label(form.stock, 'Stock initial', {'label_attr': {'class': 'block text-sm font-medium mb-2'}}) }}
-					{{ form_widget(form.stock, {'attr': {'class': 'input-style', 'placeholder': 'Quantité en stock'}}) }}
+					{{ form_widget(form.stock, {'attr': {'class': 'input-style input-style-neutral', 'placeholder': 'Quantité en stock'}}) }}
 				</div>
 
 				<div>
 					{{ form_label(form.price, 'Prix', {'label_attr': {'class': 'block text-sm font-medium mb-2'}}) }}
-					{{ form_widget(form.price, {'attr': {'class': 'input-style', 'placeholder': 'Prix en euros'}}) }}
+					{{ form_widget(form.price, {'attr': {'class': 'input-style input-style-neutral', 'placeholder': 'Prix en euros'}}) }}
 				</div>
 
 				<div>
@@ -55,8 +53,7 @@
 					</div>
 				</div>
 
-<button type="submit" class="custom-btn new-btn">
-
+				<button type="submit" class="custom-btn new-btn">
 					<ion-icon name="add-outline"></ion-icon>
 					Sauvegarder
 				</button>
