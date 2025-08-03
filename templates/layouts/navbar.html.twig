@@ -141,11 +141,20 @@
 		<div class="navbar-end">
 			<div
 				class="flex items-center gap-4">
-				{# Barre de recherche #}
-				<label class="search-style">
-					<ion-icon name="search-outline" class="search-icon"></ion-icon>
-					<input type="search" required placeholder="Rechercher ..." class="bg-transparent border-none outline-none flex-1"/>
-				</label>
+				{# Barre de recherche - cachée sur mobile, visible sur tablette+ #}
+				<div class="hidden md:block">
+					<label class="search-style">
+						<ion-icon name="search-outline" class="search-icon"></ion-icon>
+						<input type="search" required placeholder="Rechercher ..." class="border-none" autocomplete="off"/>
+					</label>
+				</div>
+
+				{# Bouton de recherche mobile #}
+				<div class="md:hidden">
+					<button class="btn btn-ghost btn-circle" onclick="toggleMobileSearch()">
+						<ion-icon name="search-outline" class="text-xl"></ion-icon>
+					</button>
+				</div>
 
 				{# Boutons de connexion/déconnexion & inscription #}
 				{% if app.user %}
@@ -174,4 +183,22 @@
 			</div>
 		</div>
 	</div>
+
+	{# Barre de recherche mobile (cachée par défaut) #}
+	<div id="mobileSearch" class="hidden md:hidden bg-base-200 px-6 py-4 border-t border-base-300">
+		<label class="search-style w-full">
+			<ion-icon name="search-outline" class="search-icon"></ion-icon>
+			<input type="search" required placeholder="Rechercher des produits..." class="border-none" autocomplete="off"/>
+		</label>
+	</div>
+
+	 <script>
+			function toggleMobileSearch() {
+				const mobileSearch = document.getElementById('mobileSearch');
+				mobileSearch.classList.toggle('hidden');
+				if (!mobileSearch.classList.contains('hidden')) {
+					mobileSearch.querySelector('input').focus();
+				}
+			}
+		</script>
 {% endblock %}
