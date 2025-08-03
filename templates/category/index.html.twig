@@ -4,43 +4,70 @@
 {% endblock %}
 
 {% block body %}
-		<div class="flex flex-col pt-20 mx-2">
-				<div class="flex justify-between items-center mb-8 mx-10">
-					<h2 class="text-3xl font-bold">Liste des catégories</h2>
-					<a href="{{ path('app_category_new') }}" class="custom-btn-with-logo new-btn">
-
-						<ion-icon name="add-outline"></ion-icon>
-						Ajouter une catégorie
-					</a>
+	<div class="container mx-auto px-4 py-6">
+		<div
+			class="content-container">
+			{# En-tête avec titre et bouton d'ajout #}
+			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2">
+						Gestion des catégories
+					</h1>
+					<p class="text-gray-600">Gérez les catégories de votre e-boutique</p>
 				</div>
+				<a href="{{ path('app_category_new') }}" class="custom-btn-with-logo new-btn">
+					<ion-icon name="add-outline"></ion-icon>
+					Nouvelle catégorie
+				</a>
+			</div>
 
-				{% include 'layouts/_flash_message.html.twig' %}
+			{# Messages flash #}
+			{% include 'layouts/_flash_message.html.twig' %}
 
-				<div class="card bg-base-100 shadow-xl">
-					<div class="card-body p-0">
+			{# Tableau des catégories #}
+			<div class="card bg-white">
+				<div class="card-body p-0">
+					{% if categories|length > 0 %}
 						<div class="overflow-x-auto">
-							<table class="table table-zebra">
-								<thead class="bg-base-200">
+							<table class="table table-zebra w-full border-2 border-base-300">
+								<thead class="bg-base-300">
 									<tr>
-										<th class="text-center">Id</th>
-										<th>Libellé</th>
-										<th class="text-center">Actions</th>
+										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center justify-center gap-1 sm:gap-2">
+												<ion-icon name="key-outline"></ion-icon>
+												<span class="hidden sm:inline">ID</span>
+											</div>
+										</th>
+										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center sm:justify-start justify-center gap-1 sm:gap-2">
+												<ion-icon name="pricetag-outline"></ion-icon>
+												<span class="hidden sm:inline">Nom de la catégorie</span>
+											</div>
+										</th>
+										<th class="text-center py-4 px-2 sm:px-6">
+											<div class="flex items-center justify-center gap-1 sm:gap-2">
+												<ion-icon name="settings-outline"></ion-icon>
+												<span class="hidden sm:inline">Actions</span>
+											</div>
+										</th>
 									</tr>
 								</thead>
 								<tbody>
 									{% for category in categories %}
 										<tr class="hover:bg-base-50 transition-colors duration-200">
-											<td class="text-center font-mono">#{{ category.id }}</td>
-											<td class="font-medium">{{ category.name }}</td>
-											<td>
-												<div class="flex justify-center gap-3">
-													<a href="{{ path('app_category_edit', {'id': category.id}) }}" class="custom-btn-with-logo edit-btn">
-
+											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<span>{{ category.id }}</span>
+											</td>
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<div class="font-semibold">{{ category.name }}</div>
+											</td>
+											<td class="py-4 px-2 sm:px-6">
+												<div class="flex flex-col sm:flex-row justify-center gap-2">
+													<a href="{{ path('app_category_edit', {'id': category.id}) }}" class="custom-btn-with-logo edit-btn text-center">
 														<ion-icon name="create-outline"></ion-icon>
 														Modifier
 													</a>
-													<a onclick="return confirm('Voulez vous vraiment supprimer cette catégorie?')" href="{{ path('app_category_delete', {'id': category.id}) }}" class="custom-btn-with-logo delete-btn">
-
+													<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer la catégorie « {{ category.name }} » ?')" href="{{ path('app_category_delete', {'id': category.id}) }}" class="custom-btn-with-logo delete-btn text-center">
 														<ion-icon name="trash-outline"></ion-icon>
 														Supprimer
 													</a>
@@ -51,7 +78,18 @@
 								</tbody>
 							</table>
 						</div>
-					</div>
+					{% else %}
+						<div class="text-center py-16">
+							<ion-icon name="folder-open-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+							<h3 class="text-xl font-semibold text-gray-600 mb-2">Aucune catégorie</h3>
+							<a href="{{ path('app_category_new') }}" class="custom-btn-with-logo new-btn">
+								<ion-icon name="add-outline"></ion-icon>
+								Créer une catégorie
+							</a>
+						</div>
+					{% endif %}
 				</div>
 			</div>
+		</div>
+	</div>
 {% endblock %}
