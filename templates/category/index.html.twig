@@ -4,12 +4,10 @@
 {% endblock %}
 
 {% block body %}
-	<div class="bg-base-100 py-8 px-4">
-		<div class="max-w-4xl mx-auto">
-			<div class="content-container">
-				<div class="flex justify-between items-center mb-8">
+		<div class="flex flex-col pt-20 mx-2">
+				<div class="flex justify-between items-center mb-8 mx-10">
 					<h2 class="text-3xl font-bold">Liste des catégories</h2>
-					<a href="{{ path('app_category_new') }}" class="custom-btn new-btn">
+					<a href="{{ path('app_category_new') }}" class="custom-btn-with-logo new-btn">
 
 						<ion-icon name="add-outline"></ion-icon>
 						Ajouter une catégorie
@@ -36,12 +34,12 @@
 											<td class="font-medium">{{ category.name }}</td>
 											<td>
 												<div class="flex justify-center gap-3">
-													<a href="{{ path('app_category_edit', {'id': category.id}) }}" class="custom-btn edit-btn">
+													<a href="{{ path('app_category_edit', {'id': category.id}) }}" class="custom-btn-with-logo edit-btn">
 
 														<ion-icon name="create-outline"></ion-icon>
 														Modifier
 													</a>
-													<a onclick="return confirm('Voulez vous vraiment supprimer cette catégorie?')" href="{{ path('app_category_delete', {'id': category.id}) }}" class="custom-btn delete-btn">
+													<a onclick="return confirm('Voulez vous vraiment supprimer cette catégorie?')" href="{{ path('app_category_delete', {'id': category.id}) }}" class="custom-btn-with-logo delete-btn">
 
 														<ion-icon name="trash-outline"></ion-icon>
 														Supprimer
@@ -56,6 +54,4 @@
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
 {% endblock %}

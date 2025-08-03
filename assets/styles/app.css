@@ -51,7 +51,7 @@ ion-icon {
     border: none;
     color: white;
     font-weight: 600;
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem 1.25rem;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     transition: all 0.2s ease-in-out;
@@ -173,8 +173,7 @@ ion-icon {
     border-radius: 0.5rem;
     padding: 0.5rem 1.25rem;
     color: #374151;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
@@ -255,6 +254,16 @@ ion-icon {
         min-width: 100%;
         max-width: 100%;
     }
+}
+
+/* Search button mobile - same height as search bar */
+.search-btn-mobile {
+    height: auto;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
 }
 
 /* ADD FILE */
