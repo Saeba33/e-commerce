@@ -156,7 +156,6 @@ details ul {
 .checkbox-style {
     transform: scale(1.25);
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-    accent-color: #4b5563;
 }
 
 .checkbox-style-register {
