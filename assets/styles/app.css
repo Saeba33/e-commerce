@@ -58,7 +58,7 @@ details ul {
     transition: all 0.2s ease-in-out;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
     text-decoration: none;
     cursor: pointer;
 }
