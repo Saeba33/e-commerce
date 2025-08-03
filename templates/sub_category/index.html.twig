@@ -4,63 +4,100 @@
 {% endblock %}
 
 {% block body %}
-	<div class="bg-base-100 py-8 px-4">
-		<div class="max-w-5xl mx-auto">
-			<div class="content-container">
-				<div class="flex justify-between items-center mb-8">
-					<h1 class="text-3xl font-bold">Liste des sous-catégories</h1>
-<a href="{{ path('app_subcategory_new') }}" class="custom-btn new-btn">
-
-						<ion-icon name="add-outline"></ion-icon>
-						Ajouter une nouvelle sous-catégorie
-					</a>
+	<div class="container mx-auto px-4 py-6">
+		<div class="content-container">
+			{# En-tête avec titre et bouton d'ajout #}
+			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2">
+						Gestion des sous-catégories
+					</h1>
+					<p class="text-gray-600">Gérez les sous-catégories de votre e-boutique</p>
 				</div>
+				<a href="{{ path('app_subcategory_new') }}" class="custom-btn-with-logo new-btn">
+					<ion-icon name="add-outline"></ion-icon>
+					Nouvelle sous-catégorie
+				</a>
+			</div>
 
-				{% include 'layouts/_flash_message.html.twig' %}
+			{# Messages flash #}
+			{% include 'layouts/_flash_message.html.twig' %}
 
-				<div class="card bg-base-100 shadow-xl">
-					<div class="card-body p-0">
+			{# Tableau des sous-catégories #}
+			<div class="card bg-white">
+				<div class="card-body p-0">
+					{% if sub_categories|length > 0 %}
 						<div class="overflow-x-auto">
-							<table class="table table-zebra">
-								<thead class="bg-base-200">
+							<table class="table table-zebra w-full border-2 border-base-300">
+								<thead class="bg-base-300">
 									<tr>
-										<th class="text-center">ID</th>
-										<th>Catégorie</th>
-										<th>Sous-catégorie</th>
-										<th class="text-center">Actions</th>
+										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center justify-center gap-1 sm:gap-2">
+												<ion-icon name="key-outline"></ion-icon>
+												<span class="hidden sm:inline">ID</span>
+											</div>
+										</th>
+										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center gap-1 sm:gap-2">
+												<ion-icon name="folder-outline"></ion-icon>
+												Catégorie
+											</div>
+										</th>
+										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center gap-1 sm:gap-2">
+												<ion-icon name="duplicate-outline"></ion-icon>
+												Sous-catégorie
+											</div>
+										</th>
+										<th class="text-center py-4 px-2 sm:px-6">
+											<div class="flex items-center justify-center gap-1 sm:gap-2">
+												<ion-icon name="settings-outline"></ion-icon>
+												<span class="hidden sm:inline">Actions</span>
+											</div>
+										</th>
 									</tr>
 								</thead>
 								<tbody>
 									{% for sub_category in sub_categories %}
 										<tr class="hover:bg-base-50 transition-colors duration-200">
-											<td class="text-center font-mono">#{{ sub_category.id }}</td>
-											<td class="font-medium">{{ sub_category.category.name }}</td>
-											<td class="font-medium">{{ sub_category.name }}</td>
-											<td>
-												<div class="flex justify-center gap-3">
-<a href="{{ path('app_subcategory_edit', {'id': sub_category.id}) }}" class="custom-btn edit-btn">
-
+											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<span>{{ sub_category.id }}</span>
+											</td>
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<div class="font-semibold">{{ sub_category.category.name }}</div>
+											</td>
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<div class="font-semibold">{{ sub_category.name }}</div>
+											</td>
+											<td class="py-4 px-2 sm:px-6">
+												<div class="flex flex-col sm:flex-row justify-center gap-2">
+													<a href="{{ path('app_subcategory_edit', {'id': sub_category.id}) }}" class="custom-btn-with-logo edit-btn text-center">
 														<ion-icon name="create-outline"></ion-icon>
 														Modifier
 													</a>
-<a onclick="return confirm('Voulez-vous vraiment supprimer cette sous-catégorie?')" href="{{ path('app_subcategory_delete', {'id': sub_category.id}) }}" class="custom-btn delete-btn">
-
+													<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer la sous-catégorie « {{ sub_category.name }} » ?')" href="{{ path('app_subcategory_delete', {'id': sub_category.id}) }}" class="custom-btn-with-logo delete-btn text-center">
 														<ion-icon name="trash-outline"></ion-icon>
 														Supprimer
 													</a>
 												</div>
 											</td>
 										</tr>
-									{% else %}
-										<tr>
-											<td colspan="4" class="text-center py-8 text-base-content/70">Aucune sous-catégorie trouvée</td>
-										</tr>
 									{% endfor %}
 								</tbody>
 							</table>
 						</div>
-					</div>
+					{% else %}
+						<div class="text-center py-16">
+							<ion-icon name="duplicate-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+							<h3 class="text-xl font-semibold text-gray-600 mb-2">Aucune sous-catégorie</h3>
+							<a href="{{ path('app_subcategory_new') }}" class="custom-btn-with-logo new-btn">
+								<ion-icon name="add-outline"></ion-icon>
+								Créer une sous-catégorie
+							</a>
+						</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>
-	{% endblock %}
+	</div>
+{% endblock %}

@@ -4,38 +4,86 @@
 {% endblock %}
 
 {% block body %}
-	<div class="bg-base-100 py-8 px-4">
-		<div class="max-w-6xl mx-auto">
-			<div class="content-container">
-				<h1 class="text-3xl font-bold text-center mb-8">Liste des utilisateurs</h1>
+	<div class="container mx-auto px-4 py-6">
+		<div class="content-container">
+			{# En-tête avec titre #}
+			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2">
+						Gestion des utilisateurs
+					</h1>
+					<p class="text-gray-600">Gérez les utilisateurs de votre e-boutique</p>
+				</div>
+			</div>
 
-				{% include 'layouts/_flash_message.html.twig' %}
+			{# Messages flash #}
+			{% include 'layouts/_flash_message.html.twig' %}
 
-				<div class="card bg-base-100 shadow-xl">
-					<div class="card-body p-0">
+			{# Tableau des utilisateurs #}
+			<div class="card bg-white">
+				<div class="card-body p-0">
+					{% if users|length > 0 %}
 						<div class="overflow-x-auto">
-							<table class="table table-zebra">
-								<thead class="bg-base-200">
+							<table class="table table-zebra w-full border-2 border-base-300">
+								<thead class="bg-base-300">
 									<tr>
-										<th class="text-center">ID</th>
-										<th>Nom</th>
-										<th>Prénom</th>
-										<th>E-mail</th>
-										<th class="text-center">Rôle</th>
-										<th class="text-center">Actions</th>
+										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center justify-center gap-1 sm:gap-2">
+												<ion-icon name="key-outline"></ion-icon>
+												<span class="hidden sm:inline">ID</span>
+											</div>
+										</th>
+										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center gap-1 sm:gap-2">
+												<ion-icon name="person-outline"></ion-icon>
+												Nom
+											</div>
+										</th>
+										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center gap-1 sm:gap-2">
+												<ion-icon name="person-outline"></ion-icon>
+												Prénom
+											</div>
+										</th>
+										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center gap-1 sm:gap-2">
+												<ion-icon name="mail-outline"></ion-icon>
+												E-mail
+											</div>
+										</th>
+										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center gap-1 sm:gap-2">
+												<ion-icon name="shield-outline"></ion-icon>
+												Rôle
+											</div>
+										</th>
+										<th class="text-center py-4 px-2 sm:px-6">
+											<div class="flex items-center justify-center gap-1 sm:gap-2">
+												<ion-icon name="settings-outline"></ion-icon>
+												<span class="hidden sm:inline">Actions</span>
+											</div>
+										</th>
 									</tr>
 								</thead>
 								<tbody>
 									{% for user in users %}
 										<tr class="hover:bg-base-50 transition-colors duration-200">
-											<td class="text-center font-mono">#{{ user.id }}</td>
-											<td class="font-medium">{{ user.lastname }}</td>
-											<td class="font-medium">{{ user.firstname }}</td>
-											<td>{{ user.email }}</td>
-											<td class="text-center">
+											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<span>{{ user.id }}</span>
+											</td>
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<div class="font-semibold">{{ user.lastname }}</div>
+											</td>
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<div class="font-semibold">{{ user.firstname }}</div>
+											</td>
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<div class="truncate">{{ user.email }}</div>
+											</td>
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
 												<span class="badge badge-primary">
 													{% if 'ROLE_ADMIN' in user.roles %}
-														Administrateur
+														Admin
 													{% elseif 'ROLE_EDITOR' in user.roles %}
 														Éditeur
 													{% else %}
@@ -43,24 +91,23 @@
 													{% endif %}
 												</span>
 											</td>
-											<td>
-												<div class="flex justify-center gap-2 flex-wrap">
+											<td class="py-4 px-2 sm:px-6">
+												<div class="flex flex-col sm:flex-row justify-center gap-2">
 													{% if 'ROLE_ADMIN' not in user.roles %}
 														{% if 'ROLE_EDITOR' not in user.roles %}
-															<a onclick="return confirm('Voulez vous vraiment affecter ce rôle à cet utilisateur ?')" class="custom-btn new-btn" href="{{ path('app_user_add_role_editor', {'id': user.id}) }}">
-
+															<a onclick="return confirm('Voulez-vous vraiment affecter le rôle éditeur à {{ user.firstname }} {{ user.lastname }} ?')" class="custom-btn-with-logo new-btn text-center" href="{{ path('app_user_add_role_editor', {'id': user.id}) }}">
 																<ion-icon name="add-outline"></ion-icon>
-																Ajouter rôle éditeur
+																<span class="hidden sm:inline">Rôle éditeur</span>
+																<span class="sm:hidden">Éditeur</span>
 															</a>
 														{% else %}
-															<a onclick="return confirm('Voulez vous vraiment retirer ce rôle à cet utilisateur ?')" class="custom-btn edit-btn" href="{{ path('app_user_remove_role_editor', {'id': user.id}) }}">
-
-																<ion-icon name="create-outline"></ion-icon>
-																Retirer rôle éditeur
+															<a onclick="return confirm('Voulez-vous vraiment retirer le rôle éditeur à {{ user.firstname }} {{ user.lastname }} ?')" class="custom-btn-with-logo edit-btn text-center" href="{{ path('app_user_remove_role_editor', {'id': user.id}) }}">
+																<ion-icon name="remove-outline"></ion-icon>
+																<span class="hidden sm:inline">Retirer éditeur</span>
+																<span class="sm:hidden">Retirer</span>
 															</a>
 														{% endif %}
-														<a onclick="return confirm('Voulez vous vraiment supprimer cet utilisateur ?')" href="{{ path('app_user_delete', {'id': user.id}) }}" class="custom-btn delete-btn">
-
+														<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer l\'utilisateur {{ user.firstname }} {{ user.lastname }} ?')" href="{{ path('app_user_delete', {'id': user.id}) }}" class="custom-btn-with-logo delete-btn text-center">
 															<ion-icon name="trash-outline"></ion-icon>
 															Supprimer
 														</a>
@@ -72,8 +119,14 @@
 								</tbody>
 							</table>
 						</div>
-					</div>
+					{% else %}
+						<div class="text-center py-16">
+							<ion-icon name="people-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+							<h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun utilisateur</h3>
+						</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>
-	{% endblock %}
+	</div>
+{% endblock %}

@@ -4,114 +4,128 @@
 {% endblock %}
 
 {% block body %}
-	<div class="bg-base-100 py-8 px-4">
-		<div class="max-w-6xl mx-auto">
-			<div class="content-container">
-				<div class="flex justify-between items-center mb-8">
-					<h2 class="text-3xl font-bold">Liste des produits</h2>
-<a href="{{ path('app_product_new') }}" class="custom-btn new-btn">
-
-						<ion-icon name="add-outline"></ion-icon>
-						Ajouter un nouveau produit
-					</a>
+	<div class="container mx-auto px-4 py-6">
+		<div class="content-container">
+			{# En-tête avec titre et bouton d'ajout #}
+			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2">
+						Gestion des produits
+					</h1>
+					<p class="text-gray-600">Gérez les produits de votre e-boutique</p>
 				</div>
+				<a href="{{ path('app_product_new') }}" class="custom-btn-with-logo new-btn">
+					<ion-icon name="add-outline"></ion-icon>
+					Nouveau produit
+				</a>
+			</div>
 
-				{% include 'layouts/_flash_message.html.twig' %}
+			{# Messages flash #}
+			{% include 'layouts/_flash_message.html.twig' %}
 
-				<div class="card bg-base-100 shadow-xl">
-					<div class="card-body p-0">
+			{# Tableau des produits #}
+			<div class="card bg-white">
+				<div class="card-body p-0">
+					{% if products|length > 0 %}
 						<div class="overflow-x-auto">
-							<table class="table table-zebra">
-								<thead class="bg-base-200">
+							<table class="table table-zebra w-full border-2 border-base-300">
+								<thead class="bg-base-300">
 									<tr>
-										<th class="text-center">Id</th>
-										<th>Nom</th>
-										<th>Description</th>
-										<th>Image</th>
-										<th>Stock</th>
-										<th>Catégories</th>
-										<th>Sous-catégories</th>
-										<th class="text-center">Prix</th>
-										<th class="text-center">Actions</th>
+										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center justify-center gap-1 sm:gap-2">
+												<ion-icon name="key-outline"></ion-icon>
+												<span class="hidden sm:inline">ID</span>
+											</div>
+										</th>
+										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center gap-1 sm:gap-2">
+												<ion-icon name="cube-outline"></ion-icon>
+												Nom
+											</div>
+										</th>
+										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center gap-1 sm:gap-2">
+												<ion-icon name="document-text-outline"></ion-icon>
+												<span class="hidden sm:inline">Description</span>
+												<span class="sm:hidden">Desc.</span>
+											</div>
+										</th>
+										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center gap-1 sm:gap-2">
+												<ion-icon name="archive-outline"></ion-icon>
+												Stock
+											</div>
+										</th>
+										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
+											<div class="flex items-center gap-1 sm:gap-2">
+												<ion-icon name="cash-outline"></ion-icon>
+												Prix
+											</div>
+										</th>
+										<th class="text-center py-4 px-2 sm:px-6">
+											<div class="flex items-center justify-center gap-1 sm:gap-2">
+												<ion-icon name="settings-outline"></ion-icon>
+												<span class="hidden sm:inline">Actions</span>
+											</div>
+										</th>
 									</tr>
 								</thead>
 								<tbody>
 									{% for product in products %}
 										<tr class="hover:bg-base-50 transition-colors duration-200">
-											<td class="text-center font-mono">#{{ product.id }}</td>
-											<td class="font-medium">{{ product.name }}</td>
-											<td class="max-w-xs">
-												<div class="line-clamp-3">{{ product.description | slice(0,100) }}
-													...</div>
+											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<span>{{ product.id }}</span>
 											</td>
-											<td class="font-medium">{{ product.image }}</td>
-
-											<td>
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<div class="font-semibold">{{ product.name }}</div>
+											</td>
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<div class="max-w-xs truncate">{{ product.description | slice(0,50) }}{% if product.description|length > 50 %}...{% endif %}</div>
+											</td>
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
 												{% if product.stock > 0 %}
-													<span class="font-medium">{{ product.stock }}</span>
+													<span class="badge badge-success">{{ product.stock }}</span>
 												{% else %}
-													<span>Stock épuisé</span>
+													<span class="badge badge-error">Épuisé</span>
 												{% endif %}
 											</td>
-
-
-											<td>
-												<div class="badge-container">
-													{% set categories = [] %}
-													{% for subCategory in product.subCategory %}
-														{% if subCategory.category.name not in categories %}
-															{% set categories = categories|merge([subCategory.category.name]) %}
-															<span class="badge badge-secondary badge-sm">
-																{{ subCategory.category.name }}
-															</span>
-														{% endif %}
-													{% endfor %}
-													{% if categories is empty %}
-														<span class="text-base-content/50 italic text-sm">Aucune catégorie</span>
-													{% endif %}
-												</div>
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<span class="font-semibold">{{ product.price }}€</span>
 											</td>
-											<td>
-												<div class="badge-container">
-													{% for subCategory in product.subCategory %}
-														<span class="badge badge-primary badge-sm">
-															{{ subCategory.name }}
-														</span>
-													{% else %}
-														<span class="text-base-content/50 italic text-sm">Aucune sous-catégorie</span>
-													{% endfor %}
-												</div>
-											</td>
-											<td class="text-center font-semibold">{{ product.price }}€</td>
-											<td>
-												<div class="flex justify-center gap-2 flex-wrap">
-<a href="{{ path('app_product_edit', {'id': product.id}) }}" class="custom-btn edit-btn">
-
+											<td class="py-4 px-2 sm:px-6">
+												<div class="flex flex-col sm:flex-row justify-center gap-2">
+													<a href="{{ path('app_product_edit', {'id': product.id}) }}" class="custom-btn-with-logo edit-btn text-center">
 														<ion-icon name="create-outline"></ion-icon>
 														Modifier
 													</a>
-													<a onclick="return confirm('Voulez vous vraiment supprimer ce produit?')" href="{{ path('app_product_delete', {'id': product.id}) }}" class="delete-btn">
+													<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer le produit « {{ product.name }} » ?')" href="{{ path('app_product_delete', {'id': product.id}) }}" class="custom-btn-with-logo delete-btn text-center">
 														<ion-icon name="trash-outline"></ion-icon>
 														Supprimer
 													</a>
-<a href="{{ path('app_product_stock_add', {'id': product.id})}}" class="custom-btn new-btn">
-
+													<a href="{{ path('app_product_stock_add', {'id': product.id})}}" class="custom-btn-with-logo new-btn text-center">
 														<ion-icon name="add-outline"></ion-icon>
-														Ajouter stock
+														<span class="hidden sm:inline">Stock</span>
+														<span class="sm:hidden">+</span>
 													</a>
 												</div>
 											</td>
-										</tr>
-									{% else %}
-										<tr>
-											<td colspan="9" class="text-center py-8 text-base-content/70">Aucun produit trouvé</td>
 										</tr>
 									{% endfor %}
 								</tbody>
 							</table>
 						</div>
-					</div>
+					{% else %}
+						<div class="text-center py-16">
+							<ion-icon name="cube-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+							<h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun produit</h3>
+							<a href="{{ path('app_product_new') }}" class="custom-btn-with-logo new-btn">
+								<ion-icon name="add-outline"></ion-icon>
+								Créer un produit
+							</a>
+						</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>
-	{% endblock %}
+	</div>
+{% endblock %}
