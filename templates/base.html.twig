@@ -27,8 +27,9 @@
 			</div>
 		{% endblock %}
 
-		<main class="flex-1 pt-20 bg-gray-100"> {% block body %}{% endblock %}
-			</main>
+		<main class="flex-1 pt-20 flex flex-col">
+			{% block body %}{% endblock %}
+		</main>
 
 			{% block footer %}
 				{% include 'layouts/footer.html.twig' %}
