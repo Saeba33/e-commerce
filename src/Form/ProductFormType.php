@@ -33,6 +33,7 @@ class ProductFormType extends AbstractType
                             'image/jpg',
                             'image/webp',
                         ],
+                        'maxSizeMessage' => 'Votre image ne doit pas dépasser 1024 ko',
                         'mimeTypesMessage' => 'Veuillez choisir un format valide (jpeg, png, jpg, webp)',
                     ])
                 ]
