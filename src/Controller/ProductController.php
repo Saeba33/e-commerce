@@ -116,14 +116,40 @@ final class ProductController extends AbstractController
     public function addStock(EntityManagerInterface $emi, ProductRepository $repo, $id, Request $request): Response
     {
         $product = $repo->find($id);
-        
+
         if (!$product) {
             throw $this->createNotFoundException('Le produit demandé n\'existe pas.');
         }
-        
+
         $stockAdd = new ProductHistory();
+        $stockAdd->setProduct($product);
         $form = $this->createForm(ProductHistoryFormType::class, $stockAdd);
         $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer la quantité à ajouter
+            $quantityToAdd = $stockAdd->getQuantity();
+
+            // Debug pour vérifier les valeurs
+            dump('Form submitted and valid', $quantityToAdd, $product->getStock());
+
+            // Ajouter la quantité au stock existant
+            $product->setStock($product->getStock() + $quantityToAdd);
+
+            // Définir la date de l'ajout
+            $stockAdd->setCreatedAt(new DateTimeImmutable());
+
+            // Sauvegarder les modifications
+            $emi->persist($stockAdd);
+            $emi->persist($product);
+            $emi->flush();
+
+            // Message de succès
+            $this->addFlash('success', sprintf('Stock ajouté avec succès ! +%d unités pour "%s"', $quantityToAdd, $product->getName()));
+
+            // Redirection vers la liste des produits
+            return $this->redirectToRoute('app_product');
+        }
 
         return $this->render('product/addStock.html.twig', [
             'form' => $form->createView(),
