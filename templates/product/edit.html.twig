@@ -12,7 +12,7 @@
 		{{ form_start(form) }}
 		<div class="flex flex-col gap-6">
 			{{ form_widget(form.name, {'attr': {'class': 'input-style input-style-common w-full mt-1', 'placeholder': 'Nom du produit'}}) }}
-			{{ form_widget(form.description, {'attr': {'class': 'textarea textarea-bordered w-full mt-1', 'placeholder': 'Description du produit'}}) }}
+			{{ form_widget(form.description, {'attr': {'class': 'input-style input-style-common w-full mt-1', 'placeholder': 'Description du produit'}}) }}
 			{{ form_widget(form.image, {'attr': {'class': 'input-style', 'placeholder': 'Image'}}) }}
 			<div>{{ form_widget(form.stock, {'attr': {'class': ' input-style-disabled', 'placeholder': 'Stock', 'disabled': 'disabled'}}) }}
 			<p class="text-xs m-1">Vous ne pouvez pas modifier le stock depuis cette page.</p>
