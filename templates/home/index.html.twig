@@ -5,12 +5,11 @@
 
 {% block body %}
 	<div class="text-center my-20">
-		<h1 class="text-3xl mb-6">Hello
-			{{ controller_name }}! ✅</h1>
+		<h1 class="text-3xl mb-6">Liste des produits</h1>
 		<div class="flex flex-wrap gap-6 items-center justify-center">
 			{% for product in products %}
 				<div class="card bg-white grid max-w-80 gap-2 p-2">
-					<img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}">
+					<img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}" class="w-50 h-50 object-cover">
 					<h3>{{product.name}}</h3>
 					<p>{{product.description}}</p>
 					<span>{{product.price}}€</span>
