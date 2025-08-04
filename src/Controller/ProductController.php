@@ -112,14 +112,23 @@ final class ProductController extends AbstractController
 
 
     #region ADD STOCK
-    #[Route('add/product/{id}/', name: 'app_product_stock_add', methods: ['POST'])]
-    public function addStock(EntityManagerInterface $emi, $id, Request $request): Response
+    #[Route('add/product/{id}/', name: 'app_product_stock_add', methods: ['GET', 'POST'])]
+    public function addStock(EntityManagerInterface $emi, ProductRepository $repo, $id, Request $request): Response
     {
+        $product = $repo->find($id);
+        
+        if (!$product) {
+            throw $this->createNotFoundException('Le produit demandé n\'existe pas.');
+        }
+        
         $stockAdd = new ProductHistory();
         $form = $this->createForm(ProductHistoryFormType::class, $stockAdd);
         $form->handleRequest($request);
 
-        return $this->render('product/addStock.html.twig', ['form' => $form->createView()]);
+        return $this->render('product/addStock.html.twig', [
+            'form' => $form->createView(),
+            'product' => $product
+        ]);
     }
     #endregion
 }
