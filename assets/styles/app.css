@@ -151,6 +151,18 @@ ion-icon {
     box-shadow: 0 4px 8px rgba(75, 85, 99, 0.2);
 }
 
+.input-style-disabled {
+    width: 100%;
+    background: rgba(224, 224, 224, 0.9);
+    backdrop-filter: blur(10px);
+    border: 2px solid #d1d5db;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: #374151;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
 /* SELECT */
 .select-style {
     width: 100%;
