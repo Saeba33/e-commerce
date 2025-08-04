@@ -65,13 +65,21 @@
 												Prix
 											</div>
 										</th>
-										<th class="text-center py-4 px-2 sm:px-6">
+										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">
 											<div
 												class="flex items-center justify-center gap-1 sm:gap-2">
 												{# <ion-icon name="settings-outline"></ion-icon> #}
 												<span class="hidden sm:inline">Actions</span>
 											</div>
 										</th>
+										<th class="text-center py-4 px-2 sm:px-6">
+											<div
+												class="flex items-center justify-center gap-1 sm:gap-2">
+												{# <ion-icon name="list-outline"></ion-icon> #}
+												<span class="hidden sm:inline">Historique</span>
+											</div>
+										</th>
+
 									</tr>
 								</thead>
 								<tbody>
@@ -99,7 +107,7 @@
 											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
 												<span class="font-semibold">{{ product.price }}€</span>
 											</td>
-											<td class="py-4 px-2 sm:px-6">
+											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
 												<div class="flex flex-col sm:flex-row justify-center gap-2">
 													<a href="{{ path('app_product_edit', {'id': product.id}) }}" class="custom-btn-with-logo edit-btn text-center">
 														<ion-icon name="create-outline"></ion-icon>
@@ -111,14 +119,18 @@
 													</a>
 													<a href="{{ path('app_product_stock_add', {'id': product.id})}}" class="custom-btn-with-logo new-btn">
 														<ion-icon name="add-outline"></ion-icon>
-														<span class="hidden sm:inline">Ajouter Stock</span>
-														<span class="sm:hidden">+</span>
+														<span class="hidden sm:inline">Ajouter du stock</span>
+														<span class="sm:hidden">Ajouter</span>
 													</a>
-													<a href="{{ path('app_product_stock_add_history', {'id': product.id})}}" class="custom-btn-with-logo bg-blue-500 text-center">
-														<ion-icon name="time-outline"></ion-icon>
-													</a>
+
 												</div>
 											</td>
+											<td>
+												<a href="{{ path('app_product_stock_add_history', {'id': product.id})}}" class="text-gray-600 text-lg flex items-center justify-center hover:text-blue-600">
+													<ion-icon name="newspaper-outline"></ion-icon>
+												</a>
+											</td>
+
 										</tr>
 									{% endfor %}
 								</tbody>
