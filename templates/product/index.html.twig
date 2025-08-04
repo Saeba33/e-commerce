@@ -44,10 +44,10 @@
 											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">
 												<span>{{ product.id }}</span>
 											</td>
-											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
+											<td class="py-4 px-2 border-r-2 border-base-300">
 												<div class="text-center font-semibold">{{ product.name }}</div>
 											</td>
-											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
+											<td class="py-4 px-2 border-r-2 border-base-300">
 												<div class="text-center max-w-xs truncate">{{ product.description | slice(0,50) }}
 													{% if product.description|length > 50 %}...
 													{% endif %}
@@ -61,21 +61,26 @@
 												{% endif %}
 											</td>
 											<td class="text-center py-4 px-2 border-r-2 border-base-300">
-												<span>{{ product.price }}€</span>
+												<span>{{ product.price }} €</span>
 											</td>
 											<td class="py-4 px-2 border-r-2 border-base-300">
-												<div class="flex flex-col sm:flex-row justify-center gap-2">
+												<div class="flex flex-col md:flex-row justify-center gap-2">
 													<a href="{{ path('app_product_edit', {'id': product.id}) }}" class="custom-btn-with-logo edit-btn">
-														<ion-icon name="create-outline"></ion-icon>
-														Modifier
+														<div class="hidden md:inline">
+															<ion-icon name="create-outline"></ion-icon> 
+															<span>Modifier</span>
+														</div>
+														<div class="inline md:hidden">
+															<ion-icon name="create-outline"></ion-icon>
+														</div>
 													</a>
 													<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer le produit « {{ product.name }} » ?')" href="{{ path('app_product_delete', {'id': product.id}) }}" class="custom-btn-with-logo delete-btn">
 														<ion-icon name="trash-outline"></ion-icon>
-														Supprimer
+														<span class="hidden md:inline">Supprimer</span>
 													</a>
 													<a href="{{ path('app_product_stock_add', {'id': product.id})}}" class="custom-btn-with-logo new-btn">
 														<ion-icon name="add-outline"></ion-icon>
-														<span class="hidden sm:inline">Ajouter du stock</span>
+														<span class="hidden md:inline">Ajouter du stock</span>
 													</a>
 												</div>
 											</td>
