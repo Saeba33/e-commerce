@@ -38,11 +38,11 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $image = $form->get('image')->getData();/* on recup l'image et son contenu*/
+            $image = $form->get('image')->getData();
 
-            if ($image) {/*si l'image existe*/
+            if ($image) {
                 $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeImageName = $slugger->slug($originalName);/* permet de recup des image avec espace dans le nom et l'enlever*/
+                $safeImageName = $slugger->slug($originalName);
                 $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension();/*cree un id unique a toute les images meme si elles ont un nom similaire*/
 
                 try {
@@ -92,18 +92,18 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $image = $form->get('image')->getData();/* on recup l'image et son contenu*/
+            $image = $form->get('image')->getData();
 
-            if ($image) {/*si l'image existe*/
+            if ($image) {
                 $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeImageName = $slugger->slug($originalName);/* permet de recup des image avec espace dans le nom et l'enlever*/
-                $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension();/*cree un id unique a toute les images meme si elles ont un nom similaire*/
+                $safeImageName = $slugger->slug($originalName);
+                $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension();
 
                 try {
                     $image->move(
                         $this->getParameter('image_directory'),
-                        $newFileImageName);/* on recup l'image et on la renomme et on la stocke dans le repoertoire */
-                } catch (FileException $exception) {}/*en cas d'erreur*/
+                        $newFileImageName);
+                } catch (FileException $exception) {}
                 $product->setImage($newFileImageName);
             }
 
@@ -176,10 +176,10 @@ class ProductController extends AbstractController
     #[Route('add/product/{id}/history', name: 'app_product_stock_add_history', methods: ['GET'])]
     public function showHistoryProductStock($id, ProductRepository $productRepository, ProductHistoryRepository $productHistoryRepository): Response
     {
-        $product = $productRepository->find($id);/*on recupere le produit passé en paramètre*/
+        $product = $productRepository->find($id);
         $productAddHistory = $productHistoryRepository->findBy(['product'=>$product],['id'=>'DESC']);
         
-        return $this->render('product/addedHistoryStockShow.html.twig',[
+        return $this->render('product/historyStock.html.twig',[
             "productsAdded"=>$productAddHistory
         ]);
     }
