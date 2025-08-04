@@ -9,16 +9,20 @@
 			{{ controller_name }}! ✅</h1>
 		<div class="flex flex-wrap gap-6 items-center justify-center">
 			{% for product in products %}
-				<div class="card bg-white flex flex-col gap-2 p-2 w-[300px] h-80">
-					<img src="{{product.image}}" alt="{{product.image}}">
+				<div class="card bg-white grid max-w-80 gap-2 p-2">
+					<img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}">
 					<h3>{{product.name}}</h3>
 					<p>{{product.description}}</p>
-					<span>{{product.price}} €</span>
+					<span>{{product.price}}€</span>
 					<span>{{product.stock}}</span>
-                    <button class="bg-green-200">Ajouter au panier</button>
+					<div class="flex">
+						<span>-</span>
+						<span>Quantité</span>
+						<span>+</span>
+					</div>
+					<button class="bg-green-200 cursor-pointer">Ajouter au panier</button>
 				</div>
 			{% endfor %}
 		</div>
-
 	</div>
 {% endblock %}
