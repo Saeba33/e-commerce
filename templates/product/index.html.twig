@@ -34,13 +34,13 @@
 									<tr>
 										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">
 											<div class="flex items-center justify-center gap-1 sm:gap-2">
-												<ion-icon name="key-outline"></ion-icon>
+												{# <ion-icon name="key-outline"></ion-icon> #}
 												<span class="hidden sm:inline">ID</span>
 											</div>
 										</th>
 										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
 											<div class="flex items-center gap-1 sm:gap-2">
-												<ion-icon name="cube-outline"></ion-icon>
+												{# <ion-icon name="cube-outline"></ion-icon> #}
 												Nom
 											</div>
 										</th>
@@ -53,19 +53,19 @@
 										</th>
 										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
 											<div class="flex items-center gap-1 sm:gap-2">
-												<ion-icon name="archive-outline"></ion-icon>
+												{# <ion-icon name="archive-outline"></ion-icon> #}
 												Stock
 											</div>
 										</th>
 										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
 											<div class="flex items-center gap-1 sm:gap-2">
-												<ion-icon name="cash-outline"></ion-icon>
+												{# <ion-icon name="cash-outline"></ion-icon> #}
 												Prix
 											</div>
 										</th>
 										<th class="text-center py-4 px-2 sm:px-6">
 											<div class="flex items-center justify-center gap-1 sm:gap-2">
-												<ion-icon name="settings-outline"></ion-icon>
+												{# <ion-icon name="settings-outline"></ion-icon> #}
 												<span class="hidden sm:inline">Actions</span>
 											</div>
 										</th>
@@ -88,9 +88,9 @@
 											</td>
 											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
 												{% if product.stock > 0 %}
-													<span class="badge badge-success">{{ product.stock }}</span>
+													<span class="">{{ product.stock }}</span>
 												{% else %}
-													<span class="badge badge-error">Épuisé</span>
+													<span class="">Épuisé</span>
 												{% endif %}
 											</td>
 											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
