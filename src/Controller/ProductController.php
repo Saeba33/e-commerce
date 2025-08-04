@@ -43,25 +43,25 @@ class ProductController extends AbstractController
             if ($image) {
                 $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeImageName = $slugger->slug($originalName);
-                $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension();/*cree un id unique a toute les images meme si elles ont un nom similaire*/
+                $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension();
 
                 try {
                     $image->move(
                         $this->getParameter('image_directory'),
-                        $newFileImageName);/* on recup l'image et on la renomme et on la stocke dans le repoertoire */
-                } catch (FileException $exception) {}/*en cas d'erreur*/
+                        $newFileImageName);
+                } catch (FileException $exception) {}
                 $product->setImage($newFileImageName);
             }
 
             $entityManager->persist($product);
             $entityManager->flush();
 
-            $stockHistory = new ProductHistory();/*nouvelle instanciation de la classe*/
-            $stockHistory->setQuantity($product->getStock());/*on recup l'id du produit et on ajoute au stock*/
-            $stockHistory->setProduct($product);/*on insere le produit*/
+            $stockHistory = new ProductHistory();
+            $stockHistory->setQuantity($product->getStock());
+            $stockHistory->setProduct($product);
             $stockHistory->setCreatedAt(new DateTimeImmutable());
             $entityManager->persist($stockHistory);
-            $entityManager->flush();/*effectue la mise a jour en bdd*/
+            $entityManager->flush();
 
             $this->addFlash('success', 'Votre produit a été ajouté');
             return $this->redirectToRoute('app_product', [], Response::HTTP_SEE_OTHER);
