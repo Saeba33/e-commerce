@@ -145,7 +145,7 @@ final class ProductController extends AbstractController
             $emi->flush();
 
             // Message de succès
-            $this->addFlash('success', sprintf('Stock ajouté avec succès ! +%d unités pour "%s"', $quantityToAdd, $product->getName()));
+            $this->addFlash('success', sprintf('Stock ajouté avec succès !', $quantityToAdd, $product->getName()));
 
             // Redirection vers la liste des produits
             return $this->redirectToRoute('app_product');

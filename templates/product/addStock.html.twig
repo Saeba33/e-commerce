@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter du stock
+{% block title %}
+    Ajouter du stock
 {% endblock %}
 
 {% block body %}
@@ -17,7 +18,7 @@
 			{{ form_start(form) }}
 			<div class="flex flex-col gap-6">
 				<div>
-					{{ form_widget(form.quantity, {'attr': {'class': 'input-style-neutral', 'placeholder': 'Quantité à ajouter', 'min': '1'}}) }}
+					{{ form_widget(form.quantity, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Quantité à ajouter'}}) }}
 				</div>
 
 				<button type="submit" class="custom-btn new-btn">
