@@ -156,11 +156,13 @@ class ProductController extends AbstractController
 
                 $stockAdd->setCreatedAt(new DateTimeImmutable());
                 $stockAdd->setProduct($product);
+                
                 $entityManager->persist($stockAdd);
                 $entityManager->flush();
 
                 $this->addFlash('success', "Le stock du produit a été modifié");
                 return $this->redirectToRoute('app_product');
+                
             } else {
                 $this->addFlash('error', "Le stock du produit ne doit pas être inférieur à zéro");
                 return $this->redirectToRoute('app_product_stock_add', ['id' => $product->getId()]);
