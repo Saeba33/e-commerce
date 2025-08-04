@@ -19,12 +19,22 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ProductController extends AbstractController
 {
-    #region READ
+    #region READ ALL
     #[Route('editor/product', name: 'app_product', methods: ['GET'])]
     public function listProducts(ProductRepository $productRepository): Response
     {
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findAll(),
+        ]);
+    }
+    #endregion
+
+    #region READ ONE
+    #[Route('editor/product/{id}', name: 'app_product_show', methods: ['GET'])]
+    public function show(Product $product): Response
+    {
+        return $this->render('product/show.html.twig', [
+            'product' => $product,
         ]);
     }
     #endregion
@@ -48,8 +58,10 @@ class ProductController extends AbstractController
                 try {
                     $image->move(
                         $this->getParameter('image_directory'),
-                        $newFileImageName);
-                } catch (FileException $exception) {}
+                        $newFileImageName
+                    );
+                } catch (FileException $exception) {
+                }
                 $product->setImage($newFileImageName);
             }
 
@@ -74,16 +86,6 @@ class ProductController extends AbstractController
     }
     #endregion
 
-    #region SHOW
-    #[Route('editor/product/{id}', name: 'app_product_show', methods: ['GET'])]
-    public function show(Product $product): Response
-    {
-        return $this->render('product/show.html.twig', [
-            'product' => $product,
-        ]);
-    }
-    #endregion
-
     #region UPDATE
     #[Route('editor/product/edit/{id}', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function editProduct(Request $request, Product $product, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
@@ -102,8 +104,10 @@ class ProductController extends AbstractController
                 try {
                     $image->move(
                         $this->getParameter('image_directory'),
-                        $newFileImageName);
-                } catch (FileException $exception) {}
+                        $newFileImageName
+                    );
+                } catch (FileException $exception) {
+                }
                 $product->setImage($newFileImageName);
             }
 
@@ -144,13 +148,9 @@ class ProductController extends AbstractController
 
         $product = $productRepository->find($id);
 
-        if (!$product) {
-            throw $this->createNotFoundException('Le produit demandé n\'existe pas.');
-        }
-
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if($stockAdd->getQuantity() > 0){
+            if ($stockAdd->getQuantity() > 0) {
                 $newQuantity = $product->getStock() + $stockAdd->getQuantity();
                 $product->setStock($newQuantity);
 
@@ -162,13 +162,13 @@ class ProductController extends AbstractController
                 $this->addFlash('success', "Le stock du produit a été modifié");
                 return $this->redirectToRoute('app_product');
             } else {
-                $this->addFlash('danger', "Le stock du produit ne doit pas être inférieur à zéro");
-                return $this->redirectToRoute('app_product_stock_add', ['id'=>$product->getId()]);
+                $this->addFlash('error', "Le stock du produit ne doit pas être inférieur à zéro");
+                return $this->redirectToRoute('app_product_stock_add', ['id' => $product->getId()]);
             }
         }
 
         return $this->render('product/addStock.html.twig', [
-            'form'=> $form->createView(),
+            'form' => $form->createView(),
             'product' => $product,
         ]);
     }
@@ -177,10 +177,10 @@ class ProductController extends AbstractController
     public function showHistoryProductStock($id, ProductRepository $productRepository, ProductHistoryRepository $productHistoryRepository): Response
     {
         $product = $productRepository->find($id);
-        $productAddHistory = $productHistoryRepository->findBy(['product'=>$product],['id'=>'DESC']);
-        
-        return $this->render('product/historyStock.html.twig',[
-            "productsAdded"=>$productAddHistory
+        $productAddHistory = $productHistoryRepository->findBy(['product' => $product], ['id' => 'DESC']);
+
+        return $this->render('product/historyStock.html.twig', [
+            "productsAdded" => $productAddHistory
         ]);
     }
     #endregion
