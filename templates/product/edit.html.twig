@@ -11,14 +11,14 @@
 
 		{{ form_start(form) }}
 		<div class="flex flex-col gap-6">
-			{{ form_widget(form.name, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Nom du produit'}}) }}
+			{{ form_widget(form.name, {'attr': {'class': 'input-style input-style-common w-full mt-1', 'placeholder': 'Nom du produit'}}) }}
 			{{ form_widget(form.description, {'attr': {'class': 'textarea textarea-bordered w-full mt-1', 'placeholder': 'Description du produit'}}) }}
-			{{ form_widget(form.image, {'attr': {'class': '', 'placeholder': 'Image'}}) }}
-			{{ form_widget(form.stock, {'attr': {'class': '', 'placeholder': 'Stock'}}) }}
-			{{ form_widget(form.price, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Prix en euros'}}) }}
-			{{ form_widget(form.sub_category, {'attr': {'class': 'w-full mt-1'}}) }}
+			{{ form_widget(form.image, {'attr': {'class': 'input-style', 'placeholder': 'Image'}}) }}
+			{{ form_widget(form.stock, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Stock'}}) }}
+			{{ form_widget(form.price, {'attr': {'class': 'input-style input-style-common w-full mt-1', 'placeholder': 'Prix (en euros)'}}) }}
+			{{ form_widget(form.sub_category, {'attr': {'class': 'w-full mt-1 checkbox-style'}}) }}
 
-			<button type="submit" class="btn btn-soft btn-warning">Mettre à jour</button>
+			<button type="submit" class="custom-btn edit-btn">Mettre à jour</button>
 		</div>
 		{{ form_end(form) }}
 	</div>
