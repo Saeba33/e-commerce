@@ -29,16 +29,6 @@ class ProductController extends AbstractController
     }
     #endregion
 
-    #region READ ONE
-    #[Route('editor/product/{id}', name: 'app_product_show', methods: ['GET'])]
-    public function show(Product $product): Response
-    {
-        return $this->render('product/show.html.twig', [
-            'product' => $product,
-        ]);
-    }
-    #endregion
-
     #region CREATE
     #[Route('editor/product/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function newProduct(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
@@ -82,6 +72,16 @@ class ProductController extends AbstractController
         return $this->render('product/new.html.twig', [
             'product' => $product,
             'form' => $form,
+        ]);
+    }
+    #endregion
+
+    #region READ ONE
+    #[Route('editor/product/{id}', name: 'app_product_show', methods: ['GET'])]
+    public function show(Product $product): Response
+    {
+        return $this->render('product/show.html.twig', [
+            'product' => $product,
         ]);
     }
     #endregion
@@ -139,7 +139,7 @@ class ProductController extends AbstractController
     #endregion
 
     #region ADD STOCK
-    #[Route('add/product/{id}/', name: 'app_product_stock_add', methods: ['GET', 'POST'])]
+    #[Route('add/stock/product/{id}/', name: 'app_product_stock_add', methods: ['GET', 'POST'])]
     public function addStock($id, EntityManagerInterface $entityManager, Request $request, ProductRepository $productRepository): Response
     {
         $stockAdd = new ProductHistory();
@@ -156,13 +156,13 @@ class ProductController extends AbstractController
 
                 $stockAdd->setCreatedAt(new DateTimeImmutable());
                 $stockAdd->setProduct($product);
-                
+
                 $entityManager->persist($stockAdd);
                 $entityManager->flush();
 
                 $this->addFlash('success', "Le stock du produit a été modifié");
                 return $this->redirectToRoute('app_product');
-                
+
             } else {
                 $this->addFlash('error', "Le stock du produit ne doit pas être inférieur à zéro");
                 return $this->redirectToRoute('app_product_stock_add', ['id' => $product->getId()]);
@@ -175,7 +175,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('add/product/{id}/history', name: 'app_product_stock_add_history', methods: ['GET'])]
+    #[Route('add/stock/product/{id}/history', name: 'app_product_stock_add_history', methods: ['GET'])]
     public function showHistoryProductStock($id, ProductRepository $productRepository, ProductHistoryRepository $productHistoryRepository): Response
     {
         $product = $productRepository->find($id);
