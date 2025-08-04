@@ -1,65 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Éditer produit
+{% block title %}
+	Éditer produit
 {% endblock %}
 
 {% block body %}
-	<div class="flex flex-col max-w-2xl mx-auto my-8">
-		<div class="content-container">
-			<div class="flex justify-between items-center gap-6 mb-8">
-				<h2 class="text-3xl font-bold">Éditer un produit</h2>
-				<a href="{{ path('app_product') }}" class="custom-btn-with-logo back-btn">
-					<ion-icon name="return-down-back-outline"></ion-icon>
-					Retour
-				</a>
-			</div>
+	<div class="flex flex-col max-w-xl mx-auto my-8">
 
-			{{ form_start(form) }}
-			<div class="flex flex-col gap-6">
-				{{ form_widget(form.name, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Nom du produit'}}) }}
+		<h2 class="text-3xl font-bold text-center mb-20">Éditer un produit</h2>
 
-				{{ form_widget(form.description, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Description du produit', 'rows': 4}}) }}
+		{{ form_start(form) }}
+		<div class="flex flex-col gap-6">
+			{{ form_widget(form.name, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Nom du produit'}}) }}
+			{{ form_widget(form.description, {'attr': {'class': 'textarea textarea-bordered w-full mt-1', 'placeholder': 'Description du produit'}}) }}
+			{{ form_widget(form.image, {'attr': {'class': '', 'placeholder': 'Image'}}) }}
+			{{ form_widget(form.stock, {'attr': {'class': '', 'placeholder': 'Stock'}}) }}
+			{{ form_widget(form.price, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Prix en euros'}}) }}
+			{{ form_widget(form.sub_category, {'attr': {'class': 'w-full mt-1'}}) }}
 
-				<div>
-					{% if form.vars.data.image %}
-						<div class="mb-4">
-							<div class="relative w-32 h-32 mx-auto">
-								<img src="{{ asset('uploads/images/' ~ form.vars.data.image) }}" alt="Image actuelle" class="w-full h-full object-cover rounded-lg border-2 border-gray-300 shadow-md">
-								<div class="absolute -top-2 -right-2 bg-blue-500 text-white rounded-full p-1">
-									<ion-icon name="image-outline" class="text-sm"></ion-icon>
-								</div>
-							</div>
-							<p class="text-center text-sm text-gray-600 mt-2">Image actuelle</p>
-						</div>
-					{% endif %}
-
-					<div class="add-image-btn cursor-pointer relative">
-						<ion-icon name="image-outline"></ion-icon>
-						{% if form.vars.data.image %}
-							Changer l'image
-						{% else %}
-							Choisir une image
-						{% endif %}
-						{{ form_widget(form.image, {'attr': {'class': 'opacity-0 absolute inset-0 w-full h-full cursor-pointer z-10'}}) }}
-					</div>
-				</div>
-
-				{{ form_widget(form.stock, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Quantité en stock'}}) }}
-
-				{{ form_widget(form.price, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Prix en euros'}}) }}
-
-				<div>
-					{{ form_label(form.sub_category, 'Sous-catégories', {'label_attr': {'class': 'block text-sm font-medium mb-2'}}) }}
-					<div class="grid grid-cols-2 gap-2">
-						{{ form_widget(form.sub_category, {'attr': {'class': 'checkbox-style'}}) }}
-					</div>
-				</div>
-
-				<button type="submit" class="custom-btn edit-btn">
-					Mettre à jour
-				</button>
-			</div>
-			{{ form_end(form) }}
+			<button type="submit" class="btn btn-soft btn-warning">Mettre à jour</button>
 		</div>
+		{{ form_end(form) }}
 	</div>
 {% endblock %}
