@@ -33,13 +33,15 @@
 								<thead class="bg-gray-300">
 									<tr>
 										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center justify-center gap-1 sm:gap-2">
+											<div
+												class="flex items-center justify-center gap-1 sm:gap-2">
 												{# <ion-icon name="key-outline"></ion-icon> #}
 												<span class="hidden sm:inline">ID</span>
 											</div>
 										</th>
 										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center gap-1 sm:gap-2">
+											<div
+												class="flex items-center gap-1 sm:gap-2">
 												{# <ion-icon name="cube-outline"></ion-icon> #}
 												Nom
 											</div>
@@ -52,19 +54,22 @@
 											</div>
 										</th>
 										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center gap-1 sm:gap-2">
+											<div
+												class="flex items-center gap-1 sm:gap-2">
 												{# <ion-icon name="archive-outline"></ion-icon> #}
 												Stock
 											</div>
 										</th>
 										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center gap-1 sm:gap-2">
+											<div
+												class="flex items-center gap-1 sm:gap-2">
 												{# <ion-icon name="cash-outline"></ion-icon> #}
 												Prix
 											</div>
 										</th>
 										<th class="text-center py-4 px-2 sm:px-6">
-											<div class="flex items-center justify-center gap-1 sm:gap-2">
+											<div
+												class="flex items-center justify-center gap-1 sm:gap-2">
 												{# <ion-icon name="settings-outline"></ion-icon> #}
 												<span class="hidden sm:inline">Actions</span>
 											</div>
@@ -108,8 +113,13 @@
 													</a>
 													<a href="{{ path('app_product_stock_add', {'id': product.id})}}" class="custom-btn-with-logo new-btn text-center">
 														<ion-icon name="add-outline"></ion-icon>
-														<span class="hidden sm:inline">Stock</span>
+														<span class="hidden sm:inline">Ajouter Stock</span>
 														<span class="sm:hidden">+</span>
+													</a>
+													<a href="{{ path('app_product_stock_add_history', {'id': product.id})}}" class="custom-btn-with-logo info-btn text-center">
+														<ion-icon name="time-outline"></ion-icon>
+														<span class="hidden sm:inline">Historique</span>
+														<span class="sm:hidden">H</span>
 													</a>
 												</div>
 											</td>
