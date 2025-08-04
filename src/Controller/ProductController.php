@@ -154,7 +154,7 @@ class ProductController extends AbstractController
                 $newQuantity = $product->getStock() + $stockAdd->getQuantity();
                 $product->setStock($newQuantity);
 
-                $stockAdd->setCreatedAt(new DateTimeImmutable());
+                $stockAdd->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
                 $stockAdd->setProduct($product);
 
                 $entityManager->persist($stockAdd);
