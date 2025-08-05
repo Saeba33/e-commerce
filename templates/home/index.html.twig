@@ -1,31 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!
+{% block title %}
+	Accueil
 {% endblock %}
 
 {% block body %}
-	<div class="text-center my-20">
-		<h1 class="text-3xl mb-6">Liste des produits</h1>
-		<div class="flex flex-wrap gap-6 items-center justify-center">
-			{% for product in products %}
-				<div class="card bg-white grid max-w-80 gap-2 p-2">
-					<img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}" class="w-50 h-50 object-cover">
-					<h3>{{product.name}}</h3>
-					<p class="truncate">{{ product.description | slice(0,50) }}
-						{% if product.description|length > 50 %}...
-						{% endif %}
-					</p>
+	<div class="container mx-auto px-4 py-12">
+		<div class="text-center mb-12">
+			<h1 class="text-4xl font-bold mb-8 text-gray-800">Notre Collection</h1>
+			<p class="text-gray-600 max-w-2xl mx-auto">Découvrez notre sélection de produits</p>
+		</div>
 
-					<span>{{product.price}}€</span>
-					<span>{{product.stock}}</span>
-					<div class="flex">
-						<span>-</span>
-						<span>Quantité</span>
-						<span>+</span>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+			{% for product in products %}
+				<div
+					class="group bg-white hover:bg-gray-50 transition-all duration-200 p-5 rounded-lg border border-gray-100 hover:border-gray-200 shadow-lg grid grid-rows-[auto_1fr_auto_auto_auto] min-h-[400px] hover:translate-y-[-2px]">
+					<div class="relative aspect-square mb-3 overflow-hidden rounded-lg bg-gray-50">
+						{% if product.image %}
+							<img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}" class="w-full h-full object-cover transition-transform duration-200">
+						{% else %}
+							<div class="w-full h-full flex flex-col items-center justify-center bg-gray-100">
+								<ion-icon name="image-outline" class="text-4xl text-gray-300 mb-2"></ion-icon>
+								<span class="text-xs text-gray-400 font-medium">Aucune image disponible</span>
+							</div>
+						{% endif %}
+
+						{% if product.subCategory.first %}
+							<div class="absolute top-2 left-2">
+								<span class="bg-gray-100 text-gray-700 text-xs font-medium px-3 py-1 rounded-full border border-gray-200 shadow-sm backdrop-blur-sm">
+									{{ product.subCategory.first.category.name }}
+								</span>
+							</div>
+						{% endif %}
 					</div>
-					<button class="bg-green-200 cursor-pointer">Ajouter au panier</button>
+
+					<div class="flex items-center justify-between gap-3 mb-2">
+						<a href="{{ path('app_home_product_show', {'id': product.id})}}" class="font-medium text-gray-900 hover:text-blue-600 transition-colors flex-1 leading-tight">
+							{{ product.name }}
+						</a>
+						<span class="text-lg font-bold text-gray-900 flex-shrink-0">{{ product.price }}€</span>
+					</div>
+
+					<div class="h-10 mb-4">
+						{% if product.description %}
+							<p class="text-sm text-gray-500 line-clamp-2 leading-relaxed">
+								{{ product.description | slice(0,50) }}
+								{% if product.description|length > 50 %}...
+								{% endif %}
+							</p>
+						{% endif %}
+					</div>
+
+					<div class="flex-1"></div>
+
+					<div class="flex items-center justify-between pt-2 mb-4">
+						<span class="text-sm text-gray-600 font-medium">Quantité:</span>
+						<div class="flex items-center gap-2">
+							<button class="w-7 h-7 rounded border border-gray-300 flex items-center justify-center text-sm text-gray-600 hover:bg-gray-100 hover:border-gray-400 transition-all font-medium">-</button>
+							<span class="w-8 text-center text-sm font-medium">0</span>
+							<button class="w-7 h-7 rounded border border-gray-300 flex items-center justify-center text-sm text-gray-600 hover:bg-gray-100 hover:border-gray-400 transition-all font-medium">+</button>
+						</div>
+					</div>
+
+					<button class="btn btn-success btn-sm w-full text-white font-medium hover:btn-success">
+						<ion-icon name="cart-outline" class="text-base"></ion-icon>
+						Ajouter au panier
+					</button>
 				</div>
 			{% endfor %}
 		</div>
+
+		{{ knp_pagination_render(products, 'layouts/_pagination.html.twig') }}
 	</div>
 {% endblock %}

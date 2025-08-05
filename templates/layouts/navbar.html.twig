@@ -18,11 +18,21 @@
 						<li>
 							<details>
 								<summary>Catégories</summary>
-								<ul class="z-[9999]">
+								<ul class="z-[9999] max-h-96 overflow-y-auto">
 									{% for category in categories %}
 										<li>
-											<a href="#">{{ category.name }}</a>
+											<span class="font-semibold text-primary cursor-default px-2 py-1">{{ category.name }}</span>
 										</li>
+										{% for subCategory in category.subCategories %}
+											<li>
+												<a href="{{ path('app_home_product_filter', {'id': subCategory.id}) }}" class="pl-6 text-gray-600 hover:text-primary transition-colors">
+													{{ subCategory.name }}
+												</a>
+											</li>
+										{% endfor %}
+										{% if not loop.last %}
+											<li><hr class="my-1 border-gray-200"></li>
+										{% endif %}
 									{% endfor %}
 								</ul>
 							</details>
@@ -98,19 +108,28 @@
 							<summary class="text-white">
 								Catégories
 							</summary>
-							<ul class="w-48 whitespace-nowrap">
+							<ul class="w-64 whitespace-nowrap bg-base-100 shadow-lg max-h-96 overflow-y-auto">
 								{% for category in categories %}
 									<li>
-										<a href="#" class="text-nowrap">
+										<span class="font-semibold text-primary cursor-default px-4 py-2 block border-l-4 border-primary bg-gray-50">
 											{{ category.name }}
-										</a>
+										</span>
 									</li>
+									{% for subCategory in category.subCategories %}
+										<li>
+											<a href="{{ path('app_home_product_filter', {'id': subCategory.id}) }}" class="pl-8 pr-4 py-2 text-gray-600 hover:text-primary hover:bg-gray-100 transition-all duration-200 block">
+												{{ subCategory.name }}
+											</a>
+										</li>
+									{% endfor %}
+									{% if not loop.last %}
+										<li><hr class="my-2 border-gray-200"></li>
+									{% endif %}
 								{% endfor %}
 							</ul>
 						</details>
 					</li>
 				{% endif %}
-
 				{% if is_granted("ROLE_ADMIN") %}
 					<li>
 						<details>
@@ -184,7 +203,7 @@
 		</div>
 	</div>
 
-	{# Barre de recherche mobile (cachée par défaut) #}
+	{# Barre de recherche mobile  #}
 	<div id="mobileSearch" class="hidden md:hidden bg-base-200 px-6 py-4 border-t border-base-300">
 		<label class="search-style w-full">
 			<ion-icon name="search-outline" class="search-icon"></ion-icon>
@@ -192,13 +211,4 @@
 		</label>
 	</div>
 
-	 <script>
-					function toggleMobileSearch() {
-						const mobileSearch = document.getElementById('mobileSearch');
-						mobileSearch.classList.toggle('hidden');
-						if (!mobileSearch.classList.contains('hidden')) {
-							mobileSearch.querySelector('input').focus();
-						}
-					}
-				</script>
 {% endblock %}
