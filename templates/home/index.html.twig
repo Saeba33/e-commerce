@@ -11,7 +11,11 @@
 				<div class="card bg-white grid max-w-80 gap-2 p-2">
 					<img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}" class="w-50 h-50 object-cover">
 					<h3>{{product.name}}</h3>
-					<p>{{product.description}}</p>
+					<p class="truncate">{{ product.description | slice(0,50) }}
+						{% if product.description|length > 50 %}...
+						{% endif %}
+					</p>
+
 					<span>{{product.price}}€</span>
 					<span>{{product.stock}}</span>
 					<div class="flex">
