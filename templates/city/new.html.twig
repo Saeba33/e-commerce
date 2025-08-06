@@ -1,11 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New City{% endblock %}
+{% block title %}
+	Nouvelle ville
+{% endblock %}
 
 {% block body %}
-    <h1>Create new City</h1>
+	<div class="flex flex-col max-w-xl mx-auto my-8">
 
-    {{ include('city/_form.html.twig') }}
+		<h2 class="text-3xl font-bold text-center mb-20">Ajouter une ville</h2>
 
-    <a href="{{ path('app_city_index') }}">back to list</a>
+		{{ form_start(form) }}
+		<div class="flex flex-col gap-6">
+			{{ form_widget(form.name, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Nom de la ville'}}) }}
+			{{ form_widget(form.shipping_cost, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Frais de livraison en euros'}}) }}
+
+			<button type="submit" class="btn btn-soft btn-success">Sauvegarder</button>
+		</div>
+		{{ form_end(form) }}
+
+		<div class="mt-6 text-center">
+			<a href="{{ path('app_city_index') }}" class="custom-btn-with-logo back-btn">
+				<ion-icon name="arrow-back-outline"></ion-icon>
+				Retour à la liste
+			</a>
+		</div>
+	</div>
 {% endblock %}

@@ -14,13 +14,11 @@ class CityFormType extends AbstractType
         $builder
             ->add('name', null, [
                 'required' => true,
-                'label' => 'Nom de la ville',
-                'attr' => ['class' => 'form form-control', 'placeholder' => 'Nom de la ville']
+                'label' => 'Nom de la ville'
             ])
             ->add('shipping_cost', null, [
                 'required' => true,
-                'label' => 'Frais de livraison',
-                'attr' => ['class' => 'form form-control', 'placeholder' => 'Frais de livraison']
+                'label' => 'Frais de livraison'
             ])
         ;
     }

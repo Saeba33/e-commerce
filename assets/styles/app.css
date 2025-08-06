@@ -94,6 +94,13 @@ ion-icon {
     background: #4b5563;
 }
 
+.view-btn {
+    background: #8b5cf6;
+}
+.view-btn:hover {
+    background: #7c3aed;
+}
+
 .login-btn {
     background: #3b82f6;
 }
@@ -182,9 +189,9 @@ ion-icon {
     background-size: 1rem;
 }
 
-.select-style:focus{
-        border: 2px solid #4b5563;
-        outline:none;
+.select-style:focus {
+    border: 2px solid #4b5563;
+    outline: none;
 }
 
 /* CHECKBOX */

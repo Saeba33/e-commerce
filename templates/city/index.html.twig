@@ -1,40 +1,92 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}City index{% endblock %}
+{% block title %}Gestion des frais de livraison
+{% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>City index</h1>
+	<div class="container mx-auto px-4 py-6">
+		<div class="content-container">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Shipping_cost</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for city in cities %}
-            <tr>
-                <td>{{ city.id }}</td>
-                <td>{{ city.name }}</td>
-                <td>{{ city.shippingCost }}</td>
-                <td>
-                    <a href="{{ path('app_city_show', {'id': city.id}) }}">show</a>
-                    <a href="{{ path('app_city_edit', {'id': city.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2">
+						Gestion des frais de livraison
+					</h1>
+					<p class="text-gray-600">Gérez les frais de livraison par ville</p>
+				</div>
+				<a href="{{ path('app_city_new') }}" class="custom-btn-with-logo new-btn">
+					<ion-icon name="add-outline"></ion-icon>
+					Nouvelle ville
+				</a>
+			</div>
 
-    <a href="{{ path('app_city_new') }}">Create new</a>
-</div>
+			{% include 'layouts/_flash_message.html.twig' %}
 
+			<div class="card bg-white">
+				<div class="card-body p-0">
+					{% if cities|length > 0 %}
+						<div class="overflow-x-auto">
+							<table class="table table-zebra w-full border-2 border-base-300">
+								<thead class="bg-gray-300">
+									<tr>
+										<th class="text-center py-4 px-2 border-r border-base-300">ID</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Nom de la ville</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Frais de livraison (€)</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for city in cities %}
+										<tr class="hover:bg-base-50 transition-colors duration-200">
+											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												<span>{{ city.id }}</span>
+											</td>
+											<td class="py-4 px-2 border-r-2 border-base-300">
+												<div class="text-center font-semibold">{{ city.name }}</div>
+											</td>
+											<td class="text-center py-4 px-2 border-r-2 border-base-300">
+												<span>{{ city.shippingCost }}
+													€</span>
+											</td>
+											<td class="py-4 px-2 border-r-2 border-base-300">
+												<div class="flex flex-col md:flex-row justify-center gap-2">
+													<a href="{{ path('app_city_show', {'id': city.id}) }}" class="custom-btn-with-logo view-btn">
+														<ion-icon name="eye-outline"></ion-icon>
+														<span class="hidden md:inline">Voir</span>
+													</a>
+													<a href="{{ path('app_city_edit', {'id': city.id}) }}" class="custom-btn-with-logo edit-btn">
+														<div class="hidden md:inline">
+															<ion-icon name="create-outline"></ion-icon>
+															<span>Modifier</span>
+														</div>
+														<div class="inline md:hidden">
+															<ion-icon name="create-outline"></ion-icon>
+														</div>
+													</a>
+													<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer la ville « {{ city.name }} » ?')" href="{{ path('app_city_delete', {'id': city.id}) }}" class="custom-btn-with-logo delete-btn">
+														<ion-icon name="trash-outline"></ion-icon>
+														<span class="hidden md:inline">Supprimer</span>
+													</a>
+												</div>
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					{% else %}
+						<div class="text-center py-16">
+							<ion-icon name="location-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+							<h3 class="text-xl font-semibold text-gray-600 mb-2">Aucune ville configurée</h3>
+							<p class="text-gray-500 mb-4">Commencez par ajouter une ville avec ses frais de livraison</p>
+							<a href="{{ path('app_city_new') }}" class="custom-btn-with-logo new-btn">
+								<ion-icon name="add-outline"></ion-icon>
+								Créer une ville
+							</a>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

@@ -1,30 +1,76 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}City{% endblock %}
+{% block title %}Détails de la ville
+{% endblock %}
 
 {% block body %}
-    <h1>City</h1>
+	<div class="container mx-auto px-4 py-6">
+		<div class="content-container max-w-2xl mx-auto">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ city.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ city.name }}</td>
-            </tr>
-            <tr>
-                <th>Shipping_cost</th>
-                <td>{{ city.shippingCost }}</td>
-            </tr>
-        </tbody>
-    </table>
+			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2">
+						Détails de la ville
+					</h1>
+					<p class="text-gray-600">Informations sur les frais de livraison</p>
+				</div>
+			</div>
 
-    <a href="{{ path('app_city_index') }}">back to list</a>
+			{% include 'layouts/_flash_message.html.twig' %}
 
-    <a href="{{ path('app_city_edit', {'id': city.id}) }}">edit</a>
+			<div class="card bg-white">
+				<div class="card-body">
+					<div class="space-y-6">
+						<div class="border-b border-gray-200 pb-4">
+							<h3 class="text-lg font-semibold text-gray-700 mb-2">Informations générales</h3>
+						</div>
 
-    {{ include('city/_delete_form.html.twig') }}
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<div>
+								<label class="block text-sm font-medium text-gray-600 mb-1">ID</label>
+								<div class="bg-gray-50 rounded-lg p-3">
+									<span class="text-gray-900 font-semibold">{{ city.id }}</span>
+								</div>
+							</div>
+
+							<div>
+								<label class="block text-sm font-medium text-gray-600 mb-1">Nom de la ville</label>
+								<div class="bg-gray-50 rounded-lg p-3">
+									<span class="text-gray-900 font-semibold">{{ city.name }}</span>
+								</div>
+							</div>
+
+							<div class="md:col-span-2">
+								<label class="block text-sm font-medium text-gray-600 mb-1">Frais de livraison</label>
+								<div class="bg-gray-50 rounded-lg p-3">
+									<span class="text-gray-900 font-semibold text-lg">{{ city.shippingCost }}
+										€</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+				<a href="{{ path('app_city_index') }}" class="custom-btn-with-logo back-btn">
+					<ion-icon name="arrow-back-outline"></ion-icon>
+					Retour à la liste
+				</a>
+
+				<a href="{{ path('app_city_edit', {'id': city.id}) }}" class="custom-btn-with-logo edit-btn">
+					<ion-icon name="create-outline"></ion-icon>
+					Modifier
+				</a>
+
+				<form method="post" action="{{ path('app_city_delete', {'id': city.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer la ville « {{ city.name }} » ?');" class="inline">
+					<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ city.id) }}">
+					<button type="submit" class="custom-btn-with-logo delete-btn">
+						<ion-icon name="trash-outline"></ion-icon>
+						Supprimer
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
 {% endblock %}

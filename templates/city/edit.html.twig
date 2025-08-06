@@ -1,13 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit City{% endblock %}
+{% block title %}
+	Éditer ville
+{% endblock %}
 
 {% block body %}
-    <h1>Edit City</h1>
+	<div class="flex flex-col max-w-xl mx-auto my-8">
 
-    {{ include('city/_form.html.twig', {'button_label': 'Update'}) }}
+		<h2 class="text-3xl font-bold text-center mb-20">Éditer une ville</h2>
 
-    <a href="{{ path('app_city_index') }}">back to list</a>
+		{{ form_start(form) }}
+		<div class="flex flex-col gap-6">
+			{{ form_widget(form.name, {'attr': {'class': 'input-style input-style-common w-full mt-1', 'placeholder': 'Nom de la ville'}}) }}
+			{{ form_widget(form.shipping_cost, {'attr': {'class': 'input-style input-style-common w-full mt-1', 'placeholder': 'Frais de livraison (en euros)'}}) }}
 
-    {{ include('city/_delete_form.html.twig') }}
+			<button type="submit" class="custom-btn edit-btn">Mettre à jour</button>
+		</div>
+		{{ form_end(form) }}
+
+		<div class="mt-6 flex justify-center gap-4">
+			<a href="{{ path('app_city_index') }}" class="custom-btn-with-logo back-btn">
+				<ion-icon name="arrow-back-outline"></ion-icon>
+				Retour à la liste
+			</a>
+
+			<form method="post" action="{{ path('app_city_delete', {'id': city.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ville ?');" class="inline">
+				<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ city.id) }}">
+				<button type="submit" class="custom-btn-with-logo delete-btn">
+					<ion-icon name="trash-outline"></ion-icon>
+					Supprimer
+				</button>
+			</form>
+		</div>
+	</div>
 {% endblock %}
