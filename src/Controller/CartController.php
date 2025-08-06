@@ -64,6 +64,18 @@ final class CartController extends AbstractController
 
 
     #region DELETE
+    #[Route("/cart/remove/{id}/", name: "app_cart_product_remove", methods: ['GET'])]
+    public function removeToCart($id, SessionInterface $session): Response
+    {
+        $cart = $session->get('cart', []);
+
+        if (!empty($cart[$id])) {
+            unset($cart[$id]);
+        }
+
+        $session->set('cart', $cart);
+        return $this->redirectToRoute('app_cart');
+    }
     #endregion
 
 }
