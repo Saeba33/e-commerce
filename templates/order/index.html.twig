@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 
-
 {% block title %}
 	Commandes
 {% endblock %}
@@ -17,11 +16,18 @@
 			<p>Montant de la commande :
 				{{ total }}
 				€</p>
-            <p>Frais de livraison : </p>
-            <p> Total à payer : </p>
+			<p>Frais de livraison :
+			</p>
+			<p>
+				Total à payer :
+			</p>
 		</div>
 
 	</div>
- <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script>$(document).ready(function() {alert('Hello World')})</script>
+	 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+	 <script>$(document).ready(function() {
+	const citySelector = $('#order_city');
+	const cityValue = citySelector.val();
+	})
+	</script>
 {% endblock %}
