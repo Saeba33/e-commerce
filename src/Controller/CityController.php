@@ -11,9 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/city')]
+#[Route('editor/city')]
 final class CityController extends AbstractController
 {
+    #region READ ALL
     #[Route(name: 'app_city_index', methods: ['GET'])]
     public function index(CityRepository $cityRepository): Response
     {
@@ -21,7 +22,19 @@ final class CityController extends AbstractController
             'cities' => $cityRepository->findAll(),
         ]);
     }
+    #endregion
 
+    #region READ ONE
+    #[Route('/{id}', name: 'app_city_show', methods: ['GET'])]
+    public function show(City $city): Response
+    {
+        return $this->render('city/show.html.twig', [
+            'city' => $city,
+        ]);
+    }
+    #endregion
+
+    #region CREATE
     #[Route('/new', name: 'app_city_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -41,15 +54,9 @@ final class CityController extends AbstractController
             'form' => $form,
         ]);
     }
+    #endregion
 
-    #[Route('/{id}', name: 'app_city_show', methods: ['GET'])]
-    public function show(City $city): Response
-    {
-        return $this->render('city/show.html.twig', [
-            'city' => $city,
-        ]);
-    }
-
+    #region UPDATE
     #[Route('/{id}/edit', name: 'app_city_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, City $city, EntityManagerInterface $entityManager): Response
     {
@@ -67,7 +74,9 @@ final class CityController extends AbstractController
             'form' => $form,
         ]);
     }
+    #endregion
 
+    #region DELETE
     #[Route('/{id}', name: 'app_city_delete', methods: ['POST'])]
     public function delete(Request $request, City $city, EntityManagerInterface $entityManager): Response
     {
@@ -78,4 +87,6 @@ final class CityController extends AbstractController
 
         return $this->redirectToRoute('app_city_index', [], Response::HTTP_SEE_OTHER);
     }
+    #endregion
+
 }
