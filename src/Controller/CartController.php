@@ -63,7 +63,7 @@ final class CartController extends AbstractController
     #endregion
 
 
-    #region DELETE
+    #region DELETE ONE PRODUCT
     #[Route("/cart/remove/{id}/", name: "app_cart_product_remove", methods: ['GET'])]
     public function removeToCart($id, SessionInterface $session): Response
     {
@@ -77,5 +77,16 @@ final class CartController extends AbstractController
         return $this->redirectToRoute('app_cart');
     }
     #endregion
+
+
+    #region DELETE ALL CART
+    #[Route("/cart/remove", name: "app_cart_remove", methods: ['GET'])]
+    public function remove(SessionInterface $session): Response
+    {
+        $session->set('cart', []);
+        return $this->redirectToRoute('app_cart');
+    }
+    #endregion
+
 
 }

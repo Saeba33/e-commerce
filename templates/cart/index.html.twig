@@ -7,15 +7,16 @@
 {% block body %}
 	<div class="container">
 		<h1>Panier</h1>
-		<table class="table table-bordered">
-			<tr>
-				<th>Produit</th>
-				<th>Prix</th>
-				<th>Quantité</th>
-				<th>Prix total</th>
-				<th>Action</th>
-			</tr>
-			{% for item in items %}
+		{% for item in items %}
+			<table class="table table-bordered">
+				<tr>
+					<th>Produit</th>
+					<th>Prix</th>
+					<th>Quantité</th>
+					<th>Prix total</th>
+					<th>Action</th>
+				</tr>
+
 				<tr>
 					<td>{{ item.product.name }}
 					</td>
@@ -31,13 +32,20 @@
 				</tr>
 			{% else %}
 				<p>Votre panier est vide</p>
+				<a href="{{ path('app_home') }}" class="custom-btn back-btn">Retour à l'accueil</a>
+
 			{% endfor %}
 		</table>
 
-		<div class="flex">
-			<a href="" class="custom-btn new-btn">Valider la commande</a>
-			<a href="" class="custom-btn delete-btn">Supprimer le panier</a>
-		</div>
+		{% if total > 0 %}
+			<p>Total :
+				{{ total }}
+				euros</p>
+			<div class="flex">
+				<a href="" class="custom-btn new-btn">Valider la commande</a>
+				<a href="{{ path('app_cart_remove') }}" class="custom-btn delete-btn">Supprimer le panier</a>
+			</div>
+		{% endif %}
 
 	</div>
 {% endblock %}
