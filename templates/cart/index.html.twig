@@ -9,27 +9,32 @@
 		<h1>Panier</h1>
 		{% for item in items %}
 			<table class="table table-bordered">
-				<tr>
-					<th>Produit</th>
-					<th>Prix</th>
-					<th>Quantité</th>
-					<th>Prix total</th>
-					<th>Action</th>
-				</tr>
+				<thead>
+					<tr>
+						<th>Produit</th>
+						<th>Prix</th>
+						<th>Quantité</th>
+						<th>Prix total</th>
+						<th>Action</th>
+					</tr>
+				</thead>
 
-				<tr>
-					<td>{{ item.product.name }}
-					</td>
-					<td>{{ item.product.price }}
-					</td>
-					<td>{{ item.quantity }}
-					</td>
-					<td>{{ item.product.price * item.quantity }}
-					</td>
-					<td>
-						<a href="{{ path('app_cart_product_remove', {'id': item.product.id}) }}" class="custom-btn delete-btn">Supprimer du panier</a>
-					</td>
-				</tr>
+				<tbody>
+					<tr>
+						<td>{{ item.product.name }}
+						</td>
+						<td>{{ item.product.price }}
+						</td>
+						<td>{{ item.quantity }}
+						</td>
+						<td>{{ item.product.price * item.quantity }}
+						</td>
+						<td>
+							<a href="{{ path('app_cart_product_remove', {'id': item.product.id}) }}" class="custom-btn delete-btn">Supprimer du panier</a>
+						</td>
+					</tr>
+				</tbody>
+
 			{% else %}
 				<p>Votre panier est vide</p>
 				<a href="{{ path('app_home') }}" class="custom-btn back-btn">Retour à l'accueil</a>
@@ -38,7 +43,7 @@
 		</table>
 
 		{% if total > 0 %}
-			<p>Total :
+			<p>Total à payer :
 				{{ total }}
 				euros</p>
 			<div class="flex">
