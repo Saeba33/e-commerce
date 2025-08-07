@@ -30,49 +30,35 @@
         </div>
 
 	</div>
-	 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-	 <script>
-	    $(document).ready(function() {
-		    const citySelector = $('#order_form_city');
-			const cityValue = citySelector.val();
-			const url = `/city/${cityValue}/shipping/cost`;
-			$.ajax({
-				url:url,
-				type:'GET',
-				success:function(response){
-				    const newResponse = JSON.parse(response)
-					if (parseInt(newResponse.status) === 200) {
-			            $("#shippingCost").text(newResponse.content)
-			            const cartPrice = parseInt($('#cartPrice').text());
-		                const shippingCost = parseInt($('#shippingCost').text());
-			            $('#totalPrice').text(cartPrice+shippingCost)
-					}
-				},
-				error:function(xhr, status, error){
-				    console.error('Erreur', error);
-                }
-			})
-			citySelector.on('change', function() {
-				const newCityValue = $(this).val();
-				const newUrl = `/city/${newCityValue}/shipping/cost`;
-			$.ajax({
-				url: newUrl,
-				type:'GET',
-				success:function(response){
-				    const newResponse = JSON.parse(response)
-					 if (parseInt(newResponse.status) === 200) {
-                        $("#shippingCost").text(newResponse.content)
-	                    const cartPrice = parseInt($('#cartPrice').text());
-		                const shippingCost = parseInt($('#shippingCost').text());
-			            $('#totalPrice').text(cartPrice+shippingCost)
-					}
-				},
-				error:function(xhr, status, error){
+ <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const citySelector = document.getElementById('order_form_city');
+        const shippingCostElement = document.getElementById('shippingCost');
+        const cartPriceElement = document.getElementById('cartPrice');
+        const totalPriceElement = document.getElementById('totalPrice');
+
+        function calculateTotal(city) {
+            fetch(`/city/${city}/shipping/cost`)
+                .then(response => response.json())
+                .then(data => {
+                    if (parseInt(data.status) === 200) {
+                        shippingCostElement.textContent = data.content;
+                        const cartPrice = parseInt(cartPriceElement.textContent) || 0;
+                        const shippingCost = parseInt(shippingCostElement.textContent) || 0;
+                        totalPriceElement.textContent = cartPrice + shippingCost;
+                    }
+                })
+                .catch(error => {
                     console.error('Erreur', error);
-				}
-			})
-	    })
-	})
-    </script>
+                });
+        }
+
+        calculateTotal(citySelector.value);
+
+        citySelector.addEventListener('change', function () {
+            calculateTotal(this.value);
+        });
+    });
+</script>
 
 {% endblock %}
