@@ -1,17 +1,19 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}
 	Commandes
 {% endblock %}
 
 {% block body %}
+
 	<div class="container">
-		<h1>Commandes</h1>
-
-		{{ form_widget(form.city, {'attr': {'id': 'order_city'}}) }}
-		<input type="submit" value="Continuer">
-
+		<h1 class="text-3xl font-bold text-center">Passer commande</h1>
+        
+        <div>
+            {{ form_start(form) }}
+            {{ form_end(form) }}
+            <input type="submit" value="Continuer">
+        </div>
 
 		<div>
 			<p>Montant de la commande :
@@ -21,6 +23,11 @@
 			<p>Total à payer :
 				<span id="totalPrice"></span>€</p>
 		</div>
+
+        <div>
+            <a href="{{ path('app_order') }}">Valider la commande</a>
+            <a href="{{ path('app_cart_remove') }}">Supprimer</a>
+        </div>
 
 	</div>
 	 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -67,5 +74,5 @@
 	    })
 	})
     </script>
-    
+
 {% endblock %}
