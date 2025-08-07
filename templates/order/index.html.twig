@@ -15,52 +15,57 @@
 
 		<div>
 			<p>Montant de la commande :
-				{{ total }}
-				€</p>
+				<span id="cartPrice">{{ total }}</span>€</p>
 			<p>Frais de livraison :
 				<span id="shippingCost"></span>€</p>
-			<p>
-				Total à payer :
-			</p>
+			<p>Total à payer :
+				<span id="totalPrice"></span>€</p>
 		</div>
 
 	</div>
 	 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 	 <script>
-			$(document).ready(function() {
-				const citySelector = $('#order_form_city');
-				const cityValue = citySelector.val();
-	    		const url = `/city/${cityValue}/shipping/cost`;
-					$.ajax({
-						url:url,
-						type:'GET',
-						success:function(response){
-						    const newResponse = JSON.parse(response)
-						    if (parseInt(newResponse.status) === 200) {
-						            console.log(newResponse.status)
-					        $("#shippingCost").text(newResponse.content)
-						    }
-						},
-						error:function(xhr, status, error){
-						}
-					})
-				    citySelector.on('change', function() {
-	const newCityValue = $(this).val();
-	    		const newUrl = `/city/${newCityValue}/shipping/cost`;
-					$.ajax({
-						url: newUrl,
-						type:'GET',
-						success:function(response){
-						    const newResponse = JSON.parse(response)
-						    if (parseInt(newResponse.status) === 200) {
-						            console.log(newResponse.status)
-					        $("#shippingCost").text(newResponse.content)
-						    }
-						},
-						error:function(xhr, status, error){
-						}
-					})
-				                })
-							})
-							</script>
+	    $(document).ready(function() {
+		    const citySelector = $('#order_form_city');
+			const cityValue = citySelector.val();
+			const url = `/city/${cityValue}/shipping/cost`;
+			$.ajax({
+				url:url,
+				type:'GET',
+				success:function(response){
+				    const newResponse = JSON.parse(response)
+					if (parseInt(newResponse.status) === 200) {
+			            $("#shippingCost").text(newResponse.content)
+			            const cartPrice = parseInt($('#cartPrice').text());
+		                const shippingCost = parseInt($('#shippingCost').text());
+			            $('#totalPrice').text(cartPrice+shippingCost)
+					}
+				},
+				error:function(xhr, status, error){
+				    console.error('Erreur', error);
+                }
+			})
+			citySelector.on('change', function() {
+				const newCityValue = $(this).val();
+				const newUrl = `/city/${newCityValue}/shipping/cost`;
+			$.ajax({
+				url: newUrl,
+				type:'GET',
+				success:function(response){
+				    const newResponse = JSON.parse(response)
+					 if (parseInt(newResponse.status) === 200) {
+                        $("#shippingCost").text(newResponse.content)
+	                    const cartPrice = parseInt($('#cartPrice').text());
+		                const shippingCost = parseInt($('#shippingCost').text());
+			            $('#totalPrice').text(cartPrice+shippingCost)
+					}
+				},
+				error:function(xhr, status, error){
+                    console.error('Erreur', error);
+				}
+			})
+	    })
+	})
+    </script>
+    
 {% endblock %}
