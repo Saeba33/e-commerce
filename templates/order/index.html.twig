@@ -37,8 +37,8 @@
         const cartPriceElement = document.getElementById('cartPrice');
         const totalPriceElement = document.getElementById('totalPrice');
 
-        function calculateTotal(city) {
-            fetch(`/city/${city}/shipping/cost`)
+        function calculateTotal(cityId) {
+            fetch(`/city/${cityId}/shipping/cost`)
                 .then(response => response.json())
                 .then(data => {
                     if (parseInt(data.status) === 200) {
