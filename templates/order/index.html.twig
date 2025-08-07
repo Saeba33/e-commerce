@@ -8,16 +8,17 @@
 {% block body %}
 	<div class="container">
 		<h1>Commandes</h1>
-		{{ form_start(form) }}
+
+		{{ form_widget(form.city, {'attr': {'id': 'order_city'}}) }}
 		<input type="submit" value="Continuer">
-		{{ form_end(form) }}
+
 
 		<div>
 			<p>Montant de la commande :
 				{{ total }}
 				€</p>
 			<p>Frais de livraison :
-			</p>
+				<span id="shippingCost"></span>€</p>
 			<p>
 				Total à payer :
 			</p>
@@ -25,9 +26,41 @@
 
 	</div>
 	 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-	 <script>$(document).ready(function() {
-	const citySelector = $('#order_city');
-	const cityValue = citySelector.val();
-	})
-	</script>
+	 <script>
+			$(document).ready(function() {
+				const citySelector = $('#order_form_city');
+				const cityValue = citySelector.val();
+	    		const url = `/city/${cityValue}/shipping/cost`;
+					$.ajax({
+						url:url,
+						type:'GET',
+						success:function(response){
+						    const newResponse = JSON.parse(response)
+						    if (parseInt(newResponse.status) === 200) {
+						            console.log(newResponse.status)
+					        $("#shippingCost").text(newResponse.content)
+						    }
+						},
+						error:function(xhr, status, error){
+						}
+					})
+				    citySelector.on('change', function() {
+	const newCityValue = $(this).val();
+	    		const newUrl = `/city/${newCityValue}/shipping/cost`;
+					$.ajax({
+						url: newUrl,
+						type:'GET',
+						success:function(response){
+						    const newResponse = JSON.parse(response)
+						    if (parseInt(newResponse.status) === 200) {
+						            console.log(newResponse.status)
+					        $("#shippingCost").text(newResponse.content)
+						    }
+						},
+						error:function(xhr, status, error){
+						}
+					})
+				                })
+							})
+							</script>
 {% endblock %}
