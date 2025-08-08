@@ -54,4 +54,14 @@ final class OrderController extends AbstractController
         return new Response(json_encode(['status' => 200, "message" => 'on', 'content' => $cityShippingPrice]));
     }
     #endregion
+
+    #region ENVOI FORMULAIRE
+    // #[Route('/city/{id}/', name: 'app_city_shipping_cost')]
+    // public function validateOrder(City $city): Response
+    // {
+   
+
+    //     return ;
+    // }
+    #endregion
 }
