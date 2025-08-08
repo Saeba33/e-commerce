@@ -4,15 +4,16 @@ namespace App\Controller;
 
 use App\Entity\City;
 use App\Entity\Order;
-use App\Form\OrderFormType;
-use App\Repository\ProductRepository;
 use App\Service\Cart;
+use App\Form\OrderFormType;
+use App\Entity\OrderProducts;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class OrderController extends AbstractController
 {
@@ -26,15 +27,33 @@ final class OrderController extends AbstractController
         $form = $this -> createForm(OrderFormType::class, $order);
         $form -> handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
-            if($order->isPayOnDelivery()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            if (!empty($data['total'])) {
                 $order->setTotalPrice($data['total']);
                 $order->setCreatedAt(new \DateTimeImmutable());
                 $emi->persist($order);
                 $emi->flush();
+                foreach ($data['cart'] as $value) {
+                    $orderProduct = new OrderProducts();
+                    $orderProduct->setOrder($order);
+                    $orderProduct->setProduct($value['product']);
+                    $orderProduct->setQuantity($value['quantity']);
+                    $emi->persist($orderProduct);
+                    $emi->flush();
+                }
             }
-        }
 
+            if ($order->isPayOnDelivery()) {
+
+                $session->set('cart', []);
+
+            }
+
+            $this->addFlash('success', 'Commande enregistrée !');
+
+            return $this->redirectToRoute('app_cart');
+        }
 
         return $this->render('order/index.html.twig', [
             'controller_name' => 'OrderController',

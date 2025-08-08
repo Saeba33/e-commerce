@@ -7,6 +7,9 @@
 {% block body %}
 	<div class="container">
 		<h1>Panier</h1>
+
+		{% include 'layouts/_flash_message.html.twig' %}
+
 		{% for item in items %}
 			<table class="table table-bordered">
 				<thead>

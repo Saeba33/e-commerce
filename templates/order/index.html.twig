@@ -8,12 +8,19 @@
 
 	<div class="container">
 		<h1 class="text-3xl font-bold text-center">Passer commande</h1>
-        
-        <div>
-            {{ form_start(form) }}
-            {{ form_end(form) }}
-            <input type="submit" value="Continuer">
-        </div>
+
+		<div>
+			{{ form_start(form) }}
+			{{ form_row(form.firstname) }}
+			{{ form_row(form.lastname) }}
+			{{ form_row(form.phone) }}
+			{{ form_row(form.address) }}
+			{{ form_row(form.city) }}
+			{{ form_row(form.payOnDelivery) }}
+			<input type="submit" value="Continuer">
+			{{ form_end(form) }}
+
+		</div>
 
 		<div>
 			<p>Montant de la commande :
@@ -25,35 +32,35 @@
 		</div>
 
 	</div>
- <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const citySelector = document.getElementById('order_form_city');
-        const shippingCostElement = document.getElementById('shippingCost');
-        const cartPriceElement = document.getElementById('cartPrice');
-        const totalPriceElement = document.getElementById('totalPrice');
-
-        function calculateTotal(cityId) {
-            fetch(`/city/${cityId}/shipping/cost`)
-                .then(response => response.json())
-                .then(data => {
-                    if (parseInt(data.status) === 200) {
-                        shippingCostElement.textContent = data.content;
-                        const cartPrice = parseInt(cartPriceElement.textContent) || 0;
-                        const shippingCost = parseInt(shippingCostElement.textContent) || 0;
-                        totalPriceElement.textContent = cartPrice + shippingCost;
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur', error);
-                });
-        }
-
-        calculateTotal(citySelector.value);
-
-        citySelector.addEventListener('change', function () {
-            calculateTotal(this.value);
-        });
-    });
-</script>
+	 <script>
+		    document.addEventListener('DOMContentLoaded', function () {
+		        const citySelector = document.getElementById('order_form_city');
+		        const shippingCostElement = document.getElementById('shippingCost');
+		        const cartPriceElement = document.getElementById('cartPrice');
+		        const totalPriceElement = document.getElementById('totalPrice');
+		
+		        function calculateTotal(cityId) {
+		            fetch(`/city/${cityId}/shipping/cost`)
+		                .then(response => response.json())
+		                .then(data => {
+		                    if (parseInt(data.status) === 200) {
+		                        shippingCostElement.textContent = data.content;
+		                        const cartPrice = parseInt(cartPriceElement.textContent) || 0;
+		                        const shippingCost = parseInt(shippingCostElement.textContent) || 0;
+		                        totalPriceElement.textContent = cartPrice + shippingCost;
+		                    }
+		                })
+		                .catch(error => {
+		                    console.error('Erreur', error);
+		                });
+		        }
+		
+		        calculateTotal(citySelector.value);
+		
+		        citySelector.addEventListener('change', function () {
+		            calculateTotal(this.value);
+		        });
+		    });
+		</script>
 
 {% endblock %}
