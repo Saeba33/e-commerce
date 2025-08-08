@@ -6,6 +6,7 @@ use App\Entity\City;
 use App\Entity\Order;
 use App\Form\OrderFormType;
 use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,7 +17,7 @@ final class OrderController extends AbstractController
 {
     #region READ ORDER
     #[Route('/order', name: 'app_order')]
-    public function index(Request $request, SessionInterface $session, ProductRepository $productRepository): Response
+    public function index(Request $request, SessionInterface $session, ProductRepository $productRepository, EntityManagerInterface $emi): Response
     {
         $cart = $session->get('cart', []);
         $cartWidthData = [];
@@ -55,13 +56,4 @@ final class OrderController extends AbstractController
     }
     #endregion
 
-    #region ENVOI FORMULAIRE
-    // #[Route('/city/{id}/', name: 'app_city_shipping_cost')]
-    // public function validateOrder(City $city): Response
-    // {
-   
-
-    //     return ;
-    // }
-    #endregion
 }
