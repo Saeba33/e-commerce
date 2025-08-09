@@ -25,13 +25,14 @@
 			<div class="card bg-white">
 				<div class="card-body p-0">
 					{% if products|length > 0 %}
-						<div class="overflow-x-auto">
+			
+						<div class="hidden xl:block overflow-x-auto">
 							<table class="table table-zebra w-full border-2 border-base-300">
 								<thead class="bg-gray-300">
 									<tr>
 										<th class="text-center py-4 px-2 border-r border-base-300">ID</th>
-										<th class="text-center py-4 px-2 border-r border-base-300">Nom</th>
-										<th class="text-center py-4 px-2 border-r border-base-300">Description</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">Nom</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">Description</th>
 										<th class="text-center py-4 px-2 border-r border-base-300">Stock</th>
 										<th class="text-center py-4 px-2 border-r border-base-300">Prix</th>
 										<th class="text-center py-4 px-2 border-r border-base-300">Actions</th>
@@ -45,58 +46,112 @@
 												<span>{{ product.id }}</span>
 											</td>
 											<td class="py-4 px-2 border-r-2 border-base-300">
-												<div class="text-center font-semibold">{{ product.name }}</div>
+												<div class="text-left font-semibold">{{ product.name }}</div>
 											</td>
 											<td class="py-4 px-2 border-r-2 border-base-300">
-												<div class="text-center max-w-xs truncate">{{ product.description | slice(0,50) }}
+												<div class="text-left max-w-xs">{{ product.description | slice(0,50) }}
 													{% if product.description|length > 50 %}...
 													{% endif %}
 												</div>
 											</td>
 											<td class="text-center py-4 px-2 border-r-2 border-base-300">
 												{% if product.stock > 0 %}
-													<span>{{ product.stock }}</span>
+													<span class="font-medium">{{ product.stock }}</span>
 												{% else %}
-													<span>Épuisé</span>
+													<span class="font-medium text-red-600">Épuisé</span>
 												{% endif %}
 											</td>
 											<td class="text-center py-4 px-2 border-r-2 border-base-300">
-												<span>{{ product.price }} €</span>
+												<span class="font-medium">{{ product.price }} €</span>
 											</td>
 											<td class="py-4 px-2 border-r-2 border-base-300">
-												<div class="flex flex-col md:flex-row justify-center gap-2">
+												<div class="flex flex-col xl:flex-row justify-center gap-2">
 													<a href="{{ path('app_product_edit', {'id': product.id}) }}" class="custom-btn-with-logo edit-btn">
-														<div class="hidden md:inline">
-															<ion-icon name="create-outline"></ion-icon> 
-															<span>Modifier</span>
-														</div>
-														<div class="inline md:hidden">
-															<ion-icon name="create-outline"></ion-icon>
-														</div>
+														<ion-icon name="create-outline"></ion-icon>
+														<span class="hidden xl:inline">Modifier</span>
 													</a>
 													<form method="post" action="{{ path('app_product_delete', {'id': product.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le produit « {{ product.name }} » ?')" style="display: inline;">
 														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
-														<button type="submit" class="custom-btn-with-logo delete-btn">
+														<button type="submit" class="custom-btn-with-logo delete-btn w-full">
 															<ion-icon name="trash-outline"></ion-icon>
-															<span class="hidden md:inline">Supprimer</span>
+															<span class="hidden xl:inline">Supprimer</span>
 														</button>
 													</form>
 													<a href="{{ path('app_product_stock_add', {'id': product.id})}}" class="custom-btn-with-logo new-btn">
 														<ion-icon name="add-outline"></ion-icon>
-														<span class="hidden md:inline">Ajouter du stock</span>
+														<span class="hidden xl:inline">Stock</span>
 													</a>
 												</div>
 											</td>
-											<td>
-												<a href="{{ path('app_product_stock_history', {'id': product.id})}}" class="text-gray-600 text-lg flex items-center justify-center hover:text-blue-600">
+											<td class="py-4 px-2">
+												<a href="{{ path('app_product_stock_history', {'id': product.id})}}" class="text-gray-600 text-lg flex items-center justify-center hover:text-blue-600 min-h-[2.5rem]">
 													<ion-icon name="newspaper-outline"></ion-icon>
 												</a>
 											</td>
-
 										</tr>
 									{% endfor %}
 								</tbody>
 							</table>
+						</div>
+
+						<div class="xl:hidden p-4 space-y-4">
+							{% for product in products %}
+								<div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
+									<div class="flex justify-between items-start mb-3">
+										<div class="flex-1">
+											<h3 class="font-semibold text-lg text-gray-900 mb-1">{{ product.name }}</h3>
+											<p class="text-sm text-gray-600 mb-2">ID: {{ product.id }}</p>
+											{% if product.description %}
+												<p class="text-sm text-gray-700 mb-3">{{ product.description | slice(0,100) }}
+													{% if product.description|length > 100 %}...
+													{% endif %}
+												</p>
+											{% endif %}
+										</div>
+									</div>
+									
+									<div class="grid grid-cols-2 gap-3 mb-4">
+										<div class="text-center bg-gray-50 rounded-lg p-3">
+											<p class="text-xs text-gray-600 mb-1">Stock</p>
+											<p class="font-semibold">
+												{% if product.stock > 0 %}
+													{{ product.stock }}
+												{% else %}
+													<span class="text-red-600">Épuisé</span>
+												{% endif %}
+											</p>
+										</div>
+										<div class="text-center bg-gray-50 rounded-lg p-3">
+											<p class="text-xs text-gray-600 mb-1">Prix</p>
+											<p class="font-semibold">{{ product.price }} €</p>
+										</div>
+									</div>
+
+									<div class="flex flex-wrap gap-2">
+										<a href="{{ path('app_product_edit', {'id': product.id}) }}" class="custom-btn-with-logo edit-btn flex-1">
+											<ion-icon name="create-outline"></ion-icon>
+											<span>Modifier</span>
+										</a>
+										<a href="{{ path('app_product_stock_add', {'id': product.id})}}" class="custom-btn-with-logo new-btn flex-1">
+											<ion-icon name="add-outline"></ion-icon>
+											<span>Stock</span>
+										</a>
+									</div>
+									
+									<div class="flex gap-2 mt-2">
+										<form method="post" action="{{ path('app_product_delete', {'id': product.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le produit « {{ product.name }} » ?')" class="flex-1">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+											<button type="submit" class="custom-btn-with-logo delete-btn w-full">
+												<ion-icon name="trash-outline"></ion-icon>
+												<span>Supprimer</span>
+											</button>
+										</form>
+										<a href="{{ path('app_product_stock_history', {'id': product.id})}}" class="text-gray-600 flex items-center justify-center hover:text-blue-600 min-h-[2.5rem] px-4 border border-gray-300 rounded-lg">
+											<ion-icon name="newspaper-outline"></ion-icon>
+										</a>
+									</div>
+								</div>
+							{% endfor %}
 						</div>
 					{% else %}
 						<div class="text-center py-16">

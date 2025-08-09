@@ -33,8 +33,8 @@
 								<thead class="bg-gray-300">
 									<tr>
 										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">ID</th>
-										<th class="py-4 px-2 sm:px-6 border-r border-base-300">Produit</th>
-										<th class="py-4 px-2 sm:px-6 border-r border-base-300">Quantité ajoutée</th>
+										<th class="text-left py-4 px-2 sm:px-6 border-r border-base-300">Produit</th>
+										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">Quantité ajoutée</th>
 										<th class="text-center py-4 px-2 sm:px-6">Date d'ajout</th>
 									</tr>
 								</thead>
@@ -42,8 +42,8 @@
 									{% for productHistory in productsAdded %}
 										<tr class="hover:bg-base-50 transition-colors duration-200">
 											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">{{ productHistory.id }}</td>
-											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300 font-bold">{{ productHistory.product.name }}</td>
-											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">+{{ productHistory.quantity }}</td>
+											<td class="text-left py-4 px-2 sm:px-6 border-r-2 border-base-300 font-semibold">{{ productHistory.product.name }}</td>
+											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300 font-medium text-green-600">+{{ productHistory.quantity }}</td>
 											<td class="text-center py-4 px-2 sm:px-6">{{ productHistory.createdAt|date('d/m/Y H:i') }}</td>
 										</tr>
 									{% endfor %}
