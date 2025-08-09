@@ -96,9 +96,31 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Vérifier si l'utilisateur veut supprimer l'image actuelle
+            $removeImage = $request->request->get('remove_image');
+            
+            if ($removeImage === '1') {
+                // Supprimer l'image actuelle
+                if ($product->getImage()) {
+                    $imagePath = $this->getParameter('image_directory') . '/' . $product->getImage();
+                    if (file_exists($imagePath)) {
+                        unlink($imagePath);
+                    }
+                }
+                $product->setImage(null);
+            }
+            
             $image = $form->get('image')->getData();
 
             if ($image) {
+                // Si on upload une nouvelle image, supprimer l'ancienne d'abord
+                if ($product->getImage()) {
+                    $oldImagePath = $this->getParameter('image_directory') . '/' . $product->getImage();
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                }
+                
                 $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeImageName = $slugger->slug($originalName);
                 $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension();

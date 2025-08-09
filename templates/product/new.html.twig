@@ -1,25 +1,234 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	Nouveau produit
+{% block title %}Nouveau produit
 {% endblock %}
 
 {% block body %}
-	<div class="flex flex-col max-w-xl mx-auto my-8">
+	<div class="container mx-auto px-4 py-6">
+		<div class="content-container max-w-4xl mx-auto">
 
-		<h2 class="text-3xl font-bold text-center mb-20">Ajouter un produit</h2>
+			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2">
+						Nouveau produit
+					</h1>
+					<p class="text-gray-600">Ajoutez un nouveau produit à votre catalogue</p>
+				</div>
+			</div>
 
-		{{ form_start(form) }}
-		<div class="flex flex-col gap-6">
-			{{ form_widget(form.name, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Nom du produit'}}) }}
-			{{ form_widget(form.description, {'attr': {'class': 'textarea textarea-bordered w-full mt-1', 'placeholder': 'Description du produit'}}) }}
-			{{ form_widget(form.image, {'attr': {'class': '', 'placeholder': 'Image'}}) }}
-			{{ form_widget(form.stock, {'attr': {'class': '', 'placeholder': 'Stock'}}) }}
-			{{ form_widget(form.price, {'attr': {'class': 'input input-bordered w-full mt-1', 'placeholder': 'Prix en euros'}}) }}
-			{{ form_widget(form.subCategories, {'attr': {'class': 'checkbox  w-full mt-1'}}) }}
+			{% include 'layouts/_flash_message.html.twig' %}
 
-			<button type="submit" class="btn btn-soft btn-success">Sauvegarder</button>
+			<div class="card bg-white">
+				<div class="card-body">
+					{{ form_start(form) }}
+					
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+						<!-- Colonne gauche : Informations principales -->
+						<div class="space-y-6">
+							<div>
+								{{ form_label(form.name, 'Nom du produit', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+								{{ form_widget(form.name, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Saisissez le nom du produit'}}) }}
+								<div class="m-1 text-red-500 text-sm">
+									{{ form_errors(form.name) }}
+								</div>
+							</div>
+
+							<div>
+								{{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+								{{ form_widget(form.description, {'attr': {'class': 'input-style input-style-common', 'rows': 4, 'placeholder': 'Décrivez votre produit en détail'}}) }}
+								<div class="m-1 text-red-500 text-sm">
+									{{ form_errors(form.description) }}
+								</div>
+							</div>
+
+							<div>
+								{{ form_label(form.image, 'Image du produit', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+								
+								<!-- Zone de téléchargement d'image personnalisée -->
+								<div class="image-upload-container">
+									<!-- Input file caché -->
+									{{ form_widget(form.image, {'attr': {'class': 'hidden', 'accept': 'image/jpeg,image/png,image/jpg,image/webp'}}) }}
+									
+									<!-- Zone de drop personnalisée -->
+									<div id="image-drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer transition-colors hover:border-blue-400 hover:bg-blue-50">
+										<div id="upload-placeholder" class="space-y-2">
+											<ion-icon name="cloud-upload-outline" class="text-4xl text-gray-400"></ion-icon>
+											<p class="text-sm font-medium text-gray-600">Cliquez ici pour ajouter une image</p>
+											<p class="text-xs text-gray-500">ou glissez-déposez votre fichier</p>
+											<p class="text-xs text-gray-400">Formats : JPEG, PNG, JPG, WEBP (max. 1MB)</p>
+										</div>
+										
+										<!-- Aperçu d'image -->
+										<div id="image-preview" class="hidden">
+											<p class="text-sm text-gray-600 mb-2">Aperçu :</p>
+											<img id="preview-img" src="" alt="Aperçu" class="w-48 h-48 mx-auto rounded-lg shadow-md object-cover border border-gray-200">
+											<p id="image-name" class="text-sm text-gray-600 mb-3 mt-2"></p>
+											
+											<!-- Bouton d'action pour supprimer l'image -->
+											<div class="flex justify-center mt-3">
+												<button type="button" id="remove-image" class="inline-flex items-center gap-3 text-red-500 text-sm hover:text-red-700 px-4 py-2 border border-red-300 rounded-md hover:bg-red-50 w-56">
+													<ion-icon name="trash-outline" class="text-base flex-shrink-0"></ion-icon>
+													<span class="text-left whitespace-nowrap">Supprimer l'image</span>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="m-1 text-red-500 text-sm">
+									{{ form_errors(form.image) }}
+								</div>
+							</div>
+						</div>
+
+						<!-- Colonne droite : Prix, stock et catégories -->
+						<div class="space-y-6">
+							<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+								<div>
+									{{ form_label(form.price, 'Prix (€)', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+									{{ form_widget(form.price, {'attr': {'class': 'input-style input-style-common', 'placeholder': '0.00'}}) }}
+									<div class="m-1 text-red-500 text-sm">
+										{{ form_errors(form.price) }}
+									</div>
+								</div>
+
+								<div>
+									{{ form_label(form.stock, 'Stock initial', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+									{{ form_widget(form.stock, {'attr': {'class': 'input-style input-style-common', 'placeholder': '0'}}) }}
+									<div class="m-1 text-red-500 text-sm">
+										{{ form_errors(form.stock) }}
+									</div>
+								</div>
+							</div>
+
+							<div>
+								{{ form_label(form.subCategories, 'Sous-catégories', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-3'}}) }}
+								<div class="max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-6">
+									<div class="space-y-3">
+										{% for choice in form.subCategories %}
+											<div class="form-control">
+												<label class="label cursor-pointer justify-start gap-3 p-2 hover:bg-gray-50 rounded transition-colors">
+													{{ form_widget(choice, {'attr': {'class': 'checkbox checkbox-sm'}}) }}
+													<span class="label-text text-sm text-gray-700">
+														{{ choice.vars.label }}
+													</span>
+												</label>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+								<div class="m-1 text-red-500 text-sm">
+									{{ form_errors(form.subCategories) }}
+								</div>
+								<p class="text-xs text-gray-500 mt-1">Sélectionnez une ou plusieurs sous-catégories</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Boutons d'action -->
+					<div class="border-t border-gray-200 pt-6 mt-8">
+						<div class="flex flex-col sm:flex-row gap-4 justify-end">
+							<a href="{{ path('app_product') }}" class="custom-btn-with-logo back-btn">
+								<ion-icon name="close-outline" class="mr-2"></ion-icon>
+								Annuler
+							</a>
+							<button type="submit" class="custom-btn-with-logo new-btn">
+								<ion-icon name="checkmark-outline" class="mr-2"></ion-icon>
+								Créer le produit
+							</button>
+						</div>
+					</div>
+
+					{{ form_end(form) }}
+				</div>
+			</div>
 		</div>
-		{{ form_end(form) }}
 	</div>
+
+	<script id="new-product-script">
+		document.addEventListener('DOMContentLoaded', initImageUpload);
+		document.addEventListener('turbo:load', initImageUpload);
+		document.addEventListener('turbo:frame-load', initImageUpload);
+
+		function initImageUpload() {
+		    if (!window.location.pathname.includes('/new')) return;
+		    if (window.newImageUploadInitialized) return;
+		    window.newImageUploadInitialized = true;
+
+		    const fileInput = document.querySelector('input[type="file"]');
+		    const dropZone = document.getElementById('image-drop-zone');
+		    if (!fileInput || !dropZone) return;
+
+		    const uploadPlaceholder = document.getElementById('upload-placeholder');
+		    const imagePreview = document.getElementById('image-preview');
+		    const previewImg = document.getElementById('preview-img');
+		    const imageName = document.getElementById('image-name');
+		    const removeBtn = document.getElementById('remove-image');
+
+		    const showImageState = state => {
+		        uploadPlaceholder?.classList.toggle('hidden', state !== 'placeholder');
+		        imagePreview?.classList.toggle('hidden', state !== 'preview');
+		    };
+
+		    const clearPreview = () => {
+		        previewImg.src = '';
+		        imageName.textContent = '';
+		        fileInput.value = '';
+		    };
+
+		    const showImagePreview = file => {
+		        const reader = new FileReader();
+		        reader.onload = e => {
+		            previewImg.src = e.target.result;
+		            imageName.textContent = file.name;
+		            showImageState('preview');
+		        };
+		        reader.readAsDataURL(file);
+		    };
+
+		    // Events
+		    dropZone.addEventListener('click', e => {
+		        if (!e.target.closest('button')) fileInput.click();
+		    });
+
+		    fileInput.addEventListener('change', e => {
+		        if (e.target.files.length) showImagePreview(e.target.files[0]);
+		    });
+
+		    dropZone.addEventListener('dragover', e => {
+		        e.preventDefault();
+		        dropZone.classList.add('border-blue-400', 'bg-blue-50');
+		    });
+
+		    dropZone.addEventListener('dragleave', e => {
+		        e.preventDefault();
+		        dropZone.classList.remove('border-blue-400', 'bg-blue-50');
+		    });
+
+		    dropZone.addEventListener('drop', e => {
+		        e.preventDefault();
+		        dropZone.classList.remove('border-blue-400', 'bg-blue-50');
+		        if (e.dataTransfer.files.length) {
+		            const dataTransfer = new DataTransfer();
+		            dataTransfer.items.add(e.dataTransfer.files[0]);
+		            fileInput.files = dataTransfer.files;
+		            showImagePreview(e.dataTransfer.files[0]);
+		        }
+		    });
+
+		    if (removeBtn) {
+		        removeBtn.addEventListener('click', e => {
+		            e.preventDefault();
+		            e.stopPropagation();
+		            clearPreview();
+		            showImageState('placeholder');
+		        });
+		    }
+
+		    // Récupération après erreur de validation
+		    if (fileInput.files && fileInput.files.length > 0) {
+		        showImagePreview(fileInput.files[0]);
+		    }
+		}
+	</script>
 {% endblock %}
