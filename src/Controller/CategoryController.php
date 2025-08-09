@@ -14,8 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class CategoryController extends AbstractController
 {
     #region READ
-    #[Route('admin/category', name: 'app_category')]
-    public function listCategories(CategoryRepository $categoryRepository): Response
+    #[Route('/admin/category', name: 'app_category')]
+    public function index(CategoryRepository $categoryRepository): Response
     {
         $categories = $categoryRepository->findAll();
 
@@ -27,16 +27,16 @@ final class CategoryController extends AbstractController
     #endregion
 
     #region CREATE
-    #[Route('admin/category/new', name: 'app_category_new', methods: ['GET', 'POST'])]
-    public function newCategory(EntityManagerInterface $emi, Request $request): Response
+    #[Route('/admin/category/new', name: 'app_category_new', methods: ['GET', 'POST'])]
+    public function new(EntityManagerInterface $entityManager, Request $request): Response
     {
         $category = new Category();
         $form = $this->createForm(CategoryFormType::class, $category);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $emi->persist($category);
-            $emi->flush();
+            $entityManager->persist($category);
+            $entityManager->flush();
 
             $this->addFlash('success', 'Catégorie créée avec succès');
             return $this->redirectToRoute('app_category');
@@ -50,14 +50,14 @@ final class CategoryController extends AbstractController
     #endregion
 
     #region UPDATE
-    #[Route('admin/category/edit/{id}', name: 'app_category_edit', methods: ['GET', 'POST'])]
-    public function editCategory(Request $request, EntityManagerInterface $emi, Category $category): Response
+    #[Route('/admin/category/edit/{id}', name: 'app_category_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, EntityManagerInterface $entityManager, Category $category): Response
     {
         $form = $this->createForm(CategoryFormType::class, $category);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $emi->flush();
+            $entityManager->flush();
 
             $this->addFlash('success', 'Catégorie modifiée avec succès.');
             return $this->redirectToRoute('app_category');
@@ -71,11 +71,11 @@ final class CategoryController extends AbstractController
     #endregion
 
     #region DELETE
-    #[Route('admin/category/delete/{id}', name: 'app_category_delete')]
-    public function deleteCategory(EntityManagerInterface $emi, Category $category): Response
+    #[Route('/admin/category/delete/{id}', name: 'app_category_delete')]
+    public function delete(EntityManagerInterface $entityManager, Category $category): Response
     {
-        $emi->remove($category);
-        $emi->flush();
+        $entityManager->remove($category);
+        $entityManager->flush();
 
         $this->addFlash('error', 'Catégorie supprimée avec succès.');
         return $this->redirectToRoute('app_category');

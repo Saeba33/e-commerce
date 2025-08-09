@@ -11,11 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('editor/city')]
+#[Route('/editor/city')]
 final class CityController extends AbstractController
 {
-    #region READ ALL
-    #[Route(name: 'app_city_index', methods: ['GET'])]
+    #region READ
+    #[Route('', name: 'app_city_index', methods: ['GET'])]
     public function index(CityRepository $cityRepository): Response
     {
         return $this->render('city/index.html.twig', [
@@ -24,7 +24,7 @@ final class CityController extends AbstractController
     }
     #endregion
 
-    #region READ ONE
+    #region READ - SHOW
     #[Route('/{id}', name: 'app_city_show', methods: ['GET'])]
     public function show(City $city): Response
     {

@@ -74,10 +74,13 @@
 															<ion-icon name="create-outline"></ion-icon>
 														</div>
 													</a>
-													<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer le produit « {{ product.name }} » ?')" href="{{ path('app_product_delete', {'id': product.id}) }}" class="custom-btn-with-logo delete-btn">
-														<ion-icon name="trash-outline"></ion-icon>
-														<span class="hidden md:inline">Supprimer</span>
-													</a>
+													<form method="post" action="{{ path('app_product_delete', {'id': product.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le produit « {{ product.name }} » ?')" style="display: inline;">
+														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+														<button type="submit" class="custom-btn-with-logo delete-btn">
+															<ion-icon name="trash-outline"></ion-icon>
+															<span class="hidden md:inline">Supprimer</span>
+														</button>
+													</form>
 													<a href="{{ path('app_product_stock_add', {'id': product.id})}}" class="custom-btn-with-logo new-btn">
 														<ion-icon name="add-outline"></ion-icon>
 														<span class="hidden md:inline">Ajouter du stock</span>
@@ -85,7 +88,7 @@
 												</div>
 											</td>
 											<td>
-												<a href="{{ path('app_product_stock_add_history', {'id': product.id})}}" class="text-gray-600 text-lg flex items-center justify-center hover:text-blue-600">
+												<a href="{{ path('app_product_stock_history', {'id': product.id})}}" class="text-gray-600 text-lg flex items-center justify-center hover:text-blue-600">
 													<ion-icon name="newspaper-outline"></ion-icon>
 												</a>
 											</td>

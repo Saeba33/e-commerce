@@ -17,37 +17,35 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class OrderController extends AbstractController
 {
-    #region READ ORDER
+    #region CREATE
     #[Route('/order', name: 'app_order')]
-    public function index(Request $request, SessionInterface $session, ProductRepository $productRepository, EntityManagerInterface $emi, Cart $cart): Response
+    public function index(Request $request, SessionInterface $session, EntityManagerInterface $entityManager, Cart $cart): Response
     {
-        $data = $cart->getCart($session);
+        $cartData = $cart->getCart($session);
 
         $order = new Order();
-        $form = $this -> createForm(OrderFormType::class, $order);
-        $form -> handleRequest($request);
+        $form = $this->createForm(OrderFormType::class, $order);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if (!empty($data['total'])) {
-                $order->setTotalPrice($data['total']);
+            if (!empty($cartData['total'])) {
+                $order->setTotalPrice($cartData['total']);
                 $order->setCreatedAt(new \DateTimeImmutable());
-                $emi->persist($order);
-                $emi->flush();
-                foreach ($data['cart'] as $value) {
+                $entityManager->persist($order);
+                $entityManager->flush();
+                foreach ($cartData['cart'] as $value) {
                     $orderProduct = new OrderProducts();
                     $orderProduct->setOrder($order);
                     $orderProduct->setProduct($value['product']);
                     $orderProduct->setQuantity($value['quantity']);
-                    $emi->persist($orderProduct);
-                    $emi->flush();
+                    $entityManager->persist($orderProduct);
+                    $entityManager->flush();
                 }
             }
 
             if ($order->isPayOnDelivery()) {
-
                 $session->set('cart', []);
-
             }
 
             $this->addFlash('success', 'Commande enregistrée !');
@@ -57,15 +55,15 @@ final class OrderController extends AbstractController
 
         return $this->render('order/index.html.twig', [
             'controller_name' => 'OrderController',
-            'form' => $form -> createView(),
-            'total' => $data['total']
+            'form' => $form->createView(),
+            'total' => $cartData['total']
         ]);
     }
     #endregion
 
-    #region READ SHIIPING COST
+    #region SHIPPING COST
     #[Route('/city/{id}/shipping/cost', name: 'app_city_shipping_cost')]
-    public function cityShippingCost(City $city): Response
+    public function getShippingCost(City $city): Response
     {
         $cityShippingPrice = $city->getShippingCost();
 

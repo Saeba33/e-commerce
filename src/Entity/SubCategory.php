@@ -25,7 +25,7 @@ class SubCategory
     /**
      * @var Collection<int, Product>
      */
-    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'sub_category')]
+    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'subCategories')]
     private Collection $products;
 
     public function __construct()

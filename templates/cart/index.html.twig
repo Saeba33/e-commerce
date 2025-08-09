@@ -33,7 +33,7 @@
 						<td>{{ item.product.price * item.quantity }}
 						</td>
 						<td>
-							<a href="{{ path('app_cart_product_remove', {'id': item.product.id}) }}" class="custom-btn delete-btn">Supprimer du panier</a>
+							<a href="{{ path('app_cart_remove_product', {'id': item.product.id}) }}" class="custom-btn delete-btn">Supprimer du panier</a>
 						</td>
 					</tr>
 				</tbody>
@@ -51,7 +51,7 @@
 				euros</p>
 			<div class="flex">
 				<a data-turbo="false" href="{{ path('app_order') }}" class="custom-btn new-btn">Valider la commande</a>
-				<a href="{{ path('app_cart_remove') }}" class="custom-btn delete-btn">Supprimer le panier</a>
+				<a href="{{ path('app_cart_clear') }}" class="custom-btn delete-btn">Supprimer le panier</a>
 			</div>
 		{% endif %}
 

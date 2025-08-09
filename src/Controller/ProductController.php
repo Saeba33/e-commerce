@@ -19,9 +19,9 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ProductController extends AbstractController
 {
-    #region READ ALL
-    #[Route('editor/product', name: 'app_product', methods: ['GET'])]
-    public function listProducts(ProductRepository $productRepository): Response
+    #region READ
+    #[Route('/editor/product', name: 'app_product', methods: ['GET'])]
+    public function index(ProductRepository $productRepository): Response
     {
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findAll(),
@@ -30,8 +30,8 @@ class ProductController extends AbstractController
     #endregion
 
     #region CREATE
-    #[Route('editor/product/new', name: 'app_product_new', methods: ['GET', 'POST'])]
-    public function newProduct(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    #[Route('/editor/product/new', name: 'app_product_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductFormType::class, $product);
@@ -61,7 +61,7 @@ class ProductController extends AbstractController
             $stockHistory = new ProductHistory();
             $stockHistory->setQuantity($product->getStock());
             $stockHistory->setProduct($product);
-            $stockHistory->setCreatedAt(new DateTimeImmutable());
+            $stockHistory->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
             $entityManager->persist($stockHistory);
             $entityManager->flush();
 
@@ -76,8 +76,8 @@ class ProductController extends AbstractController
     }
     #endregion
 
-    #region READ ONE
-    #[Route('editor/product/{id}', name: 'app_product_show', methods: ['GET'])]
+    #region READ - SHOW
+    #[Route('/editor/product/{id}', name: 'app_product_show', methods: ['GET'])]
     public function show(Product $product): Response
     {
         return $this->render('product/show.html.twig', [
@@ -87,10 +87,12 @@ class ProductController extends AbstractController
     #endregion
 
     #region UPDATE
-    #[Route('editor/product/edit/{id}', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    public function editProduct(Request $request, Product $product, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    #[Route('/editor/product/edit/{id}', name: 'app_product_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Product $product, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
-        $form = $this->createForm(ProductFormType::class, $product);
+        $form = $this->createForm(ProductFormType::class, $product, [
+            'is_edit' => true
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -125,10 +127,14 @@ class ProductController extends AbstractController
     #endregion
 
     #region DELETE
-    #[Route('editor/product/delete/{id}', name: 'app_product_delete', methods: ['POST'])]
-    public function deleteProduct(Request $request, Product $product, EntityManagerInterface $entityManager): Response
+    #[Route('/editor/product/delete/{id}', name: 'app_product_delete', methods: ['POST'])]
+    public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->get('_token'))) {
+            $histories = $product->getProductHistories();
+            foreach ($histories as $history) {
+                $entityManager->remove($history);
+            }
             $entityManager->remove($product);
             $this->addFlash('danger', 'Votre produit a été supprimé.');
             $entityManager->flush();
@@ -138,9 +144,9 @@ class ProductController extends AbstractController
     }
     #endregion
 
-    #region ADD STOCK
-    #[Route('add/stock/product/{id}/', name: 'app_product_stock_add', methods: ['GET', 'POST'])]
-    public function addStock($id, EntityManagerInterface $entityManager, Request $request, ProductRepository $productRepository): Response
+    #region STOCK - ADD
+    #[Route('/add/stock/product/{id}', name: 'app_product_stock_add', methods: ['GET', 'POST'])]
+    public function addStock(int $id, EntityManagerInterface $entityManager, Request $request, ProductRepository $productRepository): Response
     {
         $stockAdd = new ProductHistory();
         $form = $this->createForm(ProductHistoryFormType::class, $stockAdd);
@@ -174,9 +180,11 @@ class ProductController extends AbstractController
             'product' => $product,
         ]);
     }
+    #endregion
 
-    #[Route('add/stock/product/{id}/history', name: 'app_product_stock_add_history', methods: ['GET'])]
-    public function showHistoryProductStock($id, ProductRepository $productRepository, ProductHistoryRepository $productHistoryRepository): Response
+    #region STOCK - HISTORY
+    #[Route('/add/stock/product/{id}/history', name: 'app_product_stock_history', methods: ['GET'])]
+    public function showStockHistory(int $id, ProductRepository $productRepository, ProductHistoryRepository $productHistoryRepository): Response
     {
         $product = $productRepository->find($id);
         $productAddHistory = $productHistoryRepository->findBy(['product' => $product], ['id' => 'DESC']);

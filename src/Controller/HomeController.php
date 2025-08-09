@@ -14,8 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class HomeController extends AbstractController
 {
-    #region READ ALL
-    #[Route('/', name: 'app_home', methods:['GET'])]
+    #region READ
+    #[Route('/', name: 'app_home', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository, ProductRepository $productRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $categories = $categoryRepository->findAll();
@@ -34,32 +34,31 @@ final class HomeController extends AbstractController
     }
     #endregion
 
-    #region READ ONE
+    #region READ - SHOW PRODUCT
     #[Route('/product/{id}/show', name: 'app_home_product_show', methods: ['GET'])]
     public function showProduct(Product $product, ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
     {
-        $lastProductsAdd = $productRepository->findBy([], ['id' => 'DESC'], 5);
+        $lastProductsAdded = $productRepository->findBy([], ['id' => 'DESC'], 5);
 
         return $this->render('home/show.html.twig', [
             'product' => $product,
-            'products' => $lastProductsAdd,
+            'products' => $lastProductsAdded,
             'categories' => $categoryRepository->findAll()
         ]);
     }
     #endregion
 
-
-    #region FILTER
+    #region FILTER - BY SUBCATEGORY
     #[Route('/product/subcategory/{id}/filter', name: 'app_home_product_filter', methods: ['GET'])]
-    public function filterBySubCategory($id, SubCategoryRepository $subCategoryRepository, CategoryRepository $categoryRepository): Response
+    public function filterBySubCategory(int $id, SubCategoryRepository $subCategoryRepository, CategoryRepository $categoryRepository): Response
     {
-        $product = $subCategoryRepository->find($id)->getProducts();
         $subCategory = $subCategoryRepository->find($id);
+        $products = $subCategory->getProducts();
 
         return $this->render('home/filter.html.twig', [
-        'products' => $product,
-        'subCategory' => $subCategory,
-        'categories' => $categoryRepository->findAll()
+            'products' => $products,
+            'subCategory' => $subCategory,
+            'categories' => $categoryRepository->findAll()
         ]);
     }
     #endregion

@@ -12,8 +12,8 @@ use Symfony\Component\Routing\Attribute\Route;
 final class UserController extends AbstractController
 {
     #region READ
-    #[Route('admin/user', name: 'app_user')]
-    public function listUsers(UserRepository $userRepository): Response
+    #[Route('/admin/user', name: 'app_user')]
+    public function index(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAll();
 
@@ -24,23 +24,23 @@ final class UserController extends AbstractController
     }
     #endregion
 
-    #region UPDATE (ROLE EDITOR)
-    #[Route('admin/user/{id}/add/role/editor', name: 'app_user_add_role_editor')]
-    public function addRoleEditor(EntityManagerInterface $emi, User $user): Response
+    #region UPDATE - ROLE EDITOR
+    #[Route('/admin/user/{id}/add/role/editor', name: 'app_user_add_role_editor')]
+    public function addRoleEditor(EntityManagerInterface $entityManager, User $user): Response
     {
-        $user->setRoles(['ROLE_EDITOR', 'ROLE_USER']);
-        $emi->flush();
+        $user->setRoles(['ROLE_EDITOR']);
+        $entityManager->flush();
 
         $this->addFlash('success', "Le rôle éditeur a bien été ajouté à l'utilisateur.");
 
         return $this->redirectToRoute('app_user');
     }
 
-    #[Route('admin/user/{id}/remove/role/editor', name: 'app_user_remove_role_editor')]
-    public function removeRoleEditor(EntityManagerInterface $emi, User $user): Response
+    #[Route('/admin/user/{id}/remove/role/editor', name: 'app_user_remove_role_editor')]
+    public function removeRoleEditor(EntityManagerInterface $entityManager, User $user): Response
     {
         $user->setRoles(['ROLE_USER']);
-        $emi->flush();
+        $entityManager->flush();
 
         $this->addFlash('warning', "Le rôle éditeur a bien été retiré à l'utilisateur.");
 
@@ -49,11 +49,11 @@ final class UserController extends AbstractController
     #endregion
 
     #region DELETE
-    #[Route('admin/user/{id}/delete', name: 'app_user_delete')]
-    public function deleteUser(EntityManagerInterface $emi, User $user): Response
+    #[Route('/admin/user/{id}/delete', name: 'app_user_delete')]
+    public function delete(EntityManagerInterface $entityManager, User $user): Response
     {
-        $emi->remove($user);
-        $emi->flush();
+        $entityManager->remove($user);
+        $entityManager->flush();
 
         $this->addFlash('error', "L'utilisateur a bien été supprimé.");
 

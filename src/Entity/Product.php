@@ -29,7 +29,7 @@ class Product
      * @var Collection<int, SubCategory>
      */
     #[ORM\ManyToMany(targetEntity: SubCategory::class, inversedBy: 'products')]
-    private Collection $sub_category;
+    private Collection $subCategories;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
@@ -51,7 +51,7 @@ class Product
 
     public function __construct()
     {
-        $this->sub_category = new ArrayCollection();
+        $this->subCategories = new ArrayCollection();
         $this->productHistories = new ArrayCollection();
         $this->orderProducts = new ArrayCollection();
     }
@@ -100,15 +100,15 @@ class Product
     /**
      * @return Collection<int, SubCategory>
      */
-    public function getSubCategory(): Collection
+    public function getSubCategories(): Collection
     {
-        return $this->sub_category;
+        return $this->subCategories;
     }
 
     public function addSubCategory(SubCategory $subCategory): static
     {
-        if (!$this->sub_category->contains($subCategory)) {
-            $this->sub_category->add($subCategory);
+        if (!$this->subCategories->contains($subCategory)) {
+            $this->subCategories->add($subCategory);
         }
 
         return $this;
@@ -116,7 +116,7 @@ class Product
 
     public function removeSubCategory(SubCategory $subCategory): static
     {
-        $this->sub_category->removeElement($subCategory);
+        $this->subCategories->removeElement($subCategory);
 
         return $this;
     }

@@ -13,26 +13,25 @@ final class CartController extends AbstractController
 {
     public function __construct(private readonly ProductRepository $productRepository)
     {
-
     }
+
     #region READ
-    #[Route('/cart', name: 'app_cart', methods:['GET'])]
+    #[Route('/cart', name: 'app_cart', methods: ['GET'])]
     public function index(SessionInterface $session, Cart $cart): Response
     {
-
-        $data = $cart->getCart($session);
+        $cartData = $cart->getCart($session);
 
         return $this->render('cart/index.html.twig', [
             'controller_name' => 'CartController',
-            'items' => $data['cart'],
-            'total' => $data['total'],
+            'items' => $cartData['cart'],
+            'total' => $cartData['total'],
         ]);
     }
     #endregion
 
     #region CREATE
-    #[Route("/cart/add/{id}/", name: "app_cart_new", methods: ['GET'])]
-    public function addProductToCart(int $id, SessionInterface $session): Response
+    #[Route('/cart/add/{id}', name: 'app_cart_add', methods: ['GET'])]
+    public function addProduct(int $id, SessionInterface $session): Response
     {
         $cart = $session->get('cart', []);
         if (!empty($cart[$id])) {
@@ -46,14 +45,9 @@ final class CartController extends AbstractController
     }
     #endregion
 
-
-    #region UPDATE
-    #endregion
-
-
-    #region DELETE ONE PRODUCT
-    #[Route("/cart/remove/{id}/", name: "app_cart_product_remove", methods: ['GET'])]
-    public function removeToCart($id, SessionInterface $session): Response
+    #region DELETE - SINGLE PRODUCT
+    #[Route('/cart/remove/{id}', name: 'app_cart_remove_product', methods: ['GET'])]
+    public function removeProduct(int $id, SessionInterface $session): Response
     {
         $cart = $session->get('cart', []);
 
@@ -66,10 +60,9 @@ final class CartController extends AbstractController
     }
     #endregion
 
-
-    #region DELETE ALL CART
-    #[Route("/cart/remove", name: "app_cart_remove", methods: ['GET'])]
-    public function remove(SessionInterface $session): Response
+    #region DELETE - ALL CART
+    #[Route('/cart/clear', name: 'app_cart_clear', methods: ['GET'])]
+    public function clear(SessionInterface $session): Response
     {
         $session->set('cart', []);
         return $this->redirectToRoute('app_cart');

@@ -63,10 +63,13 @@
 															<ion-icon name="create-outline"></ion-icon>
 														</div>
 													</a>
-													<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer la ville « {{ city.name }} » ?')" href="{{ path('app_city_delete', {'id': city.id}) }}" class="custom-btn-with-logo delete-btn">
-														<ion-icon name="trash-outline"></ion-icon>
-														<span class="hidden md:inline">Supprimer</span>
-													</a>
+													<form method="post" action="{{ path('app_city_delete', {'id': city.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer la ville « {{ city.name }} » ?')" style="display: inline;">
+														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ city.id) }}">
+														<button type="submit" class="custom-btn-with-logo delete-btn">
+															<ion-icon name="trash-outline"></ion-icon>
+															<span class="hidden md:inline">Supprimer</span>
+														</button>
+													</form>
 												</div>
 											</td>
 										</tr>

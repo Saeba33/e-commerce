@@ -16,7 +16,7 @@ class RegistrationController extends AbstractController
 {
     #region CREATE
     #[Route('/register', name: 'app_register', methods: ['GET', 'POST'])]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $emi): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -26,8 +26,8 @@ class RegistrationController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            $emi->persist($user);
-            $emi->flush();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
             $this->addFlash('success', 'Compte créé avec succès ! Vous êtes maintenant connecté.');
 
