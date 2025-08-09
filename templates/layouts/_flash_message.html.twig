@@ -1,9 +1,42 @@
 {% for type, messages in app.flashes(['info','success','warning','error']) %}
 	{% for message in messages %}
-		<div>
+		<div class="flash-message" data-type="{{ type }}">
 			<div class="alert alert-{{ type }} shadow-lg mb-6">
 				<span>{{ message }}</span>
+				<button type="button" class="btn btn-sm btn-circle btn-ghost ml-auto" onclick="this.closest('.flash-message').remove()">
+					<ion-icon name="close-outline"></ion-icon>
+				</button>
 			</div>
 		</div>
 	{% endfor %}
 {% endfor %}
+
+ <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const flashDurations = {
+        'success': 3000,
+        'info': 5000,
+        'warning': 6000,
+        'error': 8000
+    };
+
+    const flashMessages = document.querySelectorAll('.flash-message');
+    
+    flashMessages.forEach(function(flashMessage) {
+        const type = flashMessage.getAttribute('data-type');
+        const duration = flashDurations[type] || 5000;
+        
+
+        setTimeout(function() {
+            flashMessage.style.transition = 'opacity 0.5s ease-out';
+            flashMessage.style.opacity = '0';
+            
+            setTimeout(function() {
+                if (flashMessage.parentNode) {
+                    flashMessage.parentNode.removeChild(flashMessage);
+                }
+            }, 500);
+        }, duration);
+    });
+});
+</script>
