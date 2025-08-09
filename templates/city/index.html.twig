@@ -25,13 +25,14 @@
 			<div class="card bg-white">
 				<div class="card-body p-0">
 					{% if cities|length > 0 %}
-						<div class="overflow-x-auto">
+			
+						<div class="hidden xl:block overflow-x-auto">
 							<table class="table table-zebra w-full border-2 border-base-300">
 								<thead class="bg-gray-300">
 									<tr>
 										<th class="text-center py-4 px-2 border-r border-base-300">ID</th>
-										<th class="text-center py-4 px-2 border-r border-base-300">Nom de la ville</th>
-										<th class="text-center py-4 px-2 border-r border-base-300">Frais de livraison (€)</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">Nom de la ville</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Frais de livraison</th>
 										<th class="text-center py-4 px-2 border-r border-base-300">Actions</th>
 									</tr>
 								</thead>
@@ -42,32 +43,22 @@
 												<span>{{ city.id }}</span>
 											</td>
 											<td class="py-4 px-2 border-r-2 border-base-300">
-												<div class="text-center font-semibold">{{ city.name }}</div>
+												<div class="text-left font-semibold">{{ city.name }}</div>
 											</td>
 											<td class="text-center py-4 px-2 border-r-2 border-base-300">
-												<span>{{ city.shippingCost }}
-													€</span>
+												<span class="font-medium">{{ city.shippingCost }} €</span>
 											</td>
-											<td class="py-4 px-2 border-r-2 border-base-300">
-												<div class="flex flex-col md:flex-row justify-center gap-2">
-													<a href="{{ path('app_city_show', {'id': city.id}) }}" class="custom-btn-with-logo view-btn">
-														<ion-icon name="eye-outline"></ion-icon>
-														<span class="hidden md:inline">Voir</span>
-													</a>
+											<td class="text-center py-4 px-2">
+												<div class="flex justify-center gap-2">
 													<a href="{{ path('app_city_edit', {'id': city.id}) }}" class="custom-btn-with-logo edit-btn">
-														<div class="hidden md:inline">
-															<ion-icon name="create-outline"></ion-icon>
-															<span>Modifier</span>
-														</div>
-														<div class="inline md:hidden">
-															<ion-icon name="create-outline"></ion-icon>
-														</div>
+														<ion-icon name="create-outline"></ion-icon>
+														Modifier
 													</a>
-													<form method="post" action="{{ path('app_city_delete', {'id': city.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer la ville « {{ city.name }} » ?')" style="display: inline;">
+													<form method="post" action="{{ path('app_city_delete', {'id': city.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ville ?')" class="inline">
 														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ city.id) }}">
 														<button type="submit" class="custom-btn-with-logo delete-btn">
 															<ion-icon name="trash-outline"></ion-icon>
-															<span class="hidden md:inline">Supprimer</span>
+															Supprimer
 														</button>
 													</form>
 												</div>
@@ -77,11 +68,38 @@
 								</tbody>
 							</table>
 						</div>
+
+						<div class="xl:hidden p-4 space-y-4">
+							{% for city in cities %}
+								<div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
+									<div class="flex justify-between items-start mb-3">
+										<div class="flex-1">
+											<p class="text-sm text-gray-600 mb-1">ID: {{ city.id }}</p>
+											<h3 class="font-semibold text-lg text-gray-900 mb-1">{{ city.name }}</h3>
+											<p class="text-sm text-gray-700">Frais de livraison : <span class="font-medium">{{ city.shippingCost }} €</span></p>
+										</div>
+									</div>
+
+									<div class="flex flex-wrap gap-2">
+										<a href="{{ path('app_city_edit', {'id': city.id}) }}" class="custom-btn-with-logo edit-btn flex-1">
+											<ion-icon name="create-outline"></ion-icon>
+											<span>Modifier</span>
+										</a>
+										<form method="post" action="{{ path('app_city_delete', {'id': city.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ville ?')" class="flex-1">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ city.id) }}">
+											<button type="submit" class="custom-btn-with-logo delete-btn w-full">
+												<ion-icon name="trash-outline"></ion-icon>
+												<span>Supprimer</span>
+											</button>
+										</form>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
 					{% else %}
 						<div class="text-center py-16">
 							<ion-icon name="location-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
-							<h3 class="text-xl font-semibold text-gray-600 mb-2">Aucune ville configurée</h3>
-							<p class="text-gray-500 mb-4">Commencez par ajouter une ville avec ses frais de livraison</p>
+							<h3 class="text-xl font-semibold text-gray-600 mb-2">Aucune ville</h3>
 							<a href="{{ path('app_city_new') }}" class="custom-btn-with-logo new-btn">
 								<ion-icon name="add-outline"></ion-icon>
 								Créer une ville

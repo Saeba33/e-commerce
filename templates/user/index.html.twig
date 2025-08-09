@@ -5,9 +5,8 @@
 
 {% block body %}
 	<div class="container mx-auto px-4 py-6">
-		<div
-			class="content-container">
-			{# En-tête avec titre #}
+		<div class="content-container">
+
 			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
 				<div>
 					<h1 class="text-3xl font-bold text-gray-800 mb-2">
@@ -17,53 +16,22 @@
 				</div>
 			</div>
 
-			{# Messages flash #}
 			{% include 'layouts/_flash_message.html.twig' %}
 
-			{# Tableau des utilisateurs #}
 			<div class="card bg-white">
 				<div class="card-body p-0">
 					{% if users|length > 0 %}
-						<div class="overflow-x-auto">
+			
+						<div class="hidden xl:block overflow-x-auto">
 							<table class="table table-zebra w-full border-2 border-base-300">
 								<thead class="bg-gray-300">
 									<tr>
-										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center justify-center gap-1 sm:gap-2">
-												<ion-icon name="key-outline"></ion-icon>
-												<span class="hidden sm:inline">ID</span>
-											</div>
-										</th>
-										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center gap-1 sm:gap-2">
-												<ion-icon name="person-outline"></ion-icon>
-												Nom
-											</div>
-										</th>
-										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center gap-1 sm:gap-2">
-												<ion-icon name="person-outline"></ion-icon>
-												Prénom
-											</div>
-										</th>
-										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center gap-1 sm:gap-2">
-												<ion-icon name="mail-outline"></ion-icon>
-												E-mail
-											</div>
-										</th>
-										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center gap-1 sm:gap-2">
-												<ion-icon name="shield-outline"></ion-icon>
-												Rôle
-											</div>
-										</th>
-										<th class="text-center py-4 px-2 sm:px-6">
-											<div class="flex items-center justify-center gap-1 sm:gap-2">
-												<ion-icon name="settings-outline"></ion-icon>
-												<span class="hidden sm:inline">Actions</span>
-											</div>
-										</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">ID</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">Nom</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">Prénom</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">E-mail</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Rôle</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Actions</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -72,43 +40,41 @@
 											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">
 												<span>{{ user.id }}</span>
 											</td>
-											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
-												<div class="font-semibold">{{ user.lastname }}</div>
+											<td class="py-4 px-2 border-r-2 border-base-300">
+												<div class="text-left font-semibold">{{ user.lastname }}</div>
 											</td>
-											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
-												<div class="font-semibold">{{ user.firstname }}</div>
+											<td class="py-4 px-2 border-r-2 border-base-300">
+												<div class="text-left font-semibold">{{ user.firstname }}</div>
 											</td>
-											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
-												<div class="truncate">{{ user.email }}</div>
+											<td class="py-4 px-2 border-r-2 border-base-300">
+												<div class="text-left">{{ user.email }}</div>
 											</td>
-											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
-												<span class="badge badge-primary">
-													{% if 'ROLE_ADMIN' in user.roles %}
-														Admin
-													{% elseif 'ROLE_EDITOR' in user.roles %}
-														Éditeur
-													{% else %}
-														Client
-													{% endif %}
-												</span>
+											<td class="text-center py-4 px-2 border-r-2 border-base-300">
+												{% if 'ROLE_ADMIN' in user.roles %}
+													<span class="badge badge-error">Admin</span>
+												{% elseif 'ROLE_EDITOR' in user.roles %}
+													<span class="badge badge-warning">Éditeur</span>
+												{% else %}
+													<span class="badge badge-info">Utilisateur</span>
+												{% endif %}
 											</td>
-											<td class="py-4 px-2 sm:px-6">
-												<div class="flex flex-col sm:flex-row justify-center gap-2">
+											<td class="text-center py-4 px-2">
+												<div class="flex justify-center gap-2">
 													{% if 'ROLE_ADMIN' not in user.roles %}
-														{% if 'ROLE_EDITOR' not in user.roles %}
-															<a onclick="return confirm('Voulez-vous vraiment affecter le rôle éditeur à {{ user.firstname }} {{ user.lastname }} ?')" class="custom-btn-with-logo new-btn text-center" href="{{ path('app_user_add_role_editor', {'id': user.id}) }}">
-																<ion-icon name="add-outline"></ion-icon>
-																<span class="hidden sm:inline">Rôle éditeur</span>
-																<span class="sm:hidden">Éditeur</span>
+														{% if 'ROLE_EDITOR' in user.roles %}
+															<a href="{{ path('app_user_remove_role_editor', {'id': user.id}) }}" class="custom-btn-with-logo back-btn">
+																<ion-icon name="remove-outline"></ion-icon>
+																Retirer éditeur
 															</a>
 														{% else %}
-															<a onclick="return confirm('Voulez-vous vraiment retirer le rôle éditeur à {{ user.firstname }} {{ user.lastname }} ?')" class="custom-btn-with-logo edit-btn text-center" href="{{ path('app_user_remove_role_editor', {'id': user.id}) }}">
-																<ion-icon name="remove-outline"></ion-icon>
-																<span class="hidden sm:inline">Retirer éditeur</span>
-																<span class="sm:hidden">Retirer</span>
+															<a href="{{ path('app_user_add_role_editor', {'id': user.id}) }}" class="custom-btn-with-logo edit-btn">
+																<ion-icon name="add-outline"></ion-icon>
+																Promouvoir éditeur
 															</a>
 														{% endif %}
-														<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer l\'utilisateur {{ user.firstname }} {{ user.lastname }} ?')" href="{{ path('app_user_delete', {'id': user.id}) }}" class="custom-btn-with-logo delete-btn text-center">
+													{% endif %}
+													{% if user.id != app.user.id %}
+														<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer l\'utilisateur « {{ user.firstname }} {{ user.lastname }} » ?')" href="{{ path('app_user_delete', {'id': user.id}) }}" class="custom-btn-with-logo delete-btn">
 															<ion-icon name="trash-outline"></ion-icon>
 															Supprimer
 														</a>
@@ -120,10 +86,56 @@
 								</tbody>
 							</table>
 						</div>
+
+						<div class="xl:hidden p-4 space-y-4">
+							{% for user in users %}
+								<div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
+									<div class="flex justify-between items-start mb-3">
+										<div class="flex-1">
+											<p class="text-sm text-gray-600 mb-1">ID: {{ user.id }}</p>
+											<h3 class="font-semibold text-lg text-gray-900 mb-1">{{ user.firstname }} {{ user.lastname }}</h3>
+											<p class="text-sm text-gray-700 mb-1">{{ user.email }}</p>
+											<div class="mb-2">
+												{% if 'ROLE_ADMIN' in user.roles %}
+													<span class="badge badge-error">Admin</span>
+												{% elseif 'ROLE_EDITOR' in user.roles %}
+													<span class="badge badge-warning">Éditeur</span>
+												{% else %}
+													<span class="badge badge-info">Utilisateur</span>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+
+									<div class="flex flex-wrap gap-2">
+										{% if 'ROLE_ADMIN' not in user.roles %}
+											{% if 'ROLE_EDITOR' in user.roles %}
+												<a href="{{ path('app_user_remove_role_editor', {'id': user.id}) }}" class="custom-btn-with-logo back-btn flex-1">
+													<ion-icon name="remove-outline"></ion-icon>
+													<span>Retirer éditeur</span>
+												</a>
+											{% else %}
+												<a href="{{ path('app_user_add_role_editor', {'id': user.id}) }}" class="custom-btn-with-logo edit-btn flex-1">
+													<ion-icon name="add-outline"></ion-icon>
+													<span>Promouvoir éditeur</span>
+												</a>
+											{% endif %}
+										{% endif %}
+										{% if user.id != app.user.id %}
+											<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer l\'utilisateur « {{ user.firstname }} {{ user.lastname }} » ?')" href="{{ path('app_user_delete', {'id': user.id}) }}" class="custom-btn-with-logo delete-btn flex-1">
+												<ion-icon name="trash-outline"></ion-icon>
+												<span>Supprimer</span>
+											</a>
+										{% endif %}
+									</div>
+								</div>
+							{% endfor %}
+						</div>
 					{% else %}
 						<div class="text-center py-16">
 							<ion-icon name="people-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
 							<h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun utilisateur</h3>
+							<p class="text-gray-500">Les utilisateurs s'inscrivent via la page d'inscription</p>
 						</div>
 					{% endif %}
 				</div>

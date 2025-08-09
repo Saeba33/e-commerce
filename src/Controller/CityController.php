@@ -24,16 +24,6 @@ final class CityController extends AbstractController
     }
     #endregion
 
-    #region READ - SHOW
-    #[Route('/{id}', name: 'app_city_show', methods: ['GET'])]
-    public function show(City $city): Response
-    {
-        return $this->render('city/show.html.twig', [
-            'city' => $city,
-        ]);
-    }
-    #endregion
-
     #region CREATE
     #[Route('/new', name: 'app_city_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -53,6 +43,16 @@ final class CityController extends AbstractController
         return $this->render('city/new.html.twig', [
             'city' => $city,
             'form' => $form,
+        ]);
+    }
+    #endregion
+
+    #region READ - SHOW
+    #[Route('/{id}', name: 'app_city_show', methods: ['GET'])]
+    public function show(City $city): Response
+    {
+        return $this->render('city/show.html.twig', [
+            'city' => $city,
         ]);
     }
     #endregion

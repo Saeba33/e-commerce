@@ -5,9 +5,8 @@
 
 {% block body %}
 	<div class="container mx-auto px-4 py-6">
-		<div
-			class="content-container">
-			{# En-tête avec titre et bouton d'ajout #}
+		<div class="content-container">
+
 			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
 				<div>
 					<h1 class="text-3xl font-bold text-gray-800 mb-2">
@@ -21,41 +20,20 @@
 				</a>
 			</div>
 
-			{# Messages flash #}
 			{% include 'layouts/_flash_message.html.twig' %}
 
-			{# Tableau des sous-catégories #}
 			<div class="card bg-white">
 				<div class="card-body p-0">
 					{% if subCategories|length > 0 %}
-						<div class="overflow-x-auto">
+			
+						<div class="hidden xl:block overflow-x-auto">
 							<table class="table table-zebra w-full border-2 border-base-300">
 								<thead class="bg-gray-300">
 									<tr>
-										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center justify-center gap-1 sm:gap-2">
-												<ion-icon name="key-outline"></ion-icon>
-												<span class="hidden sm:inline">ID</span>
-											</div>
-										</th>
-										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center gap-1 sm:gap-2">
-												<ion-icon name="folder-outline"></ion-icon>
-												Catégorie
-											</div>
-										</th>
-										<th class="py-4 px-2 sm:px-6 border-r border-base-300">
-											<div class="flex items-center gap-1 sm:gap-2">
-												<ion-icon name="duplicate-outline"></ion-icon>
-												Sous-catégorie
-											</div>
-										</th>
-										<th class="text-center py-4 px-2 sm:px-6">
-											<div class="flex items-center justify-center gap-1 sm:gap-2">
-												<ion-icon name="settings-outline"></ion-icon>
-												<span class="hidden sm:inline">Actions</span>
-											</div>
-										</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">ID</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">Catégorie</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">Sous-catégorie</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Actions</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -64,19 +42,19 @@
 											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">
 												<span>{{ subCategory.id }}</span>
 											</td>
-											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
-												<div class="font-semibold">{{ subCategory.category.name }}</div>
+											<td class="py-4 px-2 border-r-2 border-base-300">
+												<div class="text-left font-semibold">{{ subCategory.category.name }}</div>
 											</td>
-											<td class="py-4 px-2 sm:px-6 border-r-2 border-base-300">
-												<div class="font-semibold">{{ subCategory.name }}</div>
+											<td class="py-4 px-2 border-r-2 border-base-300">
+												<div class="text-left font-semibold">{{ subCategory.name }}</div>
 											</td>
-											<td class="py-4 px-2 sm:px-6">
-												<div class="flex flex-col sm:flex-row justify-center gap-2">
-													<a href="{{ path('app_sub_category_edit', {'id': subCategory.id}) }}" class="custom-btn-with-logo edit-btn text-center">
+											<td class="text-center py-4 px-2">
+												<div class="flex justify-center gap-2">
+													<a href="{{ path('app_sub_category_edit', {'id': subCategory.id}) }}" class="custom-btn-with-logo edit-btn">
 														<ion-icon name="create-outline"></ion-icon>
 														Modifier
 													</a>
-													<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer la sous-catégorie « {{ subCategory.name }} » ?')" href="{{ path('app_sub_category_delete', {'id': subCategory.id}) }}" class="custom-btn-with-logo delete-btn text-center">
+													<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer la sous-catégorie « {{ subCategory.name }} » ?')" href="{{ path('app_sub_category_delete', {'id': subCategory.id}) }}" class="custom-btn-with-logo delete-btn">
 														<ion-icon name="trash-outline"></ion-icon>
 														Supprimer
 													</a>
@@ -86,6 +64,31 @@
 									{% endfor %}
 								</tbody>
 							</table>
+						</div>
+
+						<div class="xl:hidden p-4 space-y-4">
+							{% for subCategory in subCategories %}
+								<div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
+									<div class="flex justify-between items-start mb-3">
+										<div class="flex-1">
+											<p class="text-sm text-gray-600 mb-1">ID: {{ subCategory.id }}</p>
+											<h3 class="font-semibold text-lg text-gray-900 mb-1">{{ subCategory.name }}</h3>
+											<p class="text-sm text-gray-700">Catégorie : <span class="font-medium">{{ subCategory.category.name }}</span></p>
+										</div>
+									</div>
+
+									<div class="flex flex-wrap gap-2">
+										<a href="{{ path('app_sub_category_edit', {'id': subCategory.id}) }}" class="custom-btn-with-logo edit-btn flex-1">
+											<ion-icon name="create-outline"></ion-icon>
+											<span>Modifier</span>
+										</a>
+										<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer la sous-catégorie « {{ subCategory.name }} » ?')" href="{{ path('app_sub_category_delete', {'id': subCategory.id}) }}" class="custom-btn-with-logo delete-btn flex-1">
+											<ion-icon name="trash-outline"></ion-icon>
+											<span>Supprimer</span>
+										</a>
+									</div>
+								</div>
+							{% endfor %}
 						</div>
 					{% else %}
 						<div class="text-center py-16">
