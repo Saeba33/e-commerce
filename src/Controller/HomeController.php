@@ -38,7 +38,7 @@ final class HomeController extends AbstractController
     #[Route('/product/{id}/show', name: 'app_home_product_show', methods: ['GET'])]
     public function showProduct(Product $product, ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
     {
-        $lastProductsAdded = $productRepository->findBy([], ['id' => 'DESC'], 5);
+        $lastProductsAdded = $productRepository->findBy([], ['id' => 'DESC'], 4);
 
         return $this->render('home/show.html.twig', [
             'product' => $product,

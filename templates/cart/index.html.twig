@@ -1,59 +1,168 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	Mon Panier
+{% block title %}Mon Panier
 {% endblock %}
 
 {% block body %}
-	<div class="container">
-		<h1>Panier</h1>
+	<div class="container mx-auto px-4 py-6">
+		<div class="content-container">
 
-		{% include 'layouts/_flash_message.html.twig' %}
-
-		{% for item in items %}
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>Produit</th>
-						<th>Prix</th>
-						<th>Quantité</th>
-						<th>Prix total</th>
-						<th>Action</th>
-					</tr>
-				</thead>
-
-				<tbody>
-					<tr>
-						<td>{{ item.product.name }}
-						</td>
-						<td>{{ item.product.price }}
-						</td>
-						<td>{{ item.quantity }}
-						</td>
-						<td>{{ item.product.price * item.quantity }}
-						</td>
-						<td>
-							<a href="{{ path('app_cart_remove_product', {'id': item.product.id}) }}" class="custom-btn delete-btn">Supprimer du panier</a>
-						</td>
-					</tr>
-				</tbody>
-
-			{% else %}
-				<p>Votre panier est vide</p>
-				<a href="{{ path('app_home') }}" class="custom-btn back-btn">Retour à l'accueil</a>
-
-			{% endfor %}
-		</table>
-
-		{% if total > 0 %}
-			<p>Total à payer :
-				{{ total }}
-				euros</p>
-			<div class="flex">
-				<a data-turbo="false" href="{{ path('app_order') }}" class="custom-btn new-btn">Valider la commande</a>
-				<a href="{{ path('app_cart_clear') }}" class="custom-btn delete-btn">Supprimer le panier</a>
+			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2 flex items-center">
+						<ion-icon name="cart-outline" class="text-4xl mr-2 text-blue-600"></ion-icon>
+						Mon Panier
+					</h1>
+					<p class="text-gray-600">Gérez les articles de votre panier</p>
+				</div>
 			</div>
-		{% endif %}
 
+			{% include 'layouts/_flash_message.html.twig' %}
+
+			{% if items|length > 0 %}
+				<div class="border border-blue-200 rounded-lg p-4 mb-8">
+					<div class="flex items-center gap-2">
+						<ion-icon name="information-circle-outline" class="text-blue-600"></ion-icon>
+						<p class="text-gray-700">Votre panier contient {{ items|length }} article{{ items|length > 1 ? 's' : '' }}. Les frais de livraison seront calculés lors de la validation de votre commande.</p>
+					</div>
+				</div>
+				<div class="card bg-white">
+					<div class="card-body p-0">
+						
+						<!-- Vue Desktop -->
+						<div class="hidden lg:block overflow-x-auto">
+							<table class="table table-zebra w-full border-2 border-base-300">
+								<thead class="bg-gray-300">
+									<tr>
+										<th class="text-left py-4 px-4 border-r border-base-300">Produit</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Prix unitaire</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Quantité</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Sous-total</th>
+										<th class="text-center py-4 px-2">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for item in items %}
+										<tr class="hover:bg-gray-50 transition-colors duration-200">
+											<td class="py-4 px-4 border-r border-base-300">
+												<div class="flex items-center gap-3">
+													{% if item.product.image %}
+														<img src="{{ asset('uploads/images/' ~ item.product.image) }}" 
+														     alt="{{ item.product.name }}" 
+														     class="w-16 h-16 object-cover rounded-lg">
+													{% else %}
+														<div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+															<ion-icon name="image-outline" class="text-gray-400 text-2xl"></ion-icon>
+														</div>
+													{% endif %}
+													<div>
+														<p class="font-semibold text-gray-800">{{ item.product.name }}</p>
+														<p class="text-sm text-gray-500">{{ item.product.description|slice(0, 50) }}...</p>
+													</div>
+												</div>
+											</td>
+											<td class="text-center py-4 px-2 border-r border-base-300">
+												<span class="font-semibold">{{ item.product.price }}€</span>
+											</td>
+											<td class="text-center py-4 px-2 border-r border-base-300">
+												<span class="text-gray-800">{{ item.quantity }}</span>
+											</td>
+											<td class="text-center py-4 px-2 border-r border-base-300">
+												<span class="font-bold">{{ (item.product.price * item.quantity)|number_format(2, ',', ' ') }}€</span>
+											</td>
+											<td class="text-center py-4 px-2">
+												<a href="{{ path('app_cart_remove_product', {'id': item.product.id}) }}" 
+												   class="custom-btn-with-logo delete-btn"
+												   onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">
+													<ion-icon name="trash-outline"></ion-icon>
+													Supprimer
+												</a>
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+
+						<!-- Vue Mobile -->
+						<div class="lg:hidden space-y-4 p-4">
+							{% for item in items %}
+								<div class="card bg-gray-50 border border-gray-200">
+									<div class="card-body p-4">
+										<div class="flex items-start gap-3">
+											{% if item.product.image %}
+												<img src="{{ asset('uploads/images/' ~ item.product.image) }}" 
+												     alt="{{ item.product.name }}" 
+												     class="w-20 h-20 object-cover rounded-lg flex-shrink-0">
+											{% else %}
+												<div class="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
+													<ion-icon name="image-outline" class="text-gray-400 text-2xl"></ion-icon>
+												</div>
+											{% endif %}
+											<div class="flex-1 min-w-0">
+												<h3 class="font-semibold text-gray-800 mb-1">{{ item.product.name }}</h3>
+												<p class="text-sm text-gray-500 mb-2 line-clamp-2">{{ item.product.description }}</p>
+												<div class="flex justify-between items-center mb-3">
+													<span class="text-sm text-gray-600">Prix unitaire:</span>
+													<span class="font-semibold">{{ item.product.price }}€</span>
+												</div>
+												<div class="flex justify-between items-center mb-3">
+													<span class="text-sm text-gray-600">Quantité:</span>
+													<span class="text-gray-800">{{ item.quantity }}</span>
+												</div>
+												<div class="flex justify-between items-center mb-3">
+													<span class="text-sm text-gray-600">Sous-total:</span>
+													<span class="font-bold">{{ (item.product.price * item.quantity)|number_format(2, ',', ' ') }}€</span>
+												</div>
+												<a href="{{ path('app_cart_remove_product', {'id': item.product.id}) }}" 
+												   class="custom-btn-with-logo delete-btn w-full"
+												   onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">
+													<ion-icon name="trash-outline"></ion-icon>
+													Supprimer du panier
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+
+				<!-- Boutons d'action -->
+				<div class="border-t border-gray-200 pt-6 mt-12">
+					<div class="flex flex-col sm:flex-row gap-4 justify-end">
+						<a href="{{ path('app_home') }}" class="custom-btn-with-logo secondary-btn">
+							<ion-icon name="storefront-outline"></ion-icon>
+							Continuer mes achats
+						</a>
+						<a href="{{ path('app_cart_clear') }}" 
+						   class="custom-btn-with-logo warning-btn"
+						   onclick="return confirm('Êtes-vous sûr de vouloir vider votre panier ?')">
+							<ion-icon name="trash-outline"></ion-icon>
+							Vider le panier
+						</a>
+						<a data-turbo="false" href="{{ path('app_order') }}" class="custom-btn-with-logo new-btn">
+							<ion-icon name="card-outline"></ion-icon>
+							Valider ma commande
+						</a>
+					</div>
+				</div>
+			{% else %}
+				<div class="card bg-white">
+					<div class="card-body text-center py-12">
+						<h2 class="text-2xl font-semibold text-gray-600 mb-4">Votre panier est vide</h2>
+						<p class="text-gray-500 mb-6">Découvrez nos produits et ajoutez-les à votre panier pour commencer vos achats.</p>
+						<div class="flex justify-center">
+							<a href="{{ path('app_home') }}" class="custom-btn-with-logo secondary-btn">
+								<ion-icon name="storefront-outline"></ion-icon>
+								Découvrir nos produits
+							</a>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+
+		</div>
 	</div>
 {% endblock %}

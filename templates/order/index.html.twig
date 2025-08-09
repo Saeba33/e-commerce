@@ -1,66 +1,233 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	Commandes
+{% block title %}Passer ma commande
 {% endblock %}
 
 {% block body %}
+	<div class="container mx-auto px-4 py-6">
+		<div class="content-container">
 
-	<div class="container">
-		<h1 class="text-3xl font-bold text-center">Passer commande</h1>
+			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2 flex items-center">
+						<ion-icon name="card-outline" class="text-4xl mr-2"></ion-icon>
+						Passer ma commande
+					</h1>
+					<p class="text-gray-600">Finalisez votre achat en quelques étapes</p>
+				</div>
+				<a href="{{ path('app_cart') }}" class="custom-btn-with-logo secondary-btn">
+					<ion-icon name="arrow-back-outline"></ion-icon>
+					Retour au panier
+				</a>
+			</div>
 
-		<div>
-			{{ form_start(form) }}
-			{{ form_row(form.firstname) }}
-			{{ form_row(form.lastname) }}
-			{{ form_row(form.phone) }}
-			{{ form_row(form.address) }}
-			{{ form_row(form.city) }}
-			{{ form_row(form.payOnDelivery) }}
-			<input type="submit" value="Continuer">
-			{{ form_end(form) }}
+			{% include 'layouts/_flash_message.html.twig' %}
+
+			<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+				
+				<!-- Formulaire de commande -->
+				<div class="lg:col-span-2">
+					<div class="card bg-white h-full">
+						<div class="card-body">
+							<h2 class="text-xl font-semibold text-gray-800 mb-6 pb-4 border-b border-gray-200 flex items-center">
+								<ion-icon name="person-outline" class="mr-2"></ion-icon>
+								Informations de livraison
+							</h2>
+
+							{{ form_start(form, {'attr': {'class': 'space-y-6 mt-8'}}) }}
+								
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+									<div class="form-group">
+										{{ form_label(form.firstname, 'Prénom', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+										{{ form_widget(form.firstname, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Votre prénom'}}) }}
+										<div class="m-1 text-red-500 text-sm">
+											{{ form_errors(form.firstname) }}
+										</div>
+									</div>
+									<div class="form-group">
+										{{ form_label(form.lastname, 'Nom', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+										{{ form_widget(form.lastname, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Votre nom'}}) }}
+										<div class="m-1 text-red-500 text-sm">
+											{{ form_errors(form.lastname) }}
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									{{ form_label(form.phone, 'Téléphone', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+									{{ form_widget(form.phone, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Votre numéro de téléphone'}}) }}
+									<div class="m-1 text-red-500 text-sm">
+										{{ form_errors(form.phone) }}
+									</div>
+								</div>
+
+								<div class="form-group">
+									{{ form_label(form.address, 'Adresse', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+									{{ form_widget(form.address, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Votre adresse complète', 'rows': 3}}) }}
+									<div class="m-1 text-red-500 text-sm">
+										{{ form_errors(form.address) }}
+									</div>
+								</div>
+
+								<div class="form-group">
+									{{ form_label(form.city, 'Ville de livraison', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+									{{ form_widget(form.city, {'attr': {'class': 'input-style input-style-common', 'id': 'order_form_city'}}) }}
+									<div class="m-1 text-red-500 text-sm">
+										{{ form_errors(form.city) }}
+									</div>
+									<p class="text-sm text-gray-500 mt-1 flex items-center">
+										<ion-icon name="information-circle-outline" class="mr-1 flex-shrink-0"></ion-icon>
+										Les frais de livraison seront calculés automatiquement selon votre ville
+									</p>
+								</div>
+
+								<div class="card bg-gray-50 border border-gray-200">
+									<div class="card-body p-4">
+										<div class="flex-1">
+											<div class="flex items-center gap-2">
+												{{ form_widget(form.payOnDelivery, {'attr': {'class': 'checkbox checkbox-neutral'}}) }}
+												<span class="text-gray-700">Paiement à la livraison</span>
+											</div>
+											<div class="m-1 text-red-500 text-sm">
+												{{ form_errors(form.payOnDelivery) }}
+											</div>
+											<p class="text-sm text-gray-600 mt-2">
+												Payez directement au livreur lors de la réception de votre commande
+											</p>
+										</div>
+									</div>
+								</div>
+
+								<div class="flex justify-center pt-4">
+									<button type="submit" class="custom-btn-with-logo new-btn px-8">
+										<ion-icon name="checkmark-outline"></ion-icon>
+										Finaliser ma commande
+									</button>
+								</div>
+
+							{{ form_end(form) }}
+						</div>
+					</div>
+				</div>
+
+				<!-- Récapitulatif de commande -->
+				<div class="lg:col-span-1">
+					<div class="card bg-white border border-gray-200 h-full flex flex-col">
+						<div class="card-body flex-1">
+							<h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+								<ion-icon name="receipt-outline" class="mr-2"></ion-icon>
+								Récapitulatif
+							</h2>
+
+							<div class="space-y-4">
+								<div class="p-4 bg-gray-50 rounded-lg">
+									<h3 class="font-semibold text-gray-700 mb-2 flex items-center">
+										<ion-icon name="bag-outline" class="mr-1"></ion-icon>
+										Montant des articles
+									</h3>
+									<div class="flex justify-between items-center">
+										<span class="text-gray-600">Sous-total :</span>
+										<span class="font-semibold text-lg"><span id="cartPrice">{{ total }}</span>€</span>
+									</div>
+								</div>
+
+								<div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+									<h3 class="font-semibold text-gray-700 mb-2 flex items-center">
+										<ion-icon name="car-outline" class="mr-1"></ion-icon>
+										Livraison
+									</h3>
+									<div class="flex justify-between items-center">
+										<span class="text-gray-600">Frais de livraison :</span>
+										<span class="font-semibold text-lg">
+											<span id="shippingCost">0</span>€
+										</span>
+									</div>
+								</div>
+
+								<div class="p-4 bg-gray-100 rounded-lg border border-gray-300">
+									<div class="flex justify-between items-center">
+										<span class="font-bold text-gray-800 text-lg">Total à payer :</span>
+										<span class="font-bold text-2xl text-gray-800">
+											<span id="totalPrice">{{ total }}</span>€
+										</span>
+									</div>
+								</div>
+
+								<div class="pt-4 space-y-3">
+									<div class="alert p-3 border border-green-100 bg-green-50">
+										<ion-icon name="shield-checkmark-outline" class="mr-2 text-green-600"></ion-icon>
+										<div>
+											<h4 class="font-semibold">Commande sécurisée</h4>
+											<p class="text-sm">Vos données sont protégées</p>
+										</div>
+									</div>
+									
+									<div class="alert p-3 border border-blue-100 bg-blue-50">
+										<ion-icon name="time-outline" class="mr-2 text-blue-600"></ion-icon>
+										<div>
+											<h4 class="font-semibold">Livraison rapide</h4>
+											<p class="text-sm">Sous 24-48h selon votre ville</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
 		</div>
-
-		<div>
-			<p>Montant de la commande :
-				<span id="cartPrice">{{ total }}</span>€</p>
-			<p>Frais de livraison :
-				<span id="shippingCost"></span>€</p>
-			<p>Total à payer :
-				<span id="totalPrice"></span>€</p>
-		</div>
-
 	</div>
-	 <script>
-		    document.addEventListener('DOMContentLoaded', function () {
-		        const citySelector = document.getElementById('order_form_city');
-		        const shippingCostElement = document.getElementById('shippingCost');
-		        const cartPriceElement = document.getElementById('cartPrice');
-		        const totalPriceElement = document.getElementById('totalPrice');
-		
-		        function calculateTotal(cityId) {
-		            fetch(`/city/${cityId}/shipping/cost`)
-		                .then(response => response.json())
-		                .then(data => {
-		                    if (parseInt(data.status) === 200) {
-		                        shippingCostElement.textContent = data.content;
-		                        const cartPrice = parseInt(cartPriceElement.textContent) || 0;
-		                        const shippingCost = parseInt(shippingCostElement.textContent) || 0;
-		                        totalPriceElement.textContent = cartPrice + shippingCost;
-		                    }
-		                })
-		                .catch(error => {
-		                    console.error('Erreur', error);
-		                });
-		        }
-		
-		        calculateTotal(citySelector.value);
-		
-		        citySelector.addEventListener('change', function () {
-		            calculateTotal(this.value);
-		        });
-		    });
-		</script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const citySelector = document.getElementById('order_form_city');
+			const shippingCostElement = document.getElementById('shippingCost');
+			const cartPriceElement = document.getElementById('cartPrice');
+			const totalPriceElement = document.getElementById('totalPrice');
+
+			function calculateTotal(cityId) {
+				if (!cityId) {
+					shippingCostElement.textContent = '0';
+					totalPriceElement.textContent = cartPriceElement.textContent;
+					return;
+				}
+
+				// Ajouter un indicateur de chargement
+				shippingCostElement.innerHTML = '<ion-icon name="refresh-outline" class="animate-spin"></ion-icon>';
+				
+				fetch(`/city/${cityId}/shipping/cost`)
+					.then(response => response.json())
+					.then(data => {
+						if (parseInt(data.status) === 200) {
+							shippingCostElement.textContent = data.content;
+							const cartPrice = parseFloat(cartPriceElement.textContent) || 0;
+							const shippingCost = parseFloat(data.content) || 0;
+							totalPriceElement.textContent = (cartPrice + shippingCost).toFixed(2);
+						} else {
+							shippingCostElement.textContent = '0';
+							totalPriceElement.textContent = cartPriceElement.textContent;
+						}
+					})
+					.catch(error => {
+						console.error('Erreur lors du calcul des frais de livraison:', error);
+						shippingCostElement.textContent = '0';
+						totalPriceElement.textContent = cartPriceElement.textContent;
+					});
+			}
+
+			// Calculer le total initial
+			if (citySelector && citySelector.value) {
+				calculateTotal(citySelector.value);
+			}
+
+			// Écouter les changements de ville
+			if (citySelector) {
+				citySelector.addEventListener('change', function () {
+					calculateTotal(this.value);
+				});
+			}
+		});
+	</script>
 
 {% endblock %}

@@ -166,6 +166,11 @@
 		<div class="navbar-end">
 			<div
 				class="flex items-center gap-4">
+				{# Icône panier #}
+				<a href="{{ path('app_cart') }}" class="btn btn-ghost btn-circle text-white hover:bg-gray-700">
+					<ion-icon name="cart-outline" class="text-xl"></ion-icon>
+				</a>
+
 				{# Barre de recherche - cachée sur mobile, visible sur tablette+ #}
 				<div class="hidden md:block">
 					<label class="search-style">

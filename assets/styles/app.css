@@ -124,6 +124,23 @@ ion-icon {
     background: #1d4ed8;
 }
 
+.secondary-btn {
+    background: #e5e7eb;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+.secondary-btn:hover {
+    background: #d1d5db;
+    color: #1f2937;
+}
+
+.warning-btn {
+    background: #f59e0b;
+}
+.warning-btn:hover {
+    background: #d97706;
+}
+
 .logout-btn {
     background: #ef4444;
 }
