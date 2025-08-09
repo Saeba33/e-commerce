@@ -7,7 +7,6 @@ use App\Entity\Order;
 use App\Service\Cart;
 use App\Form\OrderFormType;
 use App\Entity\OrderProducts;
-use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,9 +53,8 @@ final class OrderController extends AbstractController
         }
 
         return $this->render('order/index.html.twig', [
-            'controller_name' => 'OrderController',
-            'form' => $form->createView(),
-            'total' => $cartData['total']
+            'form' => $form,
+            'total' => $cartData['total'],
         ]);
     }
     #endregion

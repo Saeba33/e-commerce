@@ -14,21 +14,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class CategoryController extends AbstractController
 {
     #region READ
-    #[Route('/admin/category', name: 'app_category')]
+    #[Route('/editor/category', name: 'app_category', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository): Response
     {
-        $categories = $categoryRepository->findAll();
-
         return $this->render('category/index.html.twig', [
-            'controller_name' => 'CategoryController',
-            'categories' => $categories
+            'categories' => $categoryRepository->findAll(),
         ]);
     }
     #endregion
 
     #region CREATE
-    #[Route('/admin/category/new', name: 'app_category_new', methods: ['GET', 'POST'])]
-    public function new(EntityManagerInterface $entityManager, Request $request): Response
+    #[Route('/editor/category/new', name: 'app_category_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $category = new Category();
         $form = $this->createForm(CategoryFormType::class, $category);
@@ -38,20 +35,30 @@ final class CategoryController extends AbstractController
             $entityManager->persist($category);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Catégorie créée avec succès');
-            return $this->redirectToRoute('app_category');
+            $this->addFlash('success', 'Votre catégorie a été ajoutée');
+            return $this->redirectToRoute('app_category', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('category/new.html.twig', [
-            'controller_name' => 'CategoryController',
-            'form' => $form->createView()
+            'category' => $category,
+            'form' => $form,
+        ]);
+    }
+    #endregion
+
+    #region READ - SHOW
+    #[Route('/editor/category/{id}', name: 'app_category_show', methods: ['GET'])]
+    public function show(Category $category): Response
+    {
+        return $this->render('category/show.html.twig', [
+            'category' => $category,
         ]);
     }
     #endregion
 
     #region UPDATE
-    #[Route('/admin/category/edit/{id}', name: 'app_category_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager, Category $category): Response
+    #[Route('/editor/category/edit/{id}', name: 'app_category_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CategoryFormType::class, $category);
         $form->handleRequest($request);
@@ -59,26 +66,28 @@ final class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            $this->addFlash('success', 'Catégorie modifiée avec succès.');
-            return $this->redirectToRoute('app_category');
+            $this->addFlash('success', 'Votre catégorie a été modifiée');
+            return $this->redirectToRoute('app_category', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('category/edit.html.twig', [
-            'controller_name' => 'CategoryController',
-            'form' => $form->createView()
+            'category' => $category,
+            'form' => $form,
         ]);
     }
     #endregion
 
     #region DELETE
-    #[Route('/admin/category/delete/{id}', name: 'app_category_delete')]
-    public function delete(EntityManagerInterface $entityManager, Category $category): Response
+    #[Route('/editor/category/delete/{id}', name: 'app_category_delete', methods: ['POST'])]
+    public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
-        $entityManager->remove($category);
-        $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->getPayload()->get('_token'))) {
+            $entityManager->remove($category);
+            $entityManager->flush();
+            $this->addFlash('danger', 'Votre catégorie a été supprimée.');
+        }
 
-        $this->addFlash('error', 'Catégorie supprimée avec succès.');
-        return $this->redirectToRoute('app_category');
+        return $this->redirectToRoute('app_category', [], Response::HTTP_SEE_OTHER);
     }
     #endregion
 }

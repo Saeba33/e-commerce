@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class CityController extends AbstractController
 {
     #region READ
-    #[Route('', name: 'app_city_index', methods: ['GET'])]
+    #[Route('', name: 'app_city', methods: ['GET'])]
     public function index(CityRepository $cityRepository): Response
     {
         return $this->render('city/index.html.twig', [
@@ -46,7 +46,8 @@ final class CityController extends AbstractController
             $entityManager->persist($city);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_city_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Votre ville a été ajoutée');
+            return $this->redirectToRoute('app_city', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('city/new.html.twig', [
@@ -66,7 +67,8 @@ final class CityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_city_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Votre ville a été modifiée');
+            return $this->redirectToRoute('app_city', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('city/edit.html.twig', [
@@ -77,15 +79,16 @@ final class CityController extends AbstractController
     #endregion
 
     #region DELETE
-    #[Route('/{id}', name: 'app_city_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_city_delete', methods: ['POST'])]
     public function delete(Request $request, City $city, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$city->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$city->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->remove($city);
             $entityManager->flush();
+            $this->addFlash('danger', 'Votre ville a été supprimée.');
         }
 
-        return $this->redirectToRoute('app_city_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_city', [], Response::HTTP_SEE_OTHER);
     }
     #endregion
 

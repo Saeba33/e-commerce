@@ -22,7 +22,6 @@ final class CartController extends AbstractController
         $cartData = $cart->getCart($session);
 
         return $this->render('cart/index.html.twig', [
-            'controller_name' => 'CartController',
             'items' => $cartData['cart'],
             'total' => $cartData['total'],
         ]);
