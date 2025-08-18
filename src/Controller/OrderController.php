@@ -7,6 +7,7 @@ use App\Entity\Order;
 use App\Service\Cart;
 use App\Form\OrderFormType;
 use App\Entity\OrderProducts;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,14 +48,37 @@ final class OrderController extends AbstractController
                 $session->set('cart', []);
             }
 
-            $this->addFlash('success', 'Commande enregistrée !');
-
-            return $this->redirectToRoute('app_cart');
+            return $this->redirectToRoute('order_message');
         }
 
         return $this->render('order/index.html.twig', [
             'form' => $form,
             'total' => $cartData['total'],
+        ]);
+    }
+    #endregion
+
+    #region MESSAGE
+    #[Route('/order_message', name: 'order_message')]
+    public function orderMessage(): Response
+    {
+        return $this->render('order/order_message.twig');
+    }
+    #endregion
+
+    #region ORDERS LIST
+    #[Route('/editor/order', name: 'app_orders_show')]
+    public function getAllORder(Request $request, OrderRepository $orderRepository, \Knp\Component\Pager\PaginatorInterface $paginator): Response
+    {
+        $orders = $orderRepository->findAll();
+        $orders = $paginator->paginate(
+            $orders,
+            $request->query->getInt('page', 1),
+        10
+        );
+
+        return $this->render('order/orders.html.twig', [
+            'orders' => $orders,
         ]);
     }
     #endregion
@@ -66,6 +90,16 @@ final class OrderController extends AbstractController
         $cityShippingPrice = $city->getShippingCost();
 
         return new Response(json_encode(['status' => 200, "message" => 'on', 'content' => $cityShippingPrice]));
+    }
+    #endregion
+
+    #region SHOW ORDER
+    #[Route('/editor/order/{id}', name: 'app_order_show')]
+    public function showOrder(Order $order): Response
+    {
+        return $this->render('order/show.html.twig', [
+            'order' => $order,
+        ]);
     }
     #endregion
 

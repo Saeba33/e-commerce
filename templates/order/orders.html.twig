@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des commandes
+{% endblock %}
+
+{% block body %}
+	<div class="container mx-auto px-4 py-6">
+		<div class="content-container">
+			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2">Liste des commandes</h1>
+					<p class="text-gray-600">Historique et gestion des commandes</p>
+				</div>
+			</div>
+
+			{% include 'layouts/_flash_message.html.twig' %}
+
+			<div class="card bg-white">
+				<div class="card-body p-0">
+					{% if orders|length > 0 %}
+						<div class="hidden xl:block overflow-x-auto">
+							<table class="table table-zebra w-full border-2 border-base-300">
+								<thead class="bg-gray-300">
+									<tr>
+										<th class="text-center py-4 px-2 border-r border-base-300">Numéro</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">Prénom</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">Nom</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Téléphone</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">Adresse</th>
+										<th class="text-left py-4 px-2 border-r border-base-300">Ville</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Paiement à la livraison</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Montant</th>
+										<th class="text-center py-4 px-2">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for order in orders %}
+										<tr class="hover:bg-base-50 transition-colors duration-200">
+											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">{{ order.id }}</td>
+											<td class="py-4 px-2 border-r-2 border-base-300">{{ order.firstname }}</td>
+											<td class="py-4 px-2 border-r-2 border-base-300">{{ order.lastname }}</td>
+											<td class="text-center py-4 px-2 border-r-2 border-base-300">{{ order.phone }}</td>
+											<td class="py-4 px-2 border-r-2 border-base-300">{{ order.address }}</td>
+											<td class="py-4 px-2 border-r-2 border-base-300">{{ order.city ? order.city.name : '' }}</td>
+											<td class="text-center py-4 px-2 border-r-2 border-base-300">
+												{% if order.payOnDelivery %}
+													<span class="text-sm text-gray-600">Oui</span>
+												{% else %}
+													<span class="text-sm text-gray-600">Non</span>
+												{% endif %}
+											</td>
+											<td class="text-center py-4 px-2 border-r-2 border-base-300">{{ order.totalPrice }}
+												€</td>
+											<td class="py-4 px-2">
+												<div class="flex justify-center gap-2">
+													<a href="{{ path('app_order_show', {'id': order.id}) }}" class="custom-btn-with-logo edit-btn">
+														<span class="hidden xl:inline">Voir</span>
+													</a>
+												</div>
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+
+						<div class="xl:hidden p-4 space-y-4">
+							{% for order in orders %}
+								<div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
+									<div class="flex justify-between items-start mb-3">
+										<div class="flex-1">
+											<p class="text-sm text-gray-600 mb-1">Commande #:
+												{{ order.id }}</p>
+											<h3 class="font-semibold text-lg text-gray-900 mb-1">{{ order.firstname }}
+												{{ order.lastname }}</h3>
+											<p class="text-sm text-gray-700 mb-1">{{ order.address }}
+												{% if order.city %}
+													-
+													{{ order.city.name }}
+												{% endif %}
+											</p>
+											<div class="mb-2">
+												<span class="text-sm text-gray-600">Montant:
+												</span>
+												<span class="font-semibold">{{ order.totalPrice }}
+													€</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="flex flex-wrap gap-2 mt-2">
+										<a href="{{ path('app_order_show', {'id': order.id}) }}" class="custom-btn-with-logo edit-btn flex-1">
+											<ion-icon name="eye-outline"></ion-icon>
+											<span>Voir</span>
+										</a>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+
+						{{ knp_pagination_render(orders, 'layouts/_pagination.html.twig') }}
+					{% else %}
+						<div class="text-center py-16">
+							<ion-icon name="cube-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+							<h3 class="text-xl font-semibold text-gray-600 mb-2">Aucune commande</h3>
+							<p class="text-gray-500">Aucune commande n'a été passée pour le moment.</p>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
