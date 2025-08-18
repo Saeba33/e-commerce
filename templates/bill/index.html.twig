@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Facture
+{% endblock %}
+
+{% block body %}
+
+	<div class="example-wrapper">
+		<h2>Facture n°{{order.id}}</h2>
+		<span>commande duu
+			{{order.createdAt|date}}</span>
+	</div>
+{% endblock %}
