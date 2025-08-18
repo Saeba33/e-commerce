@@ -30,11 +30,13 @@
 										<th class="text-left py-4 px-2 border-r border-base-300">Ville</th>
 										<th class="text-center py-4 px-2 border-r border-base-300">Paiement à la livraison</th>
 										<th class="text-center py-4 px-2 border-r border-base-300">Montant</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Statut</th>
 										<th class="text-center py-4 px-2">Actions</th>
 									</tr>
 								</thead>
 								<tbody>
 									{% for order in orders %}
+
 										<tr class="hover:bg-base-50 transition-colors duration-200">
 											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">{{ order.id }}</td>
 											<td class="py-4 px-2 border-r-2 border-base-300">{{ order.firstname }}</td>
@@ -51,12 +53,38 @@
 											</td>
 											<td class="text-center py-4 px-2 border-r-2 border-base-300">{{ order.totalPrice }}
 												€</td>
-											<td class="py-4 px-2">
+											<td class="text-center py-4 px-2 border-r-2 border-base-300">
+
+												{% if order.isCompleted ==true %}
+													<span class="text-sm text-gray-600">Commande livrée</span>
+
+												{% else %}
+													<span class="text-sm text-gray-600">Commande non livrée</span>
+												{% endif %}
+											</td>
+
+											<td class="flex flex-col items-center justify-center gap-2 py-4 px-2">
 												<div class="flex justify-center gap-2">
 													<a href="{{ path('app_order_show', {'id': order.id}) }}" class="custom-btn-with-logo edit-btn">
 														<span class="hidden xl:inline">Voir</span>
 													</a>
 												</div>
+												{% if order.isCompleted ==false %}
+													<div>
+														<a href="{{ path('app_orders_is_completed_update', {'id':order.id}) }}" class="custom-btn-with-logo edit-btn">
+															<span class="hidden xl:inline">Marquer comme livrée</span>
+														</a>
+													</div>
+												{% endif %}
+												<div>
+													<a onclick="return confirm('Attention cette action est irréverssible. Êtes-vous sûr de vouloir supprimer la commande numéro : {{ order.id }} ?')" href="{{ path('app_order_delete', {'id': order.id}) }}" class="custom-btn-with-logo delete-btn">
+														<ion-icon name="trash-outline"></ion-icon>
+														Supprimer la commande
+													</a>
+
+												</div>
+
+
 											</td>
 										</tr>
 									{% endfor %}

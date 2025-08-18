@@ -74,7 +74,7 @@ final class OrderController extends AbstractController
         $orders = $paginator->paginate(
             $orders,
             $request->query->getInt('page', 1),
-        10
+            10
         );
 
         return $this->render('order/orders.html.twig', [
@@ -102,5 +102,31 @@ final class OrderController extends AbstractController
         ]);
     }
     #endregion
+
+
+    #region MAJ ORDER STATUT
+    #[Route('/editor/order/{id}/is-completed/update', name: 'app_orders_is_completed_update')]
+    public function isCompletedUpdate($id, OrderRepository $orderRepository, EntityManagerInterface $entityManager)
+    {
+        $order = $orderRepository->find($id);
+        $order->setIsCompleted(true);
+        $entityManager->flush();
+        $this->addFlash('success', 'Modification effectuée, la commande a pris le statut irée');
+        return $this->redirectToRoute('app_orders_show');
+    }
+    #endregion
+
+    #region DELETE ORDER
+    #[Route('/editor/order/{id}/delete', name: 'app_order_delete')]
+    public function deleteOrder(Order $order, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($order);
+        $entityManager->flush();
+        $this->addFlash('error', 'Commande supprimée');
+        return $this->redirectToRoute('app_orders_show');
+    }
+    #endregion
+
+
 
 }
