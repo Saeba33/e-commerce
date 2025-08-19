@@ -23,8 +23,9 @@
 
 			{% include 'layouts/_flash_message.html.twig' %}
 
-			<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-				
+			<div
+				class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
 				<!-- Formulaire de commande -->
 				<div class="lg:col-span-2">
 					<div class="card bg-white h-full">
@@ -35,21 +36,31 @@
 							</h2>
 
 							{{ form_start(form, {'attr': {'class': 'space-y-6 mt-8'}}) }}
-								
-								<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-									<div class="form-group">
-										{{ form_label(form.firstname, 'Prénom', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-										{{ form_widget(form.firstname, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Votre prénom'}}) }}
-										<div class="m-1 text-red-500 text-sm">
-											{{ form_errors(form.firstname) }}
-										</div>
+
+							<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div class="form-group">
+									{{ form_label(form.firstname, 'Prénom', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+									{{ form_widget(form.firstname, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Votre prénom'}}) }}
+									<div class="m-1 text-red-500 text-sm">
+										{{ form_errors(form.firstname) }}
 									</div>
-									<div class="form-group">
-										{{ form_label(form.lastname, 'Nom', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-										{{ form_widget(form.lastname, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Votre nom'}}) }}
-										<div class="m-1 text-red-500 text-sm">
-											{{ form_errors(form.lastname) }}
-										</div>
+								</div>
+								<div class="form-group">
+									{{ form_label(form.lastname, 'Nom', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+									{{ form_widget(form.lastname, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Votre nom'}}) }}
+									<div class="m-1 text-red-500 text-sm">
+										{{ form_errors(form.lastname) }}
+									</div>
+								</div>
+							</div>
+
+
+							<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div class="form-group">
+									{{ form_label(form.email, 'Email', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+									{{ form_widget(form.email, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Votre adresse email'}}) }}
+									<div class="m-1 text-red-500 text-sm">
+										{{ form_errors(form.email) }}
 									</div>
 								</div>
 
@@ -60,50 +71,51 @@
 										{{ form_errors(form.phone) }}
 									</div>
 								</div>
+							</div>
 
-								<div class="form-group">
-									{{ form_label(form.address, 'Adresse', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-									{{ form_widget(form.address, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Votre adresse complète', 'rows': 3}}) }}
-									<div class="m-1 text-red-500 text-sm">
-										{{ form_errors(form.address) }}
-									</div>
+							<div class="form-group">
+								{{ form_label(form.address, 'Adresse', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+								{{ form_widget(form.address, {'attr': {'class': 'input-style input-style-common', 'placeholder': 'Votre adresse complète', 'rows': 3}}) }}
+								<div class="m-1 text-red-500 text-sm">
+									{{ form_errors(form.address) }}
 								</div>
+							</div>
 
-								<div class="form-group">
-									{{ form_label(form.city, 'Ville de livraison', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-									{{ form_widget(form.city, {'attr': {'class': 'input-style input-style-common', 'id': 'order_form_city'}}) }}
-									<div class="m-1 text-red-500 text-sm">
-										{{ form_errors(form.city) }}
-									</div>
-									<p class="text-sm text-gray-500 mt-1 flex items-center">
-										<ion-icon name="information-circle-outline" class="mr-1 flex-shrink-0"></ion-icon>
-										Les frais de livraison seront calculés automatiquement selon votre ville
-									</p>
+							<div class="form-group">
+								{{ form_label(form.city, 'Ville de livraison', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+								{{ form_widget(form.city, {'attr': {'class': 'input-style input-style-common', 'id': 'order_form_city'}}) }}
+								<div class="m-1 text-red-500 text-sm">
+									{{ form_errors(form.city) }}
 								</div>
+								<p class="text-sm text-gray-500 mt-1 flex items-center">
+									<ion-icon name="information-circle-outline" class="mr-1 flex-shrink-0"></ion-icon>
+									Les frais de livraison seront calculés automatiquement selon votre ville
+								</p>
+							</div>
 
-								<div class="card bg-gray-50 border border-gray-200">
-									<div class="card-body p-4">
-										<div class="flex-1">
-											<div class="flex items-center gap-2">
-												{{ form_widget(form.payOnDelivery, {'attr': {'class': 'checkbox checkbox-neutral'}}) }}
-												<span class="text-gray-700">Paiement à la livraison</span>
-											</div>
-											<div class="m-1 text-red-500 text-sm">
-												{{ form_errors(form.payOnDelivery) }}
-											</div>
-											<p class="text-sm text-gray-600 mt-2">
-												Payez directement au livreur lors de la réception de votre commande
-											</p>
+							<div class="card bg-gray-50 border border-gray-200">
+								<div class="card-body p-4">
+									<div class="flex-1">
+										<div class="flex items-center gap-2">
+											{{ form_widget(form.payOnDelivery, {'attr': {'class': 'checkbox checkbox-neutral'}}) }}
+											<span class="text-gray-700">Paiement à la livraison</span>
 										</div>
+										<div class="m-1 text-red-500 text-sm">
+											{{ form_errors(form.payOnDelivery) }}
+										</div>
+										<p class="text-sm text-gray-600 mt-2">
+											Payez directement au livreur lors de la réception de votre commande
+										</p>
 									</div>
 								</div>
+							</div>
 
-								<div class="flex justify-center pt-4">
-									<button type="submit" class="custom-btn-with-logo new-btn px-8">
-										<ion-icon name="checkmark-outline"></ion-icon>
-										Finaliser ma commande
-									</button>
-								</div>
+							<div class="flex justify-center pt-4">
+								<button type="submit" class="custom-btn-with-logo new-btn px-8">
+									<ion-icon name="checkmark-outline"></ion-icon>
+									Finaliser ma commande
+								</button>
+							</div>
 
 							{{ form_end(form) }}
 						</div>
@@ -127,7 +139,8 @@
 									</h3>
 									<div class="flex justify-between items-center">
 										<span class="text-gray-600">Sous-total :</span>
-										<span class="font-semibold text-lg"><span id="cartPrice">{{ total }}</span>€</span>
+										<span class="font-semibold text-lg">
+											<span id="cartPrice">{{ total }}</span>€</span>
 									</div>
 								</div>
 
@@ -161,7 +174,7 @@
 											<p class="text-sm">Vos données sont protégées</p>
 										</div>
 									</div>
-									
+
 									<div class="alert p-3 border border-blue-100 bg-blue-50">
 										<ion-icon name="time-outline" class="mr-2 text-blue-600"></ion-icon>
 										<div>
@@ -179,55 +192,55 @@
 		</div>
 	</div>
 
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-			const citySelector = document.getElementById('order_form_city');
-			const shippingCostElement = document.getElementById('shippingCost');
-			const cartPriceElement = document.getElementById('cartPrice');
-			const totalPriceElement = document.getElementById('totalPrice');
-
-			function calculateTotal(cityId) {
-				if (!cityId) {
-					shippingCostElement.textContent = '0';
-					totalPriceElement.textContent = cartPriceElement.textContent;
-					return;
-				}
-
-				// Ajouter un indicateur de chargement
-				shippingCostElement.innerHTML = '<ion-icon name="refresh-outline" class="animate-spin"></ion-icon>';
-				
-				fetch(`/city/${cityId}/shipping/cost`)
-					.then(response => response.json())
-					.then(data => {
-						if (parseInt(data.status) === 200) {
-							shippingCostElement.textContent = data.content;
-							const cartPrice = parseFloat(cartPriceElement.textContent) || 0;
-							const shippingCost = parseFloat(data.content) || 0;
-							totalPriceElement.textContent = (cartPrice + shippingCost).toFixed(2);
-						} else {
-							shippingCostElement.textContent = '0';
-							totalPriceElement.textContent = cartPriceElement.textContent;
-						}
-					})
-					.catch(error => {
-						console.error('Erreur lors du calcul des frais de livraison:', error);
+	 <script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const citySelector = document.getElementById('order_form_city');
+				const shippingCostElement = document.getElementById('shippingCost');
+				const cartPriceElement = document.getElementById('cartPrice');
+				const totalPriceElement = document.getElementById('totalPrice');
+	
+				function calculateTotal(cityId) {
+					if (!cityId) {
 						shippingCostElement.textContent = '0';
 						totalPriceElement.textContent = cartPriceElement.textContent;
+						return;
+					}
+	
+					// Ajouter un indicateur de chargement
+					shippingCostElement.innerHTML = '<ion-icon name="refresh-outline" class="animate-spin"></ion-icon>';
+					
+					fetch(`/city/${cityId}/shipping/cost`)
+						.then(response => response.json())
+						.then(data => {
+							if (parseInt(data.status) === 200) {
+								shippingCostElement.textContent = data.content;
+								const cartPrice = parseFloat(cartPriceElement.textContent) || 0;
+								const shippingCost = parseFloat(data.content) || 0;
+								totalPriceElement.textContent = (cartPrice + shippingCost).toFixed(2);
+							} else {
+								shippingCostElement.textContent = '0';
+								totalPriceElement.textContent = cartPriceElement.textContent;
+							}
+						})
+						.catch(error => {
+							console.error('Erreur lors du calcul des frais de livraison:', error);
+							shippingCostElement.textContent = '0';
+							totalPriceElement.textContent = cartPriceElement.textContent;
+						});
+				}
+	
+				// Calculer le total initial
+				if (citySelector && citySelector.value) {
+					calculateTotal(citySelector.value);
+				}
+	
+				// Écouter les changements de ville
+				if (citySelector) {
+					citySelector.addEventListener('change', function () {
+						calculateTotal(this.value);
 					});
-			}
-
-			// Calculer le total initial
-			if (citySelector && citySelector.value) {
-				calculateTotal(citySelector.value);
-			}
-
-			// Écouter les changements de ville
-			if (citySelector) {
-				citySelector.addEventListener('change', function () {
-					calculateTotal(this.value);
-				});
-			}
-		});
-	</script>
+				}
+			});
+		</script>
 
 {% endblock %}

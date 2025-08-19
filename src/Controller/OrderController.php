@@ -61,7 +61,7 @@ final class OrderController extends AbstractController
             ]);
             $email = (new Email())
             ->from('maboutique@contact.com')
-            ->to('toto@toto.com')
+            ->to($order->getEmail())
             ->subject('Confirmation de commande')
             ->html($html);
             $this->mailer->send($email);

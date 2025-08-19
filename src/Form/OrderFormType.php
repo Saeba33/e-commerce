@@ -16,6 +16,7 @@ class OrderFormType extends AbstractType
         $builder
             ->add('firstname')
             ->add('lastname')
+            ->add('email')
             ->add('phone')
             ->add('address')
             // ->add('createdAt', null, [
