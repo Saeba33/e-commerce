@@ -1,26 +1,129 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	Facture
+{% block title %}Facture
 {% endblock %}
-
 {% block nav %}{% endblock %}
-
 {% block footer %}{% endblock %}
 
-<style>
-.bill-container {
-
-}
-.bill-title {}
-.bill-order {}
-
-</style>
-
 {% block body %}
+	<style>
+		.bill-container {
+			max-width: 800px;
+			margin: auto;
+			font-family: Arial, sans-serif;
+		}
+		.bill-header,
+		.bill-footer {
+			margin-bottom: 20px;
+		}
+		.bill-title {
+			font-size: 24px;
+			font-weight: bold;
+			margin-bottom: 5px;
+		}
+		.bill-order {
+			font-size: 14px;
+			color: #555;
+		}
+		.bill-section {
+			margin: 20px 0;
+		}
+		.bill-table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 15px;
+		}
+		.bill-table th,
+		.bill-table td {
+			border: 1px solid #ddd;
+			padding: 8px;
+			text-align: left;
+		}
+		.bill-total {
+			text-align: right;
+			font-weight: bold;
+		}
+	</style>
+
 	<div class="bill-container">
-        <h2 class="bill-title">Facture n°{{ order.id }}</h2>
-        <span class="bill-order">commande du
-			{{ order.createdAt|date('d/m/Y') }}</span>
+
+		<div class="bill-header">
+			<h2 class="bill-title">Facture n°{{ order.id }}</h2>
+			<span class="bill-order">Émise le
+				{{ "now"|date("d/m/Y") }}</span><br>
+			<span class="bill-order">Commande du
+				{{ order.createdAt|date('d/m/Y') }}</span>
+		</div>
+
+
+		<div class="bill-section">
+			<h3>Vendeur</h3>
+			<p>
+				<span>MA BOUTIQUE</span><br>
+				<span>rue du ays imaginaire</span><br>
+				<span>SIRET : 123456789</span><br>
+				<span>RCS : 123456789</span><br>
+				<span>TVA : 123456789</span><br>
+			</p>
+		</div>
+
+		<div class="bill-section">
+			<h3>Client</h3>
+			<p>
+				{{ order.firstname }}
+				{{ order.lastname }}<br>
+				{{ order.address }}<br>
+				{{ order.phone }}<br>
+				{% if order.city is defined and order.city is not null %}
+					{{ order.city.name }}
+				{% endif %}
+			</p>
+		</div>
+
+		<div class="bill-section">
+			<h3>Détails</h3>
+			<table class="bill-table">
+				<thead>
+					<tr>
+						<th>Produit</th>
+						<th>Quantité</th>
+						<th>PU HT</th>
+						<th>TVA</th>
+						<th>Total TTC</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in order.orderProducts %}
+						<tr>
+							<td>{{ item.product.name }}</td>
+							<td>{{ item.quantity }}</td>
+							<td>{{ (item.product.price)|number_format(2, ',', ' ') }}
+								€</td>
+							<td>—</td>
+							<td>{{ (item.product.price * item.quantity)|number_format(2, ',', ' ') }}
+								€</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="bill-section">
+			<p class="bill-total">Total :
+				{{ order.totalPrice|number_format(2, ',', ' ') }}
+				€</p>
+			{% if order.city is defined and order.city is not null %}
+				<p class="bill-total">Frais de livraison :
+					{{ order.city.shippingCost|number_format(2, ',', ' ') }}
+					€</p>
+			{% endif %}
+		</div>
+
+		<div class="bill-footer">
+			<p>
+				Mode de paiement :
+				{{ order.payOnDelivery ? 'Paiement à la livraison' : 'Paiement en ligne' }}
+			</p>
+		</div>
 	</div>
 {% endblock %}
