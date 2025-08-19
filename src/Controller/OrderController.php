@@ -7,21 +7,23 @@ use App\Entity\Order;
 use App\Service\Cart;
 use App\Form\OrderFormType;
 use App\Entity\OrderProducts;
+use App\Service\StripePayment;
 use Symfony\Component\Mime\Email;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Mailer\MailerInterface;
 
 final class OrderController extends AbstractController
 {
+    public function __construct(private MailerInterface $mailer)
+    {
+    }
 
-    public function __construct(private MailerInterface $mailer) {}
-    
     #region CREATE
     #[Route('/order', name: 'app_order')]
     public function index(Request $request, SessionInterface $session, EntityManagerInterface $entityManager, Cart $cart): Response
@@ -51,25 +53,30 @@ final class OrderController extends AbstractController
 
             if ($order->isPayOnDelivery()) {
 
+                $session->set('cart', []);
+
+                $html = $this->renderView('mail/orderConfirm.html.twig', [
+                    'order' => $order
+
+                ]);
+                $email = (new Email())
+                ->from('maboutique@contact.com')
+                ->to($order->getEmail())
+                ->subject('Confirmation de réception de commande')
+                ->html($html);
+                $this->mailer->send($email);
+
+                return $this->redirectToRoute('order_message');
             }
+            $paymentStripe = new StripePayment();
+            $shippingCost = $order->getCity()->getShippingCost();
+            $paymentStripe->startPayment($cartData, $shippingCost, $order->getId());
+            $stripeRedirectUrl = $paymentStripe->getStripeRedirectUrl();
 
-
-            $session->set('cart', []);
-            
-            $html = $this->renderView('mail/orderConfirm.html.twig', [
-                'order'=> $order
-            ]);
-            $email = (new Email())
-            ->from('maboutique@contact.com')
-            ->to($order->getEmail())
-            ->subject('Confirmation de commande')
-            ->html($html);
-            $this->mailer->send($email);
-
-
-
-            return $this->redirectToRoute('order_message');
+            return $this->redirect($stripeRedirectUrl);
         }
+
+
 
         return $this->render('order/index.html.twig', [
             'form' => $form,
