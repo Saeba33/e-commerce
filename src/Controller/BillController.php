@@ -26,7 +26,7 @@ final class BillController extends AbstractController
 
         $domPdf->loadHtml($html);
         $domPdf->render();
-        $domPdf->stream('bill-'.$order->getId().'.pdf', [
+        $domPdf->stream('facture-'.$order->getId().'.pdf', [
             'Attachment' => false
         ]);
 

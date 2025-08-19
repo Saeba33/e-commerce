@@ -4,10 +4,23 @@
 	Facture
 {% endblock %}
 
-{% block body %}
+{% block nav %}{% endblock %}
 
-		<h2>Facture n°{{order.id}}</h2>
-		<span>commande duu
-			{{order.createdAt|date}}</span>
+{% block footer %}{% endblock %}
+
+<style>
+.bill-container {
+
+}
+.bill-title {}
+.bill-order {}
+
+</style>
+
+{% block body %}
+	<div class="bill-container">
+        <h2 class="bill-title">Facture n°{{ order.id }}</h2>
+        <span class="bill-order">commande du
+			{{ order.createdAt|date('d/m/Y') }}</span>
 	</div>
 {% endblock %}
