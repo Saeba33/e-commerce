@@ -37,7 +37,8 @@ final class OrderController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if (!empty($cartData['total'])) {
-                $order->setTotalPrice($cartData['total']);
+                $totalPrice = $cartData['total'] + $order->getCity()->getShippingCost();
+                $order->setTotalPrice($totalPrice);
                 $order->setCreatedAt(new \DateTimeImmutable());
                 $order->setIsPaymentCompleted(0);
                 $entityManager->persist($order);
@@ -96,9 +97,19 @@ final class OrderController extends AbstractController
     #endregion
 
     #region ORDERS LIST
-    #[Route('/editor/order', name: 'app_orders_show')]
-    public function getAllORder(Request $request, OrderRepository $orderRepository, \Knp\Component\Pager\PaginatorInterface $paginator): Response
+    #[Route('/editor/order/{type}', name: 'app_orders_show')]
+    public function getAllORder($type, Request $request, OrderRepository $orderRepository, \Knp\Component\Pager\PaginatorInterface $paginator): Response
     {
+        if ($type == "is-completed") {
+            $data = $orderRepository->findBy(['isCompleted' => 1], ['id' => 'DESC']);
+        } else if ($type == "pay-on-stripe-not-delivred") {
+            $data = $orderRepository->findBy(['isCompleted' => null, 'pay_on_delivery'=> 0, 'is_payment_completed'=>1], ['id'=>'DESC']);
+        } else if ($type == "pay-on-stripe-is-delivred") {
+            $data = $orderRepository->findBy(['isCompleted' => 1, 'pay_on_delivery'=> 0, 'is_payment_completed'=>1], ['id'=>'DESC']);
+        } else if($type == 'no_delivery'){
+            $data = $orderRepository->findBy(['isCompleted'=>null,'payOnDelivery'=>0,'isPaymentCompleted'=>0],['id'=>'DESC']);
+        }
+        
         $orders = $orderRepository->findAll();
         $orders = $paginator->paginate(
             $orders,
@@ -155,6 +166,7 @@ final class OrderController extends AbstractController
         return $this->redirectToRoute('app_orders_show');
     }
     #endregion
+
 
 
 

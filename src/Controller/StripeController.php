@@ -46,7 +46,7 @@ final class StripeController extends AbstractController
         $payload = $request->getContent();
         $sigHeader = $request->headers->get('Stripe-Signature');
         $event = null;
-        
+
         try {
             $event = \Stripe\Webhook::constructEvent(
                 $payload,
@@ -62,11 +62,15 @@ final class StripeController extends AbstractController
         switch ($event->type) {
             case 'payment_intent.succeeded':
                 $paymentIntent = $event->data->object;
-                $fileName = 'stripe-detail-'.uniqid().'.txt';
                 $orderId = $paymentIntent->metadata->orderId;
                 $order = $orderRepository->find($orderId);
-                $order->setIsPaymentCompleted(1);
-                $entityManager->flush();
+
+                $cartPrice = $order->getTotalPrice();
+                $stripeTotalAmount = $paymentIntent->amount / 100;
+                if ($cartPrice == $stripeTotalAmount) {
+                    $order->setIsPaymentCompleted(1);
+                    $entityManager->flush();
+                }
                 break;
             case 'payment_method.attached':
                 $paymentMethod = $event->data->object;
