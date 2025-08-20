@@ -6,12 +6,35 @@ use Stripe\Stripe;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class StripeController extends AbstractController
 {
+    #region SUCCESSFULLY PAYMENT
+    #[Route('/pay/success', name: 'app_stripe_success')]
+    public function success(SessionInterface $session): Response
+    {
 
-        #region NOTIFY
+        $session->set('cart', []);
+
+        return $this->render('stripe/index.html.twig', [
+            'controller_name' => 'StripeController',
+        ]);
+    }
+    #endregion
+
+    #region CANCELED PAYMENT
+    #[Route('/pay/cancel', name: 'app_stripe_cancel')]
+    public function cancel(): Response
+    {
+        return $this->render('stripe/index.html.twig', [
+            'controller_name' => 'StripeController',
+        ]);
+    }
+    #endregion
+
+    #region NOTIFY
     #[Route('/stripe/notify', name: 'app_stripe_notify')]
     public function notify(Request $request): Response
     {
@@ -21,51 +44,35 @@ final class StripeController extends AbstractController
         $payload = $request->getContent();
         $sigHeader = $request->headers->get('Stripe-Signature');
         $event = null;
+        
         try {
             $event = \Stripe\Webhook::constructEvent(
-                $payload, $sigHeader, $endpoint
+                $payload,
+                $sigHeader,
+                $endpoint
             );
         } catch (\UnexpectedValueException $e) {
             return new Response('Invalid payload', 400);
         } catch (\Stripe\Exception\SignatureVerificationException $e) {
             return new Response('Invalid signature', 400);
         }
-        
+
         switch ($event->type) {
             case 'payment_intent.succeeded':
                 $paymentIntent = $event->data->object;
                 $fileName = 'stripe-detail-'.uniqid().'.txt';
                 $orderId = $paymentIntent->metadata->orderId;
+                
                 file_put_contents($fileName, $orderId);
                 break;
             case 'payment_method.attached':
                 $paymentMethod = $event->data->object;
                 break;
-            default :
+            default:
                 break;
         }
-        
-        return new Response('evenement recu avec succes', 200);
-    }
-    #endregion
-    
-    #region SUCCESSFULLY PAYMENT
-    #[Route('/pay/success', name: 'app_stripe_success')]
-    public function success(): Response
-    {
-        return $this->render('stripe/index.html.twig', [
-            'controller_name' => 'StripeController',
-        ]);
-    }
-    #endregion
 
-        #region CANCELED PAYMENT
-    #[Route('/pay/cancel', name: 'app_stripe_cancel')]
-    public function cancel(): Response
-    {
-        return $this->render('stripe/index.html.twig', [
-            'controller_name' => 'StripeController',
-        ]);
+        return new Response('evenement recu avec succes', 200);
     }
     #endregion
 }

@@ -53,8 +53,10 @@ class StripePayment
             'shipping_address_collection' => [
                 'allowed_countries' => ['FR', 'GB'],
             ],
-            'metadata' => [
-                'orderId' =>$orderId
+            'payment_intent_data' => [
+                'metadata' => [
+                    'orderId' => $orderId
+                    ]
             ]
         ]);
 
