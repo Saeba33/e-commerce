@@ -100,19 +100,34 @@ final class OrderController extends AbstractController
     #[Route('/editor/order/{type}', name: 'app_orders_show')]
     public function getAllORder($type, Request $request, OrderRepository $orderRepository, \Knp\Component\Pager\PaginatorInterface $paginator): Response
     {
-        if ($type == "is-completed") {
-            $data = $orderRepository->findBy(['isCompleted' => 1], ['id' => 'DESC']);
-        } else if ($type == "pay-on-stripe-not-delivred") {
-            $data = $orderRepository->findBy(['isCompleted' => null, 'pay_on_delivery'=> 0, 'is_payment_completed'=>1], ['id'=>'DESC']);
-        } else if ($type == "pay-on-stripe-is-delivred") {
-            $data = $orderRepository->findBy(['isCompleted' => 1, 'pay_on_delivery'=> 0, 'is_payment_completed'=>1], ['id'=>'DESC']);
-        } else if($type == 'no_delivery'){
-            $data = $orderRepository->findBy(['isCompleted'=>null,'payOnDelivery'=>0,'isPaymentCompleted'=>0],['id'=>'DESC']);
-        }
+
         
-        $orders = $orderRepository->findAll();
+        if ($type === 'is-completed') {
+            $data = $orderRepository->findBy(['isCompleted' => true], ['id' => 'DESC']);
+        } elseif ($type === 'pay-on-stripe-not-delivred') {
+            $data = $orderRepository->findBy([
+                'isCompleted' => null,
+                'payOnDelivery' => false,
+                'isPaymentCompleted' => true
+            ], ['id' => 'DESC']);
+        } elseif ($type === 'pay-on-stripe-is-delivred') {
+            $data = $orderRepository->findBy([
+                'isCompleted' => true,
+                'payOnDelivery' => false,
+                'isPaymentCompleted' => true
+            ], ['id' => 'DESC']);
+        } elseif ($type === 'no_delivery') {
+            $data = $orderRepository->findBy([
+                'isCompleted' => null,
+                'payOnDelivery' => false,
+                'isPaymentCompleted' => false
+            ], ['id' => 'DESC']);
+        } else {
+            $data = $orderRepository->findAll();
+        }
+
         $orders = $paginator->paginate(
-            $orders,
+            $data,
             $request->query->getInt('page', 1),
             10
         );
@@ -146,24 +161,27 @@ final class OrderController extends AbstractController
 
     #region MAJ ORDER STATUT
     #[Route('/editor/order/{id}/is-completed/update', name: 'app_orders_is_completed_update')]
-    public function isCompletedUpdate($id, OrderRepository $orderRepository, EntityManagerInterface $entityManager)
+    public function isCompletedUpdate($id, Request $request, OrderRepository $orderRepository, EntityManagerInterface $entityManager)
     {
         $order = $orderRepository->find($id);
         $order->setIsCompleted(true);
         $entityManager->flush();
         $this->addFlash('success', 'Modification effectuée, la commande a pris le statut irée');
-        return $this->redirectToRoute('app_orders_show');
+        return $this->redirect($request->headers->get('referer'));
+
     }
     #endregion
 
     #region DELETE ORDER
     #[Route('/editor/order/{id}/delete', name: 'app_order_delete')]
-    public function deleteOrder(Order $order, EntityManagerInterface $entityManager): Response
+    public function deleteOrder(Request $request, Order $order, EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($order);
         $entityManager->flush();
         $this->addFlash('error', 'Commande supprimée');
-        return $this->redirectToRoute('app_orders_show');
+
+        return $this->redirect($request->headers->get('referer'));
+
     }
     #endregion
 

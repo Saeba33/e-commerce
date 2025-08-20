@@ -133,6 +133,28 @@
 						</details>
 					</li>
 				{% endif %}
+
+				{% if is_granted("ROLE_EDITOR") or is_granted("ROLE_ADMIN") %}
+					<li>
+						<details>
+							<summary>Commandes</summary>
+							<ul class="z-[9999]">
+								<li>
+									<a href="{{ path('app_orders_show', {'type':'is-completed'}) }}">Terminées</a>
+								</li>
+								<li>
+									<a href="{{ path('app_orders_show', {'type':'pay-on-stripe-not-delivred'}) }}">Payées (non livrées)</a>
+								</li>
+								<li>
+									<a href="{{ path('app_orders_show', {'type':'pay-on-stripe-is-delivred'}) }}">Payées (livrées)</a>
+								</li>
+								<li>
+									<a href="{{ path('app_orders_show', {'type':'no_delivery'}) }}">Sans livraison / Non payées</a>
+								</li>
+							</ul>
+						</details>
+					</li>
+				{% endif %}
 				{% if is_granted("ROLE_ADMIN") %}
 					<li>
 						<details>
@@ -154,6 +176,30 @@
 								</li>
 								<li>
 									<a href="{{ path('app_user') }}" class="text-nowrap">Gérer les utilisateurs</a>
+								</li>
+							</ul>
+						</details>
+					</li>
+				{% endif %}
+
+				{% if is_granted("ROLE_EDITOR") or is_granted("ROLE_ADMIN") %}
+					<li>
+						<details>
+							<summary class="text-white">
+								Commandes
+							</summary>
+							<ul class="w-56 whitespace-nowrap z-[9999]">
+								<li>
+									<a href="{{ path('app_orders_show', {'type':'is-completed'}) }}" class="text-nowrap">Terminées</a>
+								</li>
+								<li>
+									<a href="{{ path('app_orders_show', {'type':'pay-on-stripe-not-delivred'}) }}" class="text-nowrap">Payées (non livrées)</a>
+								</li>
+								<li>
+									<a href="{{ path('app_orders_show', {'type':'pay-on-stripe-is-delivred'}) }}" class="text-nowrap">Payées (livrées)</a>
+								</li>
+								<li>
+									<a href="{{ path('app_orders_show', {'type':'no_delivery'}) }}" class="text-nowrap">Sans livraison / Non payées</a>
 								</li>
 							</ul>
 						</details>
