@@ -15,7 +15,7 @@ class StripePayment
         Stripe::setApiVersion('2025-07-30.basil');
     }
 
-    public function startPayment($cart, $shippingCost)
+    public function startPayment($cart, $shippingCost, $orderId)
     {
         $cartProducts = $cart['cart'];
 
@@ -53,7 +53,9 @@ class StripePayment
             'shipping_address_collection' => [
                 'allowed_countries' => ['FR', 'GB'],
             ],
-            'metadata' => []
+            'metadata' => [
+                'orderId' =>$orderId
+            ]
         ]);
 
         $this->redirectUrl = $session->url;

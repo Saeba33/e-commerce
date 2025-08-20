@@ -39,6 +39,7 @@ final class OrderController extends AbstractController
             if (!empty($cartData['total'])) {
                 $order->setTotalPrice($cartData['total']);
                 $order->setCreatedAt(new \DateTimeImmutable());
+                $order->setIsPaymentCompleted(0);
                 $entityManager->persist($order);
                 $entityManager->flush();
                 foreach ($cartData['cart'] as $value) {
@@ -49,31 +50,32 @@ final class OrderController extends AbstractController
                     $entityManager->persist($orderProduct);
                     $entityManager->flush();
                 }
+
+
+                if ($order->isPayOnDelivery()) {
+
+                    $session->set('cart', []);
+
+                    $html = $this->renderView('mail/orderConfirm.html.twig', [
+                        'order' => $order
+
+                    ]);
+                    $email = (new Email())
+                    ->from('maboutique@contact.com')
+                    ->to($order->getEmail())
+                    ->subject('Confirmation de réception de commande')
+                    ->html($html);
+                    $this->mailer->send($email);
+
+                    return $this->redirectToRoute('order_message');
+                }
+                $paymentStripe = new StripePayment();
+                $shippingCost = $order->getCity()->getShippingCost();
+                $paymentStripe->startPayment($cartData, $shippingCost, $order->getId());
+                $stripeRedirectUrl = $paymentStripe->getStripeRedirectUrl();
+
+                return $this->redirect($stripeRedirectUrl);
             }
-
-            if ($order->isPayOnDelivery()) {
-
-                $session->set('cart', []);
-
-                $html = $this->renderView('mail/orderConfirm.html.twig', [
-                    'order' => $order
-
-                ]);
-                $email = (new Email())
-                ->from('maboutique@contact.com')
-                ->to($order->getEmail())
-                ->subject('Confirmation de réception de commande')
-                ->html($html);
-                $this->mailer->send($email);
-
-                return $this->redirectToRoute('order_message');
-            }
-            $paymentStripe = new StripePayment();
-            $shippingCost = $order->getCity()->getShippingCost();
-            $paymentStripe->startPayment($cartData, $shippingCost, $order->getId());
-            $stripeRedirectUrl = $paymentStripe->getStripeRedirectUrl();
-
-            return $this->redirect($stripeRedirectUrl);
         }
 
 
