@@ -53,8 +53,10 @@ final class StripeController extends AbstractController
                 $sigHeader,
                 $endpoint
             );
+            
         } catch (\UnexpectedValueException $e) {
             return new Response('Invalid payload', 400);
+            
         } catch (\Stripe\Exception\SignatureVerificationException $e) {
             return new Response('Invalid signature', 400);
         }
