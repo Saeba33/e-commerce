@@ -219,10 +219,14 @@
 
 				{# Barre de recherche - cachée sur mobile, visible sur tablette+ #}
 				<div class="hidden md:block">
-					<label class="search-style">
-						<ion-icon name="search-outline" class="search-icon"></ion-icon>
-						<input type="search" required placeholder="Rechercher ..." class="border-none" autocomplete="off"/>
-					</label>
+					<form method="get" action="{{ path('app_search')}}">
+						<label class="search-style">
+							<ion-icon name="search-outline" class="search-icon"></ion-icon>
+							<input name="word" type="word" required placeholder="Rechercher ..." class="border-none" autocomplete="off"/>
+							<button class="text-red-500 font)bold cursor pointer" type="submit">SEARCH</button>
+						</label>
+					</form>
+
 				</div>
 
 				{# Bouton de recherche mobile #}

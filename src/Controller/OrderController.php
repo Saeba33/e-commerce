@@ -100,28 +100,31 @@ final class OrderController extends AbstractController
     #[Route('/editor/order/{type}', name: 'app_orders_show')]
     public function getAllORder($type, Request $request, OrderRepository $orderRepository, \Knp\Component\Pager\PaginatorInterface $paginator): Response
     {
-
         
         if ($type === 'is-completed') {
             $data = $orderRepository->findBy(['isCompleted' => true], ['id' => 'DESC']);
+            
         } elseif ($type === 'pay-on-stripe-not-delivred') {
             $data = $orderRepository->findBy([
                 'isCompleted' => null,
                 'payOnDelivery' => false,
                 'isPaymentCompleted' => true
             ], ['id' => 'DESC']);
+            
         } elseif ($type === 'pay-on-stripe-is-delivred') {
             $data = $orderRepository->findBy([
                 'isCompleted' => true,
                 'payOnDelivery' => false,
                 'isPaymentCompleted' => true
             ], ['id' => 'DESC']);
+            
         } elseif ($type === 'no_delivery') {
             $data = $orderRepository->findBy([
                 'isCompleted' => null,
                 'payOnDelivery' => false,
                 'isPaymentCompleted' => false
             ], ['id' => 'DESC']);
+            
         } else {
             $data = $orderRepository->findAll();
         }
@@ -173,16 +176,24 @@ final class OrderController extends AbstractController
     #endregion
 
     #region DELETE ORDER
-    #[Route('/editor/order/{id}/delete', name: 'app_order_delete')]
-    public function deleteOrder(Request $request, Order $order, EntityManagerInterface $entityManager): Response
-    {
-        $entityManager->remove($order);
-        $entityManager->flush();
-        $this->addFlash('error', 'Commande supprimée');
 
-        return $this->redirect($request->headers->get('referer'));
+#[Route('/editor/order/{id}/delete', name: 'app_order_delete')]
+#[Route('/editor/order/{id}/delete/{type}', name: 'app_order_delete_type')]
+public function deleteOrder(Request $request, Order $order, EntityManagerInterface $entityManager): Response
+{
 
+    $entityManager->remove($order);
+    $entityManager->flush();
+
+    $this->addFlash('success', 'Commande supprimée.');
+
+    $referer = $request->headers->get('referer');
+    if ($referer) {
+        return $this->redirect($referer);
     }
+
+    return $this->redirectToRoute('app_orders_show', ['type' => 'all']);
+}
     #endregion
 
 

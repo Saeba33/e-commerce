@@ -15,14 +15,13 @@ final class SearchController extends AbstractController
     public function index(Request $request, ProductRepository $productRepository): Response
     {
         if ($request->isMethod('GET')) {
-            $data = $request->request->all();
-            $word = $data['word'];
+            $word = $request->get('word');
             $results = $productRepository->searchEngine($word);
         }
 
 
         return $this->render('search/index.html.twig', [
-            'poducts' => $results,
+            'products' => $results,
             'word' => $word,
         ]);
     }
