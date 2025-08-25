@@ -86,15 +86,13 @@ final class StripeController extends AbstractController
                             
                             // Créer une entrée dans l'historique de stock
                             $stockHistory = new ProductStockHistory();
-                            $stockHistory->setQuantity(-$quantity); // Quantité négative pour indiquer la diminution
+                            $stockHistory->setQuantity(-$quantity);
                             $stockHistory->setProduct($product);
-                            $stockHistory->setOrigin('order_' . $orderId); // Format: order_123
+                            $stockHistory->setOrigin('order_' . $orderId);
                             $stockHistory->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
                             
                             $entityManager->persist($stockHistory);
                         }
-                        // Note: En cas de stock insuffisant, on pourrait annuler la commande
-                        // ou envoyer un email à l'administrateur
                     }
                     
                     $entityManager->flush();

@@ -13,7 +13,7 @@ class ProductStockHistory
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'productHistories')]
+    #[ORM\ManyToOne(inversedBy: 'productStockHistories')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
@@ -25,9 +25,6 @@ class ProductStockHistory
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $origin = null;
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $comment = null;
 
     public function getId(): ?int
     {
@@ -78,18 +75,6 @@ class ProductStockHistory
     public function setOrigin(?string $origin): static
     {
         $this->origin = $origin;
-
-        return $this;
-    }
-
-    public function getComment(): ?string
-    {
-        return $this->comment;
-    }
-
-    public function setComment(?string $comment): static
-    {
-        $this->comment = $comment;
 
         return $this;
     }
