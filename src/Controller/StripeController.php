@@ -73,18 +73,14 @@ final class StripeController extends AbstractController
                 if ($cartPrice == $stripeTotalAmount) {
                     $order->setIsPaymentCompleted(1);
                     
-                    // Décrémenter le stock pour chaque produit de la commande
                     foreach ($order->getOrderProducts() as $orderProduct) {
                         $product = $orderProduct->getProduct();
                         $quantity = $orderProduct->getQuantity();
                         
-                        // Vérifier que le stock est suffisant
                         if ($product->getStock() >= $quantity) {
-                            // Décrémenter le stock
                             $newStock = $product->getStock() - $quantity;
                             $product->setStock($newStock);
                             
-                            // Créer une entrée dans l'historique de stock
                             $stockHistory = new ProductStockHistory();
                             $stockHistory->setQuantity(-$quantity);
                             $stockHistory->setProduct($product);
