@@ -28,38 +28,69 @@ final class CartController extends AbstractController
     }
     #endregion
 
-    #region CREATE
+    #region ADD PRODUCTS
     #[Route('/cart/add/{id}', name: 'app_cart_add', methods: ['GET'])]
-    public function addProduct(int $id, SessionInterface $session): Response
+    public function addProduct($id, SessionInterface $session): Response
     {
-        $cart = $session->get('cart', []);
-        if (!empty($cart[$id])) {
-            $cart[$id]++;
-        } else {
-            $cart[$id] = 1;
+        return $this->addToCart($id, 1, $session);
+    }
+
+    #[Route('/cart/add/{id}/quantity/{quantity}', name: 'app_cart_add_quantity', methods: ['GET'])]
+    public function addProductWithQuantity($id, $quantity, SessionInterface $session): Response
+    {
+        return $this->addToCart($id, $quantity, $session);
+    }
+
+
+    private function addToCart($productId, $quantityToAdd, SessionInterface $session): Response
+    {
+        // 1. Find product
+        $product = $this->productRepository->find($productId);
+        if (!$product) {
+            $this->addFlash('error', 'Produit non trouvé');
+            return $this->redirectToRoute('app_home');
         }
 
+        // 2. Validate quantity
+        if ($quantityToAdd <= 0) {
+            $this->addFlash('error', 'Quantité invalide');
+            return $this->redirectToRoute('app_cart');
+        }
+
+        // 3. Get current cart
+        $cart = $session->get('cart', []);
+        $currentQuantity = $cart[$productId] ?? 0;
+        $newTotalQuantity = $currentQuantity + $quantityToAdd;
+
+        // 4. Check stock availability
+        if ($newTotalQuantity > $product->getStock()) {
+            $this->addFlash(
+                'error',
+                "Stock insuffisant pour « {$product->getName()} ». " .
+                "Disponible: {$product->getStock()}, dans le panier: {$currentQuantity}"
+            );
+            return $this->redirectToRoute('app_cart');
+        }
+
+        // 5. Add to cart
+        $cart[$productId] = $newTotalQuantity;
         $session->set('cart', $cart);
+
         return $this->redirectToRoute('app_cart');
     }
     #endregion
 
-    #region DELETE - SINGLE PRODUCT
+    #region REMOVE PRODUCTS
     #[Route('/cart/remove/{id}', name: 'app_cart_remove_product', methods: ['GET'])]
-    public function removeProduct(int $id, SessionInterface $session): Response
+    public function removeProduct($id, SessionInterface $session): Response
     {
         $cart = $session->get('cart', []);
-
-        if (!empty($cart[$id])) {
-            unset($cart[$id]);
-        }
-
+        unset($cart[$id]);
         $session->set('cart', $cart);
+
         return $this->redirectToRoute('app_cart');
     }
-    #endregion
 
-    #region DELETE - ALL CART
     #[Route('/cart/clear', name: 'app_cart_clear', methods: ['GET'])]
     public function clear(SessionInterface $session): Response
     {
@@ -67,6 +98,4 @@ final class CartController extends AbstractController
         return $this->redirectToRoute('app_cart');
     }
     #endregion
-
-
 }
