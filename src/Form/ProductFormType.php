@@ -21,11 +21,8 @@ class ProductFormType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('price');
-            
-        // Ajouter le champ stock seulement en mode création, pas en édition
-        if (!$options['is_edit']) {
-            $builder->add('stock', IntegerType::class, [
+            ->add('price')
+            ->add('stock', IntegerType::class, [
                 'constraints' => [
                     new NotBlank(['message' => 'Le stock ne peut pas être vide.']),
                     new PositiveOrZero(['message' => 'Le stock doit être positif ou égal à zéro.'])
@@ -33,19 +30,7 @@ class ProductFormType extends AbstractType
                 'attr' => [
                     'min' => 0
                 ]
-            ]);
-        } else {
-            // En mode édition, on rend le champ non mappé pour éviter les erreurs
-            $builder->add('stock', IntegerType::class, [
-                'mapped' => false,
-                'required' => false,
-                'attr' => [
-                    'disabled' => true
-                ]
-            ]);
-        }
-        
-        $builder
+            ])
             ->add('image', FileType::class, [
                 'label' => 'Image du produit',
                 'mapped' => false,

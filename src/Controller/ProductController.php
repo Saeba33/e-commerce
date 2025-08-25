@@ -61,6 +61,7 @@ class ProductController extends AbstractController
             $stockHistory = new ProductHistory();
             $stockHistory->setQuantity($product->getStock());
             $stockHistory->setProduct($product);
+            $stockHistory->setOrigin('product_creation');
             $stockHistory->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
             $entityManager->persist($stockHistory);
             $entityManager->flush();
@@ -90,15 +91,39 @@ class ProductController extends AbstractController
     #[Route('/editor/product/edit/{id}', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
+        // Stocker le stock original pour comparaison
+        $originalStock = $product->getStock();
+
         $form = $this->createForm(ProductFormType::class, $product, [
             'is_edit' => true
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Gérer les changements de stock
+            $newStock = $product->getStock();
+            if ($newStock !== $originalStock) {
+                $stockDifference = $newStock - $originalStock;
+
+                // Créer un historique pour la modification directe du stock
+                $stockHistory = new ProductHistory();
+                $stockHistory->setQuantity($stockDifference);
+                $stockHistory->setProduct($product);
+                $stockHistory->setOrigin('direct_edit');
+                $stockHistory->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+
+                $entityManager->persist($stockHistory);
+
+                if ($stockDifference > 0) {
+                    $this->addFlash('success', "Stock augmenté de {$stockDifference} unité(s)");
+                } else {
+                    $this->addFlash('warning', "Stock diminué de " . abs($stockDifference) . " unité(s)");
+                }
+            }
+
             // Vérifier si l'utilisateur veut supprimer l'image actuelle
             $removeImage = $request->request->get('remove_image');
-            
+
             if ($removeImage === '1') {
                 // Supprimer l'image actuelle
                 if ($product->getImage()) {
@@ -109,7 +134,7 @@ class ProductController extends AbstractController
                 }
                 $product->setImage(null);
             }
-            
+
             $image = $form->get('image')->getData();
 
             if ($image) {
@@ -120,7 +145,7 @@ class ProductController extends AbstractController
                         unlink($oldImagePath);
                     }
                 }
-                
+
                 $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeImageName = $slugger->slug($originalName);
                 $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension();
@@ -184,6 +209,7 @@ class ProductController extends AbstractController
 
                 $stockAdd->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
                 $stockAdd->setProduct($product);
+                $stockAdd->setOrigin('manual_add');
 
                 $entityManager->persist($stockAdd);
                 $entityManager->flush();

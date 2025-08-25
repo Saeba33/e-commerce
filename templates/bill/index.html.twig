@@ -97,11 +97,9 @@
 						<tr>
 							<td>{{ item.product.name }}</td>
 							<td>{{ item.quantity }}</td>
-							<td>{{ (item.product.price)|number_format(2, ',', ' ') }}
-								€</td>
+							<td>{{ (item.product.price)|number_format(2, ',', ' ') }}€</td>
 							<td>—</td>
-							<td>{{ (item.product.price * item.quantity)|number_format(2, ',', ' ') }}
-								€</td>
+							<td>{{ (item.product.price * item.quantity)|number_format(2, ',', ' ') }}€</td>
 						</tr>
 					{% endfor %}
 				</tbody>
