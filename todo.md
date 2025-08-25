@@ -1,10 +1,13 @@
 ## Must
 
-- Gérer la quantité au niveau de la carte et du panier (avec impact sur le stock) :
- Permettre le click sur le bouton "+" tant que la quantité sélectionnée par l'utilisateur est inférieure à mon stock. Il faut un       verrouillage front mais aussi back (dans le controller). Il faut également générer une ligne dans StockHistory. Il faut donc ajouter un champ "origin" dans stock history pour savoir si la modification a été apportée par un utilisateur ou par une commande, le cas échéant, reprendre le numéro de commande.
+- Gérer la quantité au niveau de la card du produit et  du panier (avec impact sur le stock) :
+    - Permettre le click sur le bouton "+" tant que la quantité sélectionnée par l'utilisateur est inférieure à mon stock courant.
+    - Verouillage front mais aussi back (dans le controller).
+    - Générer une ligne dans ProductHistory lorsque la commande est validée. 
+    - Il faut donc ajouter dans le champ "origin" de stockhistory une ligne connaitre la quantité décrémentée avec le numéro de commande dans le commentaire.
+    - Au niveau du twig, griser le bouton + lorsque la quantité maximale est atteinte si je l'ajoute au panier.
+    - Renommer product_history par product_stock_history. Renoomer également le form, l'entity eet le repository.
 
-<!-- - Ajouter la possibilité de modifier le stock dans la modification de produit. Cela sera notamment utile si l'utilisateur s'est trompé au niveau de l'ajout du stock. Cibler la modification dans StockHistory au niveau du noouveau champ "origin". 
-Si on doit résumer l'impact sur Sotck History, on a un nouveau champ "origin" qui reprend l'incrémentation ou la décrémentation du stock en fonction de : commande validée, modification via le bouton "ajouter du stock", modification directe du stock depuis l'édition de la carte produit. -->
 
 - Remplacer la logique de "paiement à la livraison" par "retrait en magasin". Cela sous entend que si l'option "retrait en magasin" est sélectionnée on supprime les frais de livraison du montant de la commande. Les champs doivent être également renommés en bdd. Renommer le champ "is_completed" en "is_delivered dans Order. Ajour du champ shipping_cost dans Order. Pour savoir si le client a payé des frais de livraison ou a choisi le retrait en magasin (champ avec valeur "null" dans ce cacs de figure). Quid lorsque je change les frias de livraison d'une ville ? Ok avec le champ shipping cost mais pas ok sur le libellé. Idée : au lieu de stocker le city_id dans la table order, stocker le nom de la ville en string. Cela n'empêche pas de conserver la table city.
 

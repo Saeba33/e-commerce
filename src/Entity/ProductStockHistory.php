@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductHistoryRepository;
+use App\Repository\ProductStockHistoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProductHistoryRepository::class)]
-class ProductHistory
+#[ORM\Entity(repositoryClass: ProductStockHistoryRepository::class)]
+class ProductStockHistory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,6 +25,9 @@ class ProductHistory
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $origin = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $comment = null;
 
     public function getId(): ?int
     {
@@ -75,6 +78,18 @@ class ProductHistory
     public function setOrigin(?string $origin): static
     {
         $this->origin = $origin;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): static
+    {
+        $this->comment = $comment;
 
         return $this;
     }

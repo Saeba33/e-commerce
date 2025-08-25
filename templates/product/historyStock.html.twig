@@ -44,8 +44,37 @@
 										<tr class="hover:bg-base-50 transition-colors duration-200">
 											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">{{ productHistory.id }}</td>
 											<td class="text-left py-4 px-2 sm:px-6 border-r-2 border-base-300 font-semibold">{{ productHistory.product.name }}</td>
-											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300 font-medium text-green-600">{{ productHistory.quantity }}</td>
-											<td class="text-left py-4 px-2 sm:px-6 border-r-2 border-base-300">{{ productHistory.origin }}</td>
+											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300 font-medium 
+											{% if productHistory.quantity > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+												{% if productHistory.quantity > 0 %}+{% endif %}{{ productHistory.quantity }}
+											</td>
+											<td class="text-left py-4 px-2 sm:px-6 border-r-2 border-base-300">
+												{% if productHistory.origin starts with 'order_' %}
+													<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+														<ion-icon name="receipt-outline" class="mr-1"></ion-icon>
+														Commande #{{ productHistory.origin|slice(6) }}
+													</span>
+												{% elseif productHistory.origin == 'product_creation' %}
+													<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+														<ion-icon name="add-circle-outline" class="mr-1"></ion-icon>
+														Création produit
+													</span>
+												{% elseif productHistory.origin == 'direct_edit' %}
+													<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+														<ion-icon name="create-outline" class="mr-1"></ion-icon>
+														Édition directe
+													</span>
+												{% elseif productHistory.origin == 'manual_add' %}
+													<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+														<ion-icon name="hand-left-outline" class="mr-1"></ion-icon>
+														Ajout manuel
+													</span>
+												{% else %}
+													<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+														{{ productHistory.origin }}
+													</span>
+												{% endif %}
+											</td>
 											<td class="text-center py-4 px-2 sm:px-6">{{ productHistory.createdAt|date('d/m/Y H:i') }}</td>
 										</tr>
 									{% endfor %}

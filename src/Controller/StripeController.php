@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ProductStockHistory;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Stripe;
@@ -71,6 +72,31 @@ final class StripeController extends AbstractController
                 $stripeTotalAmount = $paymentIntent->amount / 100;
                 if ($cartPrice == $stripeTotalAmount) {
                     $order->setIsPaymentCompleted(1);
+                    
+                    // Décrémenter le stock pour chaque produit de la commande
+                    foreach ($order->getOrderProducts() as $orderProduct) {
+                        $product = $orderProduct->getProduct();
+                        $quantity = $orderProduct->getQuantity();
+                        
+                        // Vérifier que le stock est suffisant
+                        if ($product->getStock() >= $quantity) {
+                            // Décrémenter le stock
+                            $newStock = $product->getStock() - $quantity;
+                            $product->setStock($newStock);
+                            
+                            // Créer une entrée dans l'historique de stock
+                            $stockHistory = new ProductStockHistory();
+                            $stockHistory->setQuantity(-$quantity); // Quantité négative pour indiquer la diminution
+                            $stockHistory->setProduct($product);
+                            $stockHistory->setOrigin('order_' . $orderId); // Format: order_123
+                            $stockHistory->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+                            
+                            $entityManager->persist($stockHistory);
+                        }
+                        // Note: En cas de stock insuffisant, on pourrait annuler la commande
+                        // ou envoyer un email à l'administrateur
+                    }
+                    
                     $entityManager->flush();
                 }
                 break;

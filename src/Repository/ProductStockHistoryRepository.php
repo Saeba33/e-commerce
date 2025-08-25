@@ -2,18 +2,18 @@
 
 namespace App\Repository;
 
-use App\Entity\ProductHistory;
+use App\Entity\ProductStockHistory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<ProductHistory>
+ * @extends ServiceEntityRepository<ProductStockHistory>
  */
-class ProductHistoryRepository extends ServiceEntityRepository
+class ProductStockHistoryRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ProductHistory::class);
+        parent::__construct($registry, ProductStockHistory::class);
     }
 
     //    /**

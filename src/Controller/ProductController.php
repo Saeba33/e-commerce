@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Entity\ProductHistory;
+use App\Entity\ProductStockHistory;
 use App\Form\ProductFormType;
-use App\Form\ProductHistoryFormType;
+use App\Form\ProductStockHistoryFormType;
 use App\Repository\ProductRepository;
-use App\Repository\ProductHistoryRepository;
+use App\Repository\ProductStockHistoryRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +58,7 @@ class ProductController extends AbstractController
             $entityManager->persist($product);
             $entityManager->flush();
 
-            $stockHistory = new ProductHistory();
+            $stockHistory = new ProductStockHistory();
             $stockHistory->setQuantity($product->getStock());
             $stockHistory->setProduct($product);
             $stockHistory->setOrigin('product_creation');
@@ -106,7 +106,7 @@ class ProductController extends AbstractController
                 $stockDifference = $newStock - $originalStock;
 
                 // Créer un historique pour la modification directe du stock
-                $stockHistory = new ProductHistory();
+                $stockHistory = new ProductStockHistory();
                 $stockHistory->setQuantity($stockDifference);
                 $stockHistory->setProduct($product);
                 $stockHistory->setOrigin('direct_edit');
@@ -178,7 +178,7 @@ class ProductController extends AbstractController
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->get('_token'))) {
-            $histories = $product->getProductHistories();
+            $histories = $product->getProductStockHistories();
             foreach ($histories as $history) {
                 $entityManager->remove($history);
             }
@@ -195,8 +195,8 @@ class ProductController extends AbstractController
     #[Route('/add/stock/product/{id}', name: 'app_product_stock_add', methods: ['GET', 'POST'])]
     public function addStock(int $id, EntityManagerInterface $entityManager, Request $request, ProductRepository $productRepository): Response
     {
-        $stockAdd = new ProductHistory();
-        $form = $this->createForm(ProductHistoryFormType::class, $stockAdd);
+        $stockAdd = new ProductStockHistory();
+        $form = $this->createForm(ProductStockHistoryFormType::class, $stockAdd);
         $form->handleRequest($request);
 
         $product = $productRepository->find($id);
@@ -232,10 +232,10 @@ class ProductController extends AbstractController
 
     #region STOCK - HISTORY
     #[Route('/add/stock/product/{id}/history', name: 'app_product_stock_history', methods: ['GET'])]
-    public function showStockHistory(int $id, ProductRepository $productRepository, ProductHistoryRepository $productHistoryRepository): Response
+    public function showStockHistory(int $id, ProductRepository $productRepository, ProductStockHistoryRepository $productStockHistoryRepository): Response
     {
         $product = $productRepository->find($id);
-        $productAddHistory = $productHistoryRepository->findBy(['product' => $product], ['id' => 'DESC']);
+        $productAddHistory = $productStockHistoryRepository->findBy(['product' => $product], ['id' => 'DESC']);
 
         return $this->render('product/historyStock.html.twig', [
             "productsAdded" => $productAddHistory
