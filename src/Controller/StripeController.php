@@ -68,7 +68,7 @@ final class StripeController extends AbstractController
                 $order = $orderRepository->find($orderId);
 
                 // Vérifier si la commande n'a pas déjà été traitée
-                if ($order->getIsPaymentCompleted() === 1) {
+                if ($order->isPaymentCompleted() === true) {
                     return new Response('Order already processed', 200);
                 }
 
@@ -76,7 +76,7 @@ final class StripeController extends AbstractController
                 $stripeTotalAmount = $paymentIntent->amount / 100;
 
                 if ($cartPrice == $stripeTotalAmount) {
-                    $order->setIsPaymentCompleted(1);
+                    $order->setIsPaymentCompleted(true);
 
                     foreach ($order->getOrderProducts() as $orderProduct) {
                         $product = $orderProduct->getProduct();
