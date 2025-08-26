@@ -1,19 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Historique du stock
+{% block title %}
+	Historique du stock
 {% endblock %}
 
 {% block body %}
 	<div class="container mx-auto px-4 py-6">
 		<div
 			class="content-container">
-			{# En-tête avec titre et bouton de retour #}
+			{# Header and back btn #}
 			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
 				<div>
-					<h1 class="text-3xl font-bold text-gray-800 mb-2">
-						Historique du stock
-					</h1>
-					<p class="text-gray-600">Historique des ajouts de stock</p>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2">Historique du stock</h1>
+					<p class="text-gray-600">Historique des mouvements de stock pour le produit
+						<span class="ml-2 font-semibold text-xl text-blue-800">{{ product.name }}</span>
+					</p>
 				</div>
 				<a href="{{ path('app_product') }}" class="custom-btn-with-logo back-btn">
 					<ion-icon name="return-down-back-outline"></ion-icon>
@@ -24,70 +25,49 @@
 			{# Messages flash #}
 			{% include 'layouts/_flash_message.html.twig' %}
 
-			{# Tableau de l'historique #}
+			{# Table #}
 			<div class="card bg-white">
 				<div class="card-body p-0">
-					{% if productsAdded|length > 0 %}
-						<div class="overflow-x-auto">
-							<table class="table table-zebra w-full border-2 border-base-300">
-								<thead class="bg-gray-300">
-									<tr>
-										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">ID</th>
-										<th class="text-left py-4 px-2 sm:px-6 border-r border-base-300">Produit</th>
-										<th class="text-center py-4 px-2 sm:px-6 border-r border-base-300">Quantité ajoutée</th>
-										<th class="text-left py-4 px-2 sm:px-6 border-r border-base-300">Origine</th>
-										<th class="text-center py-4 px-2 sm:px-6">Date d'ajout</th>
+					<div class="overflow-x-auto">
+						<table class="table table-zebra w-full border-2 border-base-300">
+							<thead class="bg-gray-300">
+								<tr>
+									<th class="text-center py-4 px-2 sm:px-6 border-2 border-base-300">ID</th>
+									<th class="text-center py-4 px-2 sm:px-6 border-2 border-base-300">Quantité modifiée</th>
+									<th class="text-left py-4 px-2 sm:px-6 border-2 border-base-300">Origine</th>
+									<th class="text-center py-4 px-2 sm:px-6 border-2 border-base-300">Date d'ajout</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for productHistory in productsAdded %}
+									<tr class="hover:bg-base-50 transition-colors duration-200">
+										<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">{{ productHistory.id }}</td>
+
+										{% set qtyClass = productHistory.quantity > 0 ? 'text-green-600' : 'text-red-600' %}
+										<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300 font-medium {{ qtyClass }}">
+											{% if productHistory.quantity > 0 %}+
+											{% endif %}
+											{{ productHistory.quantity }}
+										</td>
+										<td class="text-left py-4 px-2 sm:px-6 border-r-2 border-base-300">
+											{% if productHistory.origin starts with 'order_' %}
+												<span>Commande #{{ productHistory.origin|slice(6) }}</span>
+											{% elseif productHistory.origin == 'product_creation' %}
+												<span>Création de la fiche produit</span>
+											{% elseif productHistory.origin == 'direct_edit' %}
+												<span>Édition de la fiche produit</span>
+											{% elseif productHistory.origin == 'manual_add' %}
+												<span>Ajout du stock</span>
+											{% else %}
+												<span>{{ productHistory.origin }}</span>
+											{% endif %}
+										</td>
+										<td class="text-center py-4 px-2 sm:px-6">{{ productHistory.createdAt|date('d/m/Y H:i') }}</td>
 									</tr>
-								</thead>
-								<tbody>
-									{% for productHistory in productsAdded %}
-										<tr class="hover:bg-base-50 transition-colors duration-200">
-											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300">{{ productHistory.id }}</td>
-											<td class="text-left py-4 px-2 sm:px-6 border-r-2 border-base-300 font-semibold">{{ productHistory.product.name }}</td>
-											<td class="text-center py-4 px-2 sm:px-6 border-r-2 border-base-300 font-medium 
-											{% if productHistory.quantity > 0 %}text-green-600{% else %}text-red-600{% endif %}">
-												{% if productHistory.quantity > 0 %}+{% endif %}{{ productHistory.quantity }}
-											</td>
-											<td class="text-left py-4 px-2 sm:px-6 border-r-2 border-base-300">
-												{% if productHistory.origin starts with 'order_' %}
-													<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-														<ion-icon name="receipt-outline" class="mr-1"></ion-icon>
-														Commande #{{ productHistory.origin|slice(6) }}
-													</span>
-												{% elseif productHistory.origin == 'product_creation' %}
-													<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-														<ion-icon name="add-circle-outline" class="mr-1"></ion-icon>
-														Création produit
-													</span>
-												{% elseif productHistory.origin == 'direct_edit' %}
-													<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-														<ion-icon name="create-outline" class="mr-1"></ion-icon>
-														Édition directe
-													</span>
-												{% elseif productHistory.origin == 'manual_add' %}
-													<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-														<ion-icon name="hand-left-outline" class="mr-1"></ion-icon>
-														Ajout manuel
-													</span>
-												{% else %}
-													<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-														{{ productHistory.origin }}
-													</span>
-												{% endif %}
-											</td>
-											<td class="text-center py-4 px-2 sm:px-6">{{ productHistory.createdAt|date('d/m/Y H:i') }}</td>
-										</tr>
-									{% endfor %}
-								</tbody>
-							</table>
-						</div>
-					{% else %}
-						<div class="text-center py-16">
-							<ion-icon name="archive-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
-							<h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun historique</h3>
-							<p class="text-gray-500">Aucun ajout de stock n'a été enregistré</p>
-						</div>
-					{% endif %}
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

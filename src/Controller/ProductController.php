@@ -238,6 +238,7 @@ class ProductController extends AbstractController
         $productAddHistory = $productStockHistoryRepository->findBy(['product' => $product], ['id' => 'DESC']);
 
         return $this->render('product/historyStock.html.twig', [
+            'product' => $product,
             "productsAdded" => $productAddHistory
         ]);
     }
