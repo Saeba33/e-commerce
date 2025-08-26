@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ProductStockHistory;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Stripe;
@@ -40,7 +41,6 @@ final class StripeController extends AbstractController
     #[Route('/stripe/notify', name: 'app_stripe_notify')]
     public function notify(Request $request, OrderRepository $orderRepository, EntityManagerInterface $entityManager): Response
     {
-
         Stripe::setApiKey($_SERVER['STRIPE_SECRET_KEY']);
         $endpoint = $_SERVER['STRIPE_SECRET_ENDPOINT'];
         $payload = $request->getContent();
@@ -53,10 +53,10 @@ final class StripeController extends AbstractController
                 $sigHeader,
                 $endpoint
             );
-            
+
         } catch (\UnexpectedValueException $e) {
             return new Response('Invalid payload', 400);
-            
+
         } catch (\Stripe\Exception\SignatureVerificationException $e) {
             return new Response('Invalid signature', 400);
         }
@@ -67,10 +67,35 @@ final class StripeController extends AbstractController
                 $orderId = $paymentIntent->metadata->orderId;
                 $order = $orderRepository->find($orderId);
 
+                // Vérifier si la commande n'a pas déjà été traitée
+                if ($order->isPaymentCompleted() === true) {
+                    return new Response('Order already processed', 200);
+                }
+
                 $cartPrice = $order->getTotalPrice();
                 $stripeTotalAmount = $paymentIntent->amount / 100;
+
                 if ($cartPrice == $stripeTotalAmount) {
-                    $order->setIsPaymentCompleted(1);
+                    $order->setIsPaymentCompleted(true);
+
+                    foreach ($order->getOrderProducts() as $orderProduct) {
+                        $product = $orderProduct->getProduct();
+                        $quantity = $orderProduct->getQuantity();
+
+                        if ($product->getStock() >= $quantity) {
+                            $newStock = $product->getStock() - $quantity;
+                            $product->setStock($newStock);
+
+                            $stockHistory = new ProductStockHistory();
+                            $stockHistory->setQuantity(-$quantity);
+                            $stockHistory->setProduct($product);
+                            $stockHistory->setOrigin('order_' . $orderId);
+                            $stockHistory->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+
+                            $entityManager->persist($stockHistory);
+                        }
+                    }
+
                     $entityManager->flush();
                 }
                 break;

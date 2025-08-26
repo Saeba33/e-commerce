@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Entity\ProductHistory;
+use App\Entity\ProductStockHistory;
 use App\Form\ProductFormType;
-use App\Form\ProductHistoryFormType;
+use App\Form\ProductStockHistoryFormType;
 use App\Repository\ProductRepository;
-use App\Repository\ProductHistoryRepository;
+use App\Repository\ProductStockHistoryRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,9 +58,10 @@ class ProductController extends AbstractController
             $entityManager->persist($product);
             $entityManager->flush();
 
-            $stockHistory = new ProductHistory();
+            $stockHistory = new ProductStockHistory();
             $stockHistory->setQuantity($product->getStock());
             $stockHistory->setProduct($product);
+            $stockHistory->setOrigin('product_creation');
             $stockHistory->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
             $entityManager->persist($stockHistory);
             $entityManager->flush();
@@ -90,15 +91,39 @@ class ProductController extends AbstractController
     #[Route('/editor/product/edit/{id}', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
+        // Stocker le stock original pour comparaison
+        $originalStock = $product->getStock();
+
         $form = $this->createForm(ProductFormType::class, $product, [
             'is_edit' => true
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Gérer les changements de stock
+            $newStock = $product->getStock();
+            if ($newStock !== $originalStock) {
+                $stockDifference = $newStock - $originalStock;
+
+                // Créer un historique pour la modification directe du stock
+                $stockHistory = new ProductStockHistory();
+                $stockHistory->setQuantity($stockDifference);
+                $stockHistory->setProduct($product);
+                $stockHistory->setOrigin('direct_edit');
+                $stockHistory->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+
+                $entityManager->persist($stockHistory);
+
+                if ($stockDifference > 0) {
+                    $this->addFlash('success', "Stock augmenté de {$stockDifference} unité(s)");
+                } else {
+                    $this->addFlash('warning', "Stock diminué de " . abs($stockDifference) . " unité(s)");
+                }
+            }
+
             // Vérifier si l'utilisateur veut supprimer l'image actuelle
             $removeImage = $request->request->get('remove_image');
-            
+
             if ($removeImage === '1') {
                 // Supprimer l'image actuelle
                 if ($product->getImage()) {
@@ -109,7 +134,7 @@ class ProductController extends AbstractController
                 }
                 $product->setImage(null);
             }
-            
+
             $image = $form->get('image')->getData();
 
             if ($image) {
@@ -120,7 +145,7 @@ class ProductController extends AbstractController
                         unlink($oldImagePath);
                     }
                 }
-                
+
                 $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeImageName = $slugger->slug($originalName);
                 $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension();
@@ -153,7 +178,7 @@ class ProductController extends AbstractController
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->get('_token'))) {
-            $histories = $product->getProductHistories();
+            $histories = $product->getProductStockHistories();
             foreach ($histories as $history) {
                 $entityManager->remove($history);
             }
@@ -170,8 +195,8 @@ class ProductController extends AbstractController
     #[Route('/add/stock/product/{id}', name: 'app_product_stock_add', methods: ['GET', 'POST'])]
     public function addStock(int $id, EntityManagerInterface $entityManager, Request $request, ProductRepository $productRepository): Response
     {
-        $stockAdd = new ProductHistory();
-        $form = $this->createForm(ProductHistoryFormType::class, $stockAdd);
+        $stockAdd = new ProductStockHistory();
+        $form = $this->createForm(ProductStockHistoryFormType::class, $stockAdd);
         $form->handleRequest($request);
 
         $product = $productRepository->find($id);
@@ -184,6 +209,7 @@ class ProductController extends AbstractController
 
                 $stockAdd->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
                 $stockAdd->setProduct($product);
+                $stockAdd->setOrigin('manual_add');
 
                 $entityManager->persist($stockAdd);
                 $entityManager->flush();
@@ -206,12 +232,13 @@ class ProductController extends AbstractController
 
     #region STOCK - HISTORY
     #[Route('/add/stock/product/{id}/history', name: 'app_product_stock_history', methods: ['GET'])]
-    public function showStockHistory(int $id, ProductRepository $productRepository, ProductHistoryRepository $productHistoryRepository): Response
+    public function showStockHistory(int $id, ProductRepository $productRepository, ProductStockHistoryRepository $productStockHistoryRepository): Response
     {
         $product = $productRepository->find($id);
-        $productAddHistory = $productHistoryRepository->findBy(['product' => $product], ['id' => 'DESC']);
+        $productAddHistory = $productStockHistoryRepository->findBy(['product' => $product], ['id' => 'DESC']);
 
         return $this->render('product/historyStock.html.twig', [
+            'product' => $product,
             "productsAdded" => $productAddHistory
         ]);
     }

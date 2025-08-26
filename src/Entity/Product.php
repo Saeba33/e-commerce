@@ -40,10 +40,10 @@ class Product
     private ?int $stock = null;
 
     /**
-     * @var Collection<int, ProductHistory>
+     * @var Collection<int, ProductStockHistory>
      */
-    #[ORM\OneToMany(targetEntity: ProductHistory::class, mappedBy: 'product')]
-    private Collection $productHistories;
+    #[ORM\OneToMany(targetEntity: ProductStockHistory::class, mappedBy: 'product')]
+    private Collection $productStockHistories;
 
     /**
      * @var Collection<int, OrderProducts>
@@ -54,7 +54,7 @@ class Product
     public function __construct()
     {
         $this->subCategories = new ArrayCollection();
-        $this->productHistories = new ArrayCollection();
+        $this->productStockHistories = new ArrayCollection();
         $this->orderProducts = new ArrayCollection();
     }
 
@@ -148,29 +148,29 @@ class Product
     }
 
     /**
-     * @return Collection<int, ProductHistory>
+     * @return Collection<int, ProductStockHistory>
      */
-    public function getProductHistories(): Collection
+    public function getProductStockHistories(): Collection
     {
-        return $this->productHistories;
+        return $this->productStockHistories;
     }
 
-    public function addProductHistory(ProductHistory $productHistory): static
+    public function addProductStockHistory(ProductStockHistory $productStockHistory): static
     {
-        if (!$this->productHistories->contains($productHistory)) {
-            $this->productHistories->add($productHistory);
-            $productHistory->setProduct($this);
+        if (!$this->productStockHistories->contains($productStockHistory)) {
+            $this->productStockHistories->add($productStockHistory);
+            $productStockHistory->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeProductHistory(ProductHistory $productHistory): static
+    public function removeProductStockHistory(ProductStockHistory $productStockHistory): static
     {
-        if ($this->productHistories->removeElement($productHistory)) {
+        if ($this->productStockHistories->removeElement($productStockHistory)) {
             // set the owning side to null (unless already changed)
-            if ($productHistory->getProduct() === $this) {
-                $productHistory->setProduct(null);
+            if ($productStockHistory->getProduct() === $this) {
+                $productStockHistory->setProduct(null);
             }
         }
 

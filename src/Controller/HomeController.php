@@ -10,13 +10,14 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class HomeController extends AbstractController
 {
     #region READ
     #[Route('/', name: 'app_home', methods: ['GET'])]
-    public function index(CategoryRepository $categoryRepository, ProductRepository $productRepository, PaginatorInterface $paginator, Request $request): Response
+    public function index(CategoryRepository $categoryRepository, ProductRepository $productRepository, PaginatorInterface $paginator, Request $request, SessionInterface $session): Response
     {
         $categories = $categoryRepository->findAll();
         $products = $productRepository->findAll();
@@ -26,10 +27,14 @@ final class HomeController extends AbstractController
             8
         );
 
+        // Récupérer le panier actuel
+        $cart = $session->get('cart', []);
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'categories' => $categories,
             'products' => $products,
+            'cart' => $cart,
         ]);
     }
     #endregion

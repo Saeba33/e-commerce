@@ -2,18 +2,18 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductHistoryRepository;
+use App\Repository\ProductStockHistoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProductHistoryRepository::class)]
-class ProductHistory
+#[ORM\Entity(repositoryClass: ProductStockHistoryRepository::class)]
+class ProductStockHistory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'productHistories')]
+    #[ORM\ManyToOne(inversedBy: 'productStockHistories')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
@@ -22,6 +22,9 @@ class ProductHistory
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $origin = null;
 
     public function getId(): ?int
     {
@@ -60,6 +63,18 @@ class ProductHistory
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getOrigin(): ?string
+    {
+        return $this->origin;
+    }
+
+    public function setOrigin(?string $origin): static
+    {
+        $this->origin = $origin;
 
         return $this;
     }
