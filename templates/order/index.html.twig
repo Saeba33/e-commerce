@@ -97,14 +97,14 @@
 								<div class="card-body p-4">
 									<div class="flex-1">
 										<div class="flex items-center gap-2">
-											{{ form_widget(form.payOnDelivery, {'attr': {'class': 'checkbox checkbox-neutral'}}) }}
-											<span class="text-gray-700">Paiement à la livraison</span>
+											{{ form_widget(form.isPickup, {'attr': {'class': 'checkbox checkbox-neutral', 'id': 'order_form_isPickup'}}) }}
+											<span class="text-gray-700">Retrait en magasin</span>
 										</div>
 										<div class="m-1 text-red-500 text-sm">
-											{{ form_errors(form.payOnDelivery) }}
+											{{ form_errors(form.isPickup) }}
 										</div>
 										<p class="text-sm text-gray-600 mt-2">
-											Payez directement au livreur lors de la réception de votre commande
+											Retrait en magasin : vous devrez tout de même payer en ligne lors de la validation.
 										</p>
 									</div>
 								</div>
@@ -195,6 +195,7 @@
 	 <script>
 			document.addEventListener('DOMContentLoaded', function () {
 				const citySelector = document.getElementById('order_form_city');
+				const pickupCheckbox = document.getElementById('order_form_isPickup');
 				const shippingCostElement = document.getElementById('shippingCost');
 				const cartPriceElement = document.getElementById('cartPrice');
 				const totalPriceElement = document.getElementById('totalPrice');
@@ -206,16 +207,16 @@
 						return;
 					}
 	
-					// Ajouter un indicateur de chargement
 					shippingCostElement.innerHTML = '<ion-icon name="refresh-outline" class="animate-spin"></ion-icon>';
 					
 					fetch(`/city/${cityId}/shipping/cost`)
 						.then(response => response.json())
 						.then(data => {
-							if (parseInt(data.status) === 200) {
-								shippingCostElement.textContent = data.content;
+								if (parseInt(data.status) === 200) {
+								// if pickup is selected, shipping cost is 0
+								const shippingCost = (pickupCheckbox && pickupCheckbox.checked) ? 0 : parseFloat(data.content) || 0;
+								shippingCostElement.textContent = shippingCost;
 								const cartPrice = parseFloat(cartPriceElement.textContent) || 0;
-								const shippingCost = parseFloat(data.content) || 0;
 								totalPriceElement.textContent = (cartPrice + shippingCost).toFixed(2);
 							} else {
 								shippingCostElement.textContent = '0';
@@ -238,6 +239,15 @@
 				if (citySelector) {
 					citySelector.addEventListener('change', function () {
 						calculateTotal(this.value);
+					});
+				}
+
+				// Écouter la checkbox de retrait en magasin
+				if (pickupCheckbox) {
+					pickupCheckbox.addEventListener('change', function () {
+						// Recalculate using current city value
+						const cityId = citySelector ? citySelector.value : null;
+						calculateTotal(cityId);
 					});
 				}
 			});

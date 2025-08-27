@@ -35,11 +35,8 @@ class Order
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?bool $payOnDelivery = null;
+    private ?bool $isPickup = null;
 
-    /**
-     * @var Collection<int, OrderProducts>
-     */
     #[ORM\OneToMany(targetEntity: OrderProducts::class, mappedBy: '_order', orphanRemoval: true)]
     private Collection $orderProducts;
 
@@ -47,7 +44,10 @@ class Order
     private ?float $totalPrice = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isCompleted = null;
+    private ?bool $isDelivered = null;
+
+    #[ORM\Column(name: 'shipping_cost', nullable: true)]
+    private ?float $shippingCost = null;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
@@ -137,14 +137,14 @@ class Order
         return $this;
     }
 
-    public function isPayOnDelivery(): ?bool
+    public function isPickup(): ?bool
     {
-        return $this->payOnDelivery;
+        return $this->isPickup;
     }
 
-    public function setPayOnDelivery(bool $payOnDelivery): static
+    public function setIsPickup(bool $isPickup): static
     {
-        $this->payOnDelivery = $payOnDelivery;
+        $this->isPickup = $isPickup;
 
         return $this;
     }
@@ -191,14 +191,14 @@ class Order
         return $this;
     }
 
-    public function isCompleted(): ?bool
+    public function isDelivered(): ?bool
     {
-        return $this->isCompleted;
+        return $this->isDelivered;
     }
 
-    public function setIsCompleted(?bool $isCompleted): static
+    public function setIsDelivered(?bool $isDelivered): static
     {
-        $this->isCompleted = $isCompleted;
+        $this->isDelivered = $isDelivered;
 
         return $this;
     }
@@ -223,6 +223,18 @@ class Order
     public function setIsPaymentCompleted(bool $isPaymentCompleted): static
     {
         $this->isPaymentCompleted = $isPaymentCompleted;
+
+        return $this;
+    }
+
+    public function getShippingCost(): ?float
+    {
+        return $this->shippingCost;
+    }
+
+    public function setShippingCost(?float $shippingCost): static
+    {
+        $this->shippingCost = $shippingCost;
 
         return $this;
     }

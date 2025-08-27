@@ -1,10 +1,9 @@
 ## Must
 
-- Remplacer la logique de "paiement à la livraison" par "retrait en magasin". Cela sous entend que si l'option "retrait en magasin" est sélectionnée on supprime les frais de livraison du montant de la commande. Les champs doivent être également renommés en bdd. Renommer le champ "is_completed" en "is_delivered dans Order. Ajour du champ shipping_cost dans Order. Pour savoir si le client a payé des frais de livraison ou a choisi le retrait en magasin (champ avec valeur "null" dans ce cacs de figure). Quid lorsque je change les frias de livraison d'une ville ? Ok avec le champ shipping cost mais pas ok sur le libellé. Idée : au lieu de stocker le city_id dans la table order, stocker le nom de la ville en string. Cela n'empêche pas de conserver la table city. TEST 2
 
 - Gérer l’affichage des commandes en conséquence des modifications précédentes.
 
-- Faire en sorte que les informations sur la facture soient les informations générées au moment de la commande, de façon à avoir le prix et le produit (en cas de suppression ou modification) qui correspondent à la réalité. Création d'un nouveau champ (current_price dans la table order_products). Renommer product_history par product_stock_history. Renoomer également le form, l'entity eet le repository.
+- Faire en sorte que les informations sur la facture soient les informations générées au moment de la commande, de façon à avoir le prix et le produit (en cas de suppression ou modification) qui correspondent à la réalité. Création d'un nouveau champ (current_price dans la table order_products). Quid lorsque je change les frias de livraison d'une ville ? Ok avec le champ shipping cost mais pas ok sur le libellé. Idée : au lieu de stocker le city_id dans la table order, non ? stocker le nom de la ville en string. Cela n'empêche pas de conserver la table city. Quid du nom du produit s'il est modifié entre temps ? quelles sont tes suggestions ?
 
 - Ajouter les "mentions légales" / "CGI" (dans le footer avec ouverture d'une modale).
 

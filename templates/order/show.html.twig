@@ -33,9 +33,9 @@
 					</div>
 
 					<div class="mb-6">
-						<p class="text-sm text-gray-600">Paiement à la livraison</p>
+						<p class="text-sm text-gray-600">Retrait en magasin</p>
 						<p class="font-semibold">
-							{% if order.payOnDelivery %}Oui{% else %}Non
+							{% if order.isPickup %}Oui{% else %}Non
 							{% endif %}
 						</p>
 					</div>

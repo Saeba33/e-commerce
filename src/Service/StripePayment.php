@@ -19,13 +19,15 @@ class StripePayment
     {
         $cartProducts = $cart['cart'];
 
-        $products = [
-            [
+        $products = [];
+
+        if (!is_null($shippingCost) && $shippingCost > 0) {
+            $products[] = [
                 'quantity' => 1,
                 'price' => $shippingCost,
                 'name' => "Frais de livraison"
-            ]
-        ];
+            ];
+        }
 
         foreach ($cartProducts as $value) {
             $productItem = [];
