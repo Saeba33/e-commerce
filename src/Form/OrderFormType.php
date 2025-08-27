@@ -19,15 +19,12 @@ class OrderFormType extends AbstractType
             ->add('email')
             ->add('phone')
             ->add('address')
-            // ->add('createdAt', null, [
-            //     'widget' => 'single_text',
-            // ])
             ->add('city', EntityType::class, [
                 'class' => City::class,
                 'choice_label' => 'name',
             ])
-            ->add('payOnDelivery', null, [
-                'label' => 'Payez à la livraison'
+            ->add('isPickup', null, [
+                'label' => 'Retrait en magasin'
             ])
         ;
     }

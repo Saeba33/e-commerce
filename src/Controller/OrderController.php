@@ -37,10 +37,13 @@ final class OrderController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if (!empty($cartData['total'])) {
-                $totalPrice = $cartData['total'] + $order->getCity()->getShippingCost();
+                $shippingCost = $order->isPickup() ? 0 : $order->getCity()->getShippingCost();
+                $order->setShippingCost($shippingCost);
+
+                $totalPrice = $cartData['total'] + $shippingCost;
                 $order->setTotalPrice($totalPrice);
                 $order->setCreatedAt(new \DateTimeImmutable());
-                $order->setIsPaymentCompleted(0);
+                $order->setIsPaymentCompleted(false);
                 $entityManager->persist($order);
                 $entityManager->flush();
                 foreach ($cartData['cart'] as $value) {
@@ -52,27 +55,8 @@ final class OrderController extends AbstractController
                     $entityManager->flush();
                 }
 
-
-                if ($order->isPayOnDelivery()) {
-
-                    $session->set('cart', []);
-
-                    $html = $this->renderView('mail/orderConfirm.html.twig', [
-                        'order' => $order
-
-                    ]);
-                    $email = (new Email())
-                    ->from('maboutique@contact.com')
-                    ->to($order->getEmail())
-                    ->subject('Confirmation de réception de commande')
-                    ->html($html);
-                    $this->mailer->send($email);
-
-                    return $this->redirectToRoute('order_message');
-                }
                 $paymentStripe = new StripePayment();
-                $shippingCost = $order->getCity()->getShippingCost();
-                $paymentStripe->startPayment($cartData, $shippingCost, $order->getId());
+                $paymentStripe->startPayment($cartData, $order->getShippingCost(), $order->getId());
                 $stripeRedirectUrl = $paymentStripe->getStripeRedirectUrl();
 
                 return $this->redirect($stripeRedirectUrl);
@@ -102,29 +86,25 @@ final class OrderController extends AbstractController
     {
         
         if ($type === 'is-completed') {
-            $data = $orderRepository->findBy(['isCompleted' => true], ['id' => 'DESC']);
-            
+            $data = $orderRepository->findBy(['isDelivered' => true], ['id' => 'DESC']);
         } elseif ($type === 'pay-on-stripe-not-delivred') {
             $data = $orderRepository->findBy([
-                'isCompleted' => null,
-                'payOnDelivery' => false,
+                'isDelivered' => null,
+                'isPickup' => false,
                 'isPaymentCompleted' => true
             ], ['id' => 'DESC']);
-            
         } elseif ($type === 'pay-on-stripe-is-delivred') {
             $data = $orderRepository->findBy([
-                'isCompleted' => true,
-                'payOnDelivery' => false,
+                'isDelivered' => true,
+                'isPickup' => false,
                 'isPaymentCompleted' => true
             ], ['id' => 'DESC']);
-            
         } elseif ($type === 'no_delivery') {
             $data = $orderRepository->findBy([
-                'isCompleted' => null,
-                'payOnDelivery' => false,
+                'isDelivered' => null,
+                'isPickup' => false,
                 'isPaymentCompleted' => false
             ], ['id' => 'DESC']);
-            
         } else {
             $data = $orderRepository->findAll();
         }
@@ -167,7 +147,7 @@ final class OrderController extends AbstractController
     public function isCompletedUpdate($id, Request $request, OrderRepository $orderRepository, EntityManagerInterface $entityManager)
     {
         $order = $orderRepository->find($id);
-        $order->setIsCompleted(true);
+    $order->setIsDelivered(true);
         $entityManager->flush();
         $this->addFlash('success', 'Modification effectuée, la commande a pris le statut irée');
         return $this->redirect($request->headers->get('referer'));

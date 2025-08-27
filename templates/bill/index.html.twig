@@ -119,8 +119,8 @@
 
 		<div class="bill-footer">
 			<p>
-				Mode de paiement :
-				{{ order.payOnDelivery ? 'Paiement à la livraison' : 'Paiement en ligne' }}
+					Mode de retrait / paiement :
+					{{ order.isPickup ? 'Retrait en magasin' : 'Livraison à domicile' }}
 			</p>
 		</div>
 	</div>
