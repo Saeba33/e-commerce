@@ -28,9 +28,6 @@ class Order
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    private ?City $city = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -48,6 +45,9 @@ class Order
 
     #[ORM\Column(name: 'shipping_cost', nullable: true)]
     private ?float $shippingCost = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $city = null;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
@@ -109,18 +109,6 @@ class Order
     public function setAddress(string $address): static
     {
         $this->address = $address;
-
-        return $this;
-    }
-
-    public function getCity(): ?City
-    {
-        return $this->city;
-    }
-
-    public function setCity(?City $city): static
-    {
-        $this->city = $city;
 
         return $this;
     }
@@ -235,6 +223,18 @@ class Order
     public function setShippingCost(?float $shippingCost): static
     {
         $this->shippingCost = $shippingCost;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
 
         return $this;
     }

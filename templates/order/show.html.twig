@@ -28,7 +28,7 @@
 						<div>
 							<p class="text-sm text-gray-600">Adresse</p>
 							<p class="font-semibold">{{ order.address }}</p>
-							<p class="text-sm">{{ order.city ? order.city.name : '' }}</p>
+							<p class="text-sm">{{ order.city ?: '' }}</p>
 						</div>
 					</div>
 

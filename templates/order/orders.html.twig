@@ -8,8 +8,38 @@
 		<div class="content-container">
 			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
 				<div>
-					<h1 class="text-3xl font-bold text-gray-800 mb-2">Liste des commandes</h1>
+					<h1 class="text-3xl font-bold text-gray-800 mb-2">Gestion des commandes</h1>
 					<p class="text-gray-600">Historique et gestion des commandes</p>
+				</div>
+			</div>
+
+			{# Boutons de filtres #}
+			<div class="mb-6">
+				<div class="flex flex-wrap gap-2 mb-4">
+					<a href="{{ path('app_orders_show', {'type': 'all'}) }}" 
+					   class="btn btn-sm {{ currentFilter == 'all' ? 'btn-primary' : 'btn-outline' }}">
+						Toutes
+					</a>
+					<a href="{{ path('app_orders_show', {'type': 'delivered'}) }}" 
+					   class="btn btn-sm {{ currentFilter == 'delivered' ? 'btn-primary' : 'btn-outline' }}">
+						Livrées
+					</a>
+					<a href="{{ path('app_orders_show', {'type': 'not-delivered'}) }}" 
+					   class="btn btn-sm {{ currentFilter == 'not-delivered' ? 'btn-primary' : 'btn-outline' }}">
+						Non livrées
+					</a>
+					<a href="{{ path('app_orders_show', {'type': 'pending-payment'}) }}" 
+					   class="btn btn-sm {{ currentFilter == 'pending-payment' ? 'btn-primary' : 'btn-outline' }}">
+						Abandonnées / Non payées
+					</a>
+					<a href="{{ path('app_orders_show', {'type': 'pickup'}) }}" 
+					   class="btn btn-sm {{ currentFilter == 'pickup' ? 'btn-primary' : 'btn-outline' }}">
+						Retrait en magasin
+					</a>
+					<a href="{{ path('app_orders_show', {'type': 'delivery'}) }}" 
+					   class="btn btn-sm {{ currentFilter == 'delivery' ? 'btn-primary' : 'btn-outline' }}">
+						Livraison à domicile
+					</a>
 				</div>
 			</div>
 
@@ -43,7 +73,7 @@
 											<td class="py-4 px-2 border-r-2 border-base-300">{{ order.lastname }}</td>
 											<td class="text-center py-4 px-2 border-r-2 border-base-300">{{ order.phone }}</td>
 											<td class="py-4 px-2 border-r-2 border-base-300">{{ order.address }}</td>
-											<td class="py-4 px-2 border-r-2 border-base-300">{{ order.city ? order.city.name : '' }}</td>
+											<td class="py-4 px-2 border-r-2 border-base-300">{{ order.city ?: '' }}</td>
 											<td class="text-center py-4 px-2 border-r-2 border-base-300">
 												{% if order.isPickup %}
 													<span class="text-sm text-gray-600">Oui</span>
@@ -105,10 +135,7 @@
 											<h3 class="font-semibold text-lg text-gray-900 mb-1">{{ order.firstname }}
 												{{ order.lastname }}</h3>
 											<p class="text-sm text-gray-700 mb-1">{{ order.address }}
-												{% if order.city %}
-													-
-													{{ order.city.name }}
-												{% endif %}
+												{{ order.city }}
 											</p>
 											<div class="mb-2">
 												<span class="text-sm text-gray-600">Montant:

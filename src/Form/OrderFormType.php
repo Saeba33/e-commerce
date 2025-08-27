@@ -6,6 +6,7 @@ use App\Entity\City;
 use App\Entity\Order;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,6 +23,7 @@ class OrderFormType extends AbstractType
             ->add('city', EntityType::class, [
                 'class' => City::class,
                 'choice_label' => 'name',
+                'mapped' => false,
             ])
             ->add('isPickup', null, [
                 'label' => 'Retrait en magasin'

@@ -10,6 +10,7 @@ use App\Entity\OrderProducts;
 use App\Service\StripePayment;
 use Symfony\Component\Mime\Email;
 use App\Repository\OrderRepository;
+use App\Repository\CityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -26,7 +27,7 @@ final class OrderController extends AbstractController
 
     #region CREATE
     #[Route('/order', name: 'app_order')]
-    public function index(Request $request, SessionInterface $session, EntityManagerInterface $entityManager, Cart $cart): Response
+    public function index(Request $request, SessionInterface $session, EntityManagerInterface $entityManager, Cart $cart, CityRepository $cityRepository): Response
     {
         $cartData = $cart->getCart($session);
 
@@ -37,8 +38,21 @@ final class OrderController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if (!empty($cartData['total'])) {
-                $shippingCost = $order->isPickup() ? 0 : $order->getCity()->getShippingCost();
+                // Récupérer la ville sélectionnée dans le formulaire
+                $city = $form->get('city')->getData();
+                
+                if (!$city) {
+                    $this->addFlash('error', 'Ville non trouvée');
+                    return $this->render('order/index.html.twig', [
+                        'form' => $form,
+                        'total' => $cartData['total'],
+                    ]);
+                }
+
+                // Calculer les frais de livraison et stocker les valeurs figées (snapshot)
+                $shippingCost = $order->isPickup() ? 0 : $city->getShippingCost();
                 $order->setShippingCost($shippingCost);
+                $order->setCity($city->getName());
 
                 $totalPrice = $cartData['total'] + $shippingCost;
                 $order->setTotalPrice($totalPrice);
@@ -51,6 +65,9 @@ final class OrderController extends AbstractController
                     $orderProduct->setOrder($order);
                     $orderProduct->setProduct($value['product']);
                     $orderProduct->setQuantity($value['quantity']);
+
+                    $orderProduct->setProductName($value['product']->getName());
+                    $orderProduct->setCurrentPrice($value['product']->getPrice());
                     $entityManager->persist($orderProduct);
                     $entityManager->flush();
                 }
@@ -81,32 +98,56 @@ final class OrderController extends AbstractController
     #endregion
 
     #region ORDERS LIST
-    #[Route('/editor/order/{type}', name: 'app_orders_show')]
+    #[Route('/editor/order/{type}', name: 'app_orders_show', defaults: ['type' => 'all'])]
     public function getAllORder($type, Request $request, OrderRepository $orderRepository, \Knp\Component\Pager\PaginatorInterface $paginator): Response
     {
         
-        if ($type === 'is-completed') {
+        if ($type === 'delivered') {
+            $data = $orderRepository->findBy(['isDelivered' => true], ['id' => 'DESC']);
+        } elseif ($type === 'not-delivered') {
+            $data = $orderRepository->findBy([
+                'isDelivered' => null,
+                'isPaymentCompleted' => true
+            ], ['id' => 'DESC']);
+        } elseif ($type === 'pending-payment') {
+            $data = $orderRepository->findBy([
+                'isPaymentCompleted' => false
+            ], ['id' => 'DESC']);
+        } elseif ($type === 'pickup') {
+            $data = $orderRepository->findBy([
+                'isPickup' => true
+            ], ['id' => 'DESC']);
+        } elseif ($type === 'delivery') {
+            $data = $orderRepository->findBy([
+                'isPickup' => false
+            ], ['id' => 'DESC']);
+        } elseif ($type === 'is-completed') {
+            // Compatibilité avec l'ancien système
             $data = $orderRepository->findBy(['isDelivered' => true], ['id' => 'DESC']);
         } elseif ($type === 'pay-on-stripe-not-delivred') {
+            // Compatibilité avec l'ancien système
             $data = $orderRepository->findBy([
                 'isDelivered' => null,
                 'isPickup' => false,
                 'isPaymentCompleted' => true
             ], ['id' => 'DESC']);
         } elseif ($type === 'pay-on-stripe-is-delivred') {
+            // Compatibilité avec l'ancien système
             $data = $orderRepository->findBy([
                 'isDelivered' => true,
                 'isPickup' => false,
                 'isPaymentCompleted' => true
             ], ['id' => 'DESC']);
         } elseif ($type === 'no_delivery') {
+            // Compatibilité avec l'ancien système
             $data = $orderRepository->findBy([
                 'isDelivered' => null,
                 'isPickup' => false,
                 'isPaymentCompleted' => false
             ], ['id' => 'DESC']);
         } else {
-            $data = $orderRepository->findAll();
+            // Par défaut : toutes les commandes
+            $data = $orderRepository->findBy([], ['id' => 'DESC']);
         }
 
         $orders = $paginator->paginate(
@@ -117,6 +158,7 @@ final class OrderController extends AbstractController
 
         return $this->render('order/orders.html.twig', [
             'orders' => $orders,
+            'currentFilter' => $type,
         ]);
     }
     #endregion

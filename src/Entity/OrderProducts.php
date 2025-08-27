@@ -24,6 +24,12 @@ class OrderProducts
     #[ORM\Column]
     private ?int $quantity = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $productName = null;
+
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $currentPrice = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +67,30 @@ class OrderProducts
     public function setQuantity(int $quantity): static
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getProductName(): ?string
+    {
+        return $this->productName;
+    }
+
+    public function setProductName(?string $productName): static
+    {
+        $this->productName = $productName;
+
+        return $this;
+    }
+
+    public function getCurrentPrice(): ?float
+    {
+        return $this->currentPrice;
+    }
+
+    public function setCurrentPrice(?float $currentPrice): static
+    {
+        $this->currentPrice = $currentPrice;
 
         return $this;
     }

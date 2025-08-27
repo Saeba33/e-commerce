@@ -74,9 +74,7 @@
 				{{ order.lastname }}<br>
 				{{ order.address }}<br>
 				{{ order.phone }}<br>
-				{% if order.city is defined and order.city is not null %}
-					{{ order.city.name }}
-				{% endif %}
+				{{ order.city }}
 			</p>
 		</div>
 
@@ -93,13 +91,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for item in order.orderProducts %}
+		    {% for item in order.orderProducts %}
 						<tr>
-							<td>{{ item.product.name }}</td>
-							<td>{{ item.quantity }}</td>
-							<td>{{ (item.product.price)|number_format(2, ',', ' ') }}€</td>
-							<td>—</td>
-							<td>{{ (item.product.price * item.quantity)|number_format(2, ',', ' ') }}€</td>
+			    <td>{{ item.productName ?: item.product.name }}</td>
+			    <td>{{ item.quantity }}</td>
+			    <td>{{ (item.currentPrice ?: item.product.price)|number_format(2, ',', ' ') }}€</td>
+			    <td>—</td>
+			    <td>{{ ((item.currentPrice ?: item.product.price) * item.quantity)|number_format(2, ',', ' ') }}€</td>
 						</tr>
 					{% endfor %}
 				</tbody>
@@ -110,16 +108,16 @@
 			<p class="bill-total">Total :
 				{{ order.totalPrice|number_format(2, ',', ' ') }}
 				€</p>
-			{% if order.city is defined and order.city is not null %}
+			{% if order.shippingCost is defined and order.shippingCost > 0 %}
 				<p class="bill-total">Frais de livraison :
-					{{ order.city.shippingCost|number_format(2, ',', ' ') }}
+					{{ order.shippingCost|number_format(2, ',', ' ') }}
 					€</p>
 			{% endif %}
 		</div>
 
 		<div class="bill-footer">
 			<p>
-					Mode de retrait / paiement :
+					Mode de livraison :
 					{{ order.isPickup ? 'Retrait en magasin' : 'Livraison à domicile' }}
 			</p>
 		</div>
