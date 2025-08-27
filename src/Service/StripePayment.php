@@ -57,7 +57,8 @@ class StripePayment
             ],
             'payment_intent_data' => [
                 'metadata' => [
-                    'orderId' => $orderId
+                    'orderId' => $orderId,
+                    'is_pickup' => $order->isPickup() ? '1' : '0',
                     ]
             ]
         ]);

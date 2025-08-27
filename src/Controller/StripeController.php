@@ -11,9 +11,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 final class StripeController extends AbstractController
 {
+    private MailerInterface $mailer;
+
+    public function __construct(MailerInterface $mailer)
+    {
+        $this->mailer = $mailer;
+    }
     #region SUCCESSFULLY PAYMENT
     #[Route('/pay/success', name: 'app_stripe_success')]
     public function success(SessionInterface $session): Response
@@ -67,7 +75,6 @@ final class StripeController extends AbstractController
                 $orderId = $paymentIntent->metadata->orderId;
                 $order = $orderRepository->find($orderId);
 
-                // Vérifier si la commande n'a pas déjà été traitée
                 if ($order->isPaymentCompleted() === true) {
                     return new Response('Order already processed', 200);
                 }
@@ -97,6 +104,18 @@ final class StripeController extends AbstractController
                     }
 
                     $entityManager->flush();
+
+                    try {
+                        $html = $this->renderView('mail/orderConfirm.html.twig', ['order' => $order]);
+                        $email = (new Email())
+                            ->from('maboutique@contact.com')
+                            ->to($order->getEmail())
+                            ->subject('Confirmation de réception de commande')
+                            ->html($html);
+
+                            $this->mailer->send($email);
+                    } catch (\Throwable $e) {
+                    }
                 }
                 break;
             case 'payment_method.attached':

@@ -1,0 +1,13 @@
+<h1>Merci pour votre commande</h1>
+<p>Bonjour,</p>
+<p>Votre commande n°{{ order.id }} a bien été enregistrée et le paiement a été confirmé.</p>
+<ul>
+    <li>Montant total : {{ order.totalPrice | number_format(2, ',', ' ') }} €</li>
+    <li>Mode : {{ order.isPickup ? 'Retrait en magasin' : 'Livraison' }}</li>
+    {% if order.cityName is defined and order.cityName %}
+    <li>Ville : {{ order.cityName }}</li>
+    {% endif %}
+</ul>
+<p>Vous pouvez consulter le détail de votre commande depuis votre espace.</p>
+<p>Bonne journée,</p>
+<p>L'équipe</p>
