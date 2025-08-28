@@ -1,5 +1,9 @@
 twig:
     file_name_pattern: '*.twig'
+    form_themes: ['bootstrap_5_layout.html.twig']
+    globals:
+        # This makes the CartService available in Twig as a variable named 'cart_service'
+        cart_service: '@App\Service\Cart'
 
 when@test:
     twig:

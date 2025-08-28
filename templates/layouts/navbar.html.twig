@@ -137,9 +137,7 @@
 					</li>
 				{% endif %}
 
-				{% if is_granted("ROLE_EDITOR") or is_granted("ROLE_ADMIN") %}
-
-				{% endif %}
+				{% if is_granted("ROLE_EDITOR") or is_granted("ROLE_ADMIN") %}{% endif %}
 				{% if is_granted("ROLE_ADMIN") %}
 					<li>
 						<details>
@@ -170,8 +168,7 @@
 					</li>
 				{% endif %}
 
-				{% if is_granted("ROLE_EDITOR") or is_granted("ROLE_ADMIN") %}
-				{% endif %}
+				{% if is_granted("ROLE_EDITOR") or is_granted("ROLE_ADMIN") %}{% endif %}
 			</ul>
 		</div>
 
@@ -180,8 +177,14 @@
 			<div
 				class="flex items-center gap-4">
 				{# Icône panier #}
-				<a href="{{ path('app_cart') }}" class="btn btn-ghost btn-circle text-white hover:bg-gray-700">
-					<ion-icon name="cart-outline" class="text-xl"></ion-icon>
+				<a href="{{ path('app_cart') }}" class="btn btn-ghost btn-circle text-white text-lg hover:bg-gray-700 relative">
+					<ion-icon name="cart-outline"></ion-icon>
+					{% set cart_quantity = cart_service.getCartQuantity() %}
+					{% if cart_quantity > 0 %}
+						<span class="absolute top-0 left-6 bg-red-500 px-1 text-xs rounded-full">
+							{{ cart_quantity }}
+						</span>
+					{% endif %}
 				</a>
 
 				{# Barre de recherche #}

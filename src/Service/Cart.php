@@ -3,13 +3,16 @@
 namespace App\Service;
 
 use App\Repository\ProductRepository;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class Cart
 {
-    public function __construct(private readonly ProductRepository $productRepository)
+    
+    public function __construct(private readonly ProductRepository $productRepository, RequestStack $requestStack)
     {
-
+        $this->requestStack = $requestStack;
     }
+    
     public function getCart($session): array
     {
 
@@ -31,5 +34,16 @@ class Cart
             'cart' => $cartWidthData,
             'total' => $total,
         ];
+    }
+
+    /**
+     * Calculates the total number of items in the cart.
+     */
+    public function getCartQuantity(): int
+    {
+        $cart = $this->requestStack->getSession()->get('cart', []);
+
+        // array_sum calculates the total of all quantities in the cart array
+        return array_sum($cart);
     }
 }
