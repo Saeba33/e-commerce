@@ -1,5 +1,124 @@
 {% block body %}
-	<footer class="bg-slate-800 text-base-content py-4 px-6">
-		<p class="text-sm text-center text-white">Ceci est un super footer</p>
+	<footer class="bg-slate-800 text-base-content py-6 px-6">
+		<div class="container mx-auto">
+			<div class="flex flex-col md:flex-row justify-between items-center text-white">
+				<div class="mb-4 md:mb-0">
+					<p class="text-sm">© {{ "now"|date("Y") }} E-Commerce AFPA. Tous droits réservés.</p>
+				</div>
+				<div class="flex space-x-6">
+					<button class="text-sm hover:text-gray-300 transition-colors" onclick="mentions_legales_modal.showModal()">
+						Mentions légales
+					</button>
+					<button class="text-sm hover:text-gray-300 transition-colors" onclick="cgv_modal.showModal()">
+						CGV
+					</button>
+				</div>
+			</div>
+		</div>
 	</footer>
+
+	<!-- Modal Mentions Légales -->
+	<dialog id="mentions_legales_modal" class="modal">
+		<div class="modal-box w-11/12 max-w-4xl">
+			<form method="dialog">
+				<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+			</form>
+			<h3 class="font-bold text-lg mb-4">Mentions Légales</h3>
+			<div class="prose max-w-none">
+				<h4 class="font-semibold">Éditeur du site</h4>
+				<p>
+					<strong>Raison sociale :</strong> E-Commerce AFPA<br>
+					<strong>Forme juridique :</strong> Projet de formation<br>
+					<strong>Adresse :</strong> Centre AFPA, Formation Développeur Web et Web Mobile<br>
+					<strong>Téléphone :</strong> 01 23 45 67 89<br>
+					<strong>Email :</strong> contact@ecommerce-afpa.fr
+				</p>
+
+				<h4 class="font-semibold mt-4">Hébergement</h4>
+				<p>
+					<strong>Hébergeur :</strong> Localhost (Développement)<br>
+					<strong>Adresse :</strong> Formation AFPA
+				</p>
+
+				<h4 class="font-semibold mt-4">Propriété intellectuelle</h4>
+				<p>
+					Ce site est développé dans le cadre d'une formation AFPA. Tous les contenus présents sur ce site (textes, images, graphismes, logo, icônes, sons, logiciels) sont la propriété exclusive de leurs auteurs respectifs.
+				</p>
+
+				<h4 class="font-semibold mt-4">Protection des données personnelles</h4>
+				<p>
+					Conformément à la loi « Informatique et Libertés » du 6 janvier 1978 modifiée et au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement et d'opposition aux données personnelles vous concernant.
+				</p>
+
+				<h4 class="font-semibold mt-4">Cookies</h4>
+				<p>
+					Ce site utilise des cookies techniques nécessaires au bon fonctionnement du site, notamment pour la gestion du panier et de la session utilisateur.
+				</p>
+			</div>
+		</div>
+		<form method="dialog" class="modal-backdrop">
+			<button>Fermer</button>
+		</form>
+	</dialog>
+
+	<!-- Modal CGV -->
+	<dialog id="cgv_modal" class="modal">
+		<div class="modal-box w-11/12 max-w-4xl">
+			<form method="dialog">
+				<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+			</form>
+			<h3 class="font-bold text-lg mb-4">Conditions Générales de Vente</h3>
+			<div class="prose max-w-none">
+				<h4 class="font-semibold">Article 1 - Objet</h4>
+				<p>
+					Les présentes conditions générales de vente régissent les relations contractuelles entre E-Commerce AFPA et ses clients dans le cadre de la vente de produits via le site internet.
+				</p>
+
+				<h4 class="font-semibold mt-4">Article 2 - Prix</h4>
+				<p>
+					Les prix affichés sont exprimés en euros toutes taxes comprises. Ils incluent la TVA applicable au jour de la commande. Les frais de livraison sont calculés selon la ville de destination et sont indiqués avant la validation de la commande.
+				</p>
+
+				<h4 class="font-semibold mt-4">Article 3 - Commande</h4>
+				<p>
+					La commande est ferme et définitive dès validation du paiement ou confirmation pour le retrait en magasin. Un email de confirmation est envoyé à l'adresse indiquée lors de la commande.
+				</p>
+
+				<h4 class="font-semibold mt-4">Article 4 - Livraison</h4>
+				<p>
+					Deux options sont disponibles :<br>
+					- <strong>Retrait en magasin :</strong> Gratuit, disponible aux heures d'ouverture<br>
+					- <strong>Livraison à domicile :</strong> Les frais varient selon la ville de destination
+				</p>
+
+				<h4 class="font-semibold mt-4">Article 5 - Paiement</h4>
+				<p>
+					Le paiement s'effectue par carte bancaire via Stripe pour les livraisons. Pour les retraits en magasin, le paiement s'effectue sur place.
+				</p>
+
+				<h4 class="font-semibold mt-4">Article 6 - Droit de rétractation</h4>
+				<p>
+					Conformément à l'article L121-21 du Code de la consommation, vous disposez d'un délai de 14 jours francs pour exercer votre droit de rétractation sans avoir à justifier de motifs ni à payer de pénalité.
+				</p>
+
+				<h4 class="font-semibold mt-4">Article 7 - Garanties</h4>
+				<p>
+					Tous nos produits bénéficient de la garantie légale de conformité et de la garantie contre les vices cachés, dans les conditions prévues par les articles L217-4 et suivants du Code de la consommation.
+				</p>
+
+				<h4 class="font-semibold mt-4">Article 8 - Données personnelles</h4>
+				<p>
+					Les données collectées sont nécessaires au traitement de votre commande. Elles ne sont pas transmises à des tiers et sont conservées selon les durées légales en vigueur.
+				</p>
+
+				<h4 class="font-semibold mt-4">Article 9 - Litiges</h4>
+				<p>
+					En cas de litige, une solution amiable sera recherchée avant toute action judiciaire. À défaut, les tribunaux français seront seuls compétents.
+				</p>
+			</div>
+		</div>
+		<form method="dialog" class="modal-backdrop">
+			<button>Fermer</button>
+		</form>
+	</dialog>
 {% endblock %}

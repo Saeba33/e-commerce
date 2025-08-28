@@ -57,7 +57,7 @@ class StripePayment
             ],
             'payment_intent_data' => [
                 'metadata' => [
-                    'orderId' => $orderId
+                    'orderId' => $orderId,
                     ]
             ]
         ]);

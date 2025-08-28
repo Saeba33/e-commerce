@@ -59,6 +59,9 @@
 									<li>
 										<a href="{{ path('app_user') }}">Gérer les utilisateurs</a>
 									</li>
+									<li>
+										<a href="{{ path('app_orders_show', {'type':'all'}) }}">Gestion des commandes</a>
+									</li>
 								</ul>
 							</details>
 						</li>
@@ -135,25 +138,7 @@
 				{% endif %}
 
 				{% if is_granted("ROLE_EDITOR") or is_granted("ROLE_ADMIN") %}
-					<li>
-						<details>
-							<summary>Commandes</summary>
-							<ul class="z-[9999]">
-								<li>
-									<a href="{{ path('app_orders_show', {'type':'is-completed'}) }}">Terminées</a>
-								</li>
-								<li>
-									<a href="{{ path('app_orders_show', {'type':'pay-on-stripe-not-delivred'}) }}">Payées (non livrées)</a>
-								</li>
-								<li>
-									<a href="{{ path('app_orders_show', {'type':'pay-on-stripe-is-delivred'}) }}">Payées (livrées)</a>
-								</li>
-								<li>
-									<a href="{{ path('app_orders_show', {'type':'no_delivery'}) }}">Sans livraison / Non payées</a>
-								</li>
-							</ul>
-						</details>
-					</li>
+
 				{% endif %}
 				{% if is_granted("ROLE_ADMIN") %}
 					<li>
@@ -177,33 +162,15 @@
 								<li>
 									<a href="{{ path('app_user') }}" class="text-nowrap">Gérer les utilisateurs</a>
 								</li>
+								<li>
+									<a href="{{ path('app_orders_show', {'type':'all'}) }}" class="text-nowrap">Gestion des commandes</a>
+								</li>
 							</ul>
 						</details>
 					</li>
 				{% endif %}
 
 				{% if is_granted("ROLE_EDITOR") or is_granted("ROLE_ADMIN") %}
-					<li>
-						<details>
-							<summary class="text-white">
-								Commandes
-							</summary>
-							<ul class="w-56 whitespace-nowrap z-[9999]">
-								<li>
-									<a href="{{ path('app_orders_show', {'type':'is-completed'}) }}" class="text-nowrap">Terminées</a>
-								</li>
-								<li>
-									<a href="{{ path('app_orders_show', {'type':'pay-on-stripe-not-delivred'}) }}" class="text-nowrap">Payées (non livrées)</a>
-								</li>
-								<li>
-									<a href="{{ path('app_orders_show', {'type':'pay-on-stripe-is-delivred'}) }}" class="text-nowrap">Payées (livrées)</a>
-								</li>
-								<li>
-									<a href="{{ path('app_orders_show', {'type':'no_delivery'}) }}" class="text-nowrap">Sans livraison / Non payées</a>
-								</li>
-							</ul>
-						</details>
-					</li>
 				{% endif %}
 			</ul>
 		</div>
@@ -217,8 +184,8 @@
 					<ion-icon name="cart-outline" class="text-xl"></ion-icon>
 				</a>
 
-				{# Barre de recherche - cachée sur mobile, visible sur tablette+ #}
-				<div class="hidden md:block">
+				{# Barre de recherche #}
+				<div class="hidden md:block mr-4">
 					<form method="get" action="{{ path('app_search') }}" class="relative">
 						<div class="flex items-center w-80 bg-white/10 rounded-full overflow-hidden">
 							<input name="word" type="search" required placeholder="Rechercher un produit" class="flex-1 pl-4 pr-4 py-2 bg-transparent text-white placeholder:text-gray-400 border-none focus:outline-none " autocomplete="off"/>
@@ -227,7 +194,6 @@
 							</button>
 						</div>
 					</form>
-
 				</div>
 
 				{# Bouton de recherche mobile #}
@@ -240,8 +206,6 @@
 				{# Boutons de connexion/déconnexion & inscription #}
 				{% if app.user %}
 					<a href="{{ path('app_logout') }}" class="custom-btn-with-logo logout-btn">
-
-
 						<ion-icon name="log-out-outline"></ion-icon>
 						Se déconnecter
 					</a>
