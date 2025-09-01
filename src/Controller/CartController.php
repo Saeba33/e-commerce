@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\Cart;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,13 +18,14 @@ final class CartController extends AbstractController
 
     #region READ
     #[Route('/cart', name: 'app_cart', methods: ['GET'])]
-    public function index(SessionInterface $session, Cart $cart): Response
+    public function index(SessionInterface $session, Cart $cart, CategoryRepository $categoryRepository): Response
     {
         $cartData = $cart->getCart($session);
 
         return $this->render('cart/index.html.twig', [
             'items' => $cartData['cart'],
             'total' => $cartData['total'],
+            'categories' => $categoryRepository->findAll(),
         ]);
     }
     #endregion
