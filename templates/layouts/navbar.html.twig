@@ -181,7 +181,7 @@
 					<ion-icon name="cart-outline"></ion-icon>
 					{% set cart_quantity = cart_service.getCartQuantity() %}
 					{% if cart_quantity > 0 %}
-						<span class="absolute top-0 left-6 bg-red-500 px-1 text-xs rounded-full">
+						<span class="absolute -top-px left-6 bg-orange-500 px-1 text-xs rounded-full">
 							{{ cart_quantity }}
 						</span>
 					{% endif %}

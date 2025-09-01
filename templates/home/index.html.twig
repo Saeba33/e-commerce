@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block body %}
+	{% include 'layouts/_flash_message.html.twig' %}
+
 	<div class="container mx-auto px-4 py-12">
 		<div class="text-center mb-12">
 			<h1 class="text-4xl font-bold mb-8 text-gray-800">Notre Collection</h1>
@@ -78,5 +80,5 @@
 	</div>
 
 	{# Inclusion du gestionnaire de quantité #}
-	 <script src="{{ asset('js/quantity-manager.js') }}"></script>
+	<script src="{{ asset('js/quantity-manager.js') }}"></script>
 {% endblock %}

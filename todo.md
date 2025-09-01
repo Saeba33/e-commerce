@@ -1,7 +1,9 @@
 ## Must
+
 -   Installer Tailwind et Daisy Ui avec AssetMapper.
 
 ## Should
+
 -   Ajouter le script des quantités dans toutes les pages qui utilisent la carte produit (produit détail, produit filter, produite recherhce, panier).
 -   Déplacer le "Continuer mes achats" du panier en haut à droite (à l'image des boutons "retour" des autres composants).
 -   Revoir la forumulatin de retrait en magasin avant de passer commande.
@@ -19,8 +21,10 @@
 -   facture
 -   résultat de recherche
 -   barre de recherche
+-   flash message sous forme de toast
 
 ## Could
+
 -   Harmoniser le nom des fonctions
 -   Harmoniser les url des path
 -   Harmoniser le nom des variables
@@ -28,5 +32,5 @@
 -   Bien indenter le code pour avoir une structure claire et lisible
 
 ## Won't
--   Implémenter avec de vraies données (erase bdd avec raz des id)
 
+-   Implémenter avec de vraies données (erase bdd avec raz des id)
