@@ -21,7 +21,9 @@
 		{% else %}
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 				{% for product in products %}
-					<div class="group bg-white hover:bg-gray-50 transition-all duration-200 p-5 rounded-lg border border-gray-100 hover:border-gray-200 shadow-lg grid grid-rows-[auto_1fr_auto_auto_auto] min-h-[400px] hover:translate-y-[-2px]">
+					{% set cartQuantity = 0 %}
+					{% set availableStock = product.stock - cartQuantity %}
+					<div class="group bg-white hover:bg-gray-50 transition-all duration-200 p-5 rounded-lg border border-gray-100 hover:border-gray-200 shadow-lg grid grid-rows-[auto_1fr_auto_auto_auto] min-h-[400px] hover:translate-y-[-2px]" data-product-id="{{ product.id }}" data-stock="{{ product.stock }}" data-cart-quantity="{{ cartQuantity }}" data-available-stock="{{ availableStock }}">
 						<div class="relative aspect-square mb-3 overflow-hidden rounded-lg bg-gray-50">
 							{% if product.image %}
 								<img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}" class="w-full h-full object-cover transition-transform duration-200">
@@ -55,13 +57,13 @@
 						<div class="flex items-center justify-between pt-2 mb-4">
 							<span class="text-sm text-gray-600 font-medium">Quantité:</span>
 							<div class="flex items-center gap-2">
-								<button class="w-7 h-7 rounded border border-gray-300 flex items-center justify-center text-sm text-gray-600 hover:bg-gray-100 hover:border-gray-400 transition-all font-medium">-</button>
-								<span class="w-8 text-center text-sm font-medium">0</span>
-								<button class="w-7 h-7 rounded border border-gray-300 flex items-center justify-center text-sm text-gray-600 hover:bg-gray-100 hover:border-gray-400 transition-all font-medium">+</button>
+								<button class="btn-minus w-7 h-7 rounded border border-gray-300 flex items-center justify-center text-sm text-gray-600 hover:bg-gray-100 hover:border-gray-400 transition-all font-medium">-</button>
+								<span class="quantity-display w-8 text-center text-sm font-medium">1</span>
+								<button class="btn-plus w-7 h-7 rounded border border-gray-300 flex items-center justify-center text-sm text-gray-600 hover:bg-gray-100 hover:border-gray-400 transition-all font-medium">+</button>
 							</div>
 						</div>
 
-						<a href="{{ path('app_cart_add', {'id': product.id}) }}" class="btn btn-success btn-sm w-full text-white font-medium hover:btn-success">
+						<a href="#" class="add-to-cart-btn btn btn-success btn-sm w-full text-white font-medium hover:btn-success" data-product-id="{{ product.id }}">
 							<ion-icon name="cart-outline" class="text-base"></ion-icon>
 							Ajouter au panier
 						</a>
@@ -70,5 +72,5 @@
 			</div>
 		{% endif %}
 	</div>
-
+	<script src="{{ asset('js/quantity-manager.js') }}"></script>
 {% endblock %}

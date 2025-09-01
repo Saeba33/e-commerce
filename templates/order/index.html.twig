@@ -98,13 +98,13 @@
 									<div class="flex-1">
 										<div class="flex items-center gap-2">
 											{{ form_widget(form.isPickup, {'attr': {'class': 'checkbox checkbox-neutral', 'id': 'order_form_isPickup'}}) }}
-											<span class="text-gray-700">Retrait en magasin</span>
+											<span class="badge badge-success badge-sm">Gratuit</span>
 										</div>
 										<div class="m-1 text-red-500 text-sm">
 											{{ form_errors(form.isPickup) }}
 										</div>
 										<p class="text-sm text-gray-600 mt-2">
-											Retrait en magasin : vous devrez tout de même payer en ligne lors de la validation.
+											Récupérez votre commande directement en magasin. Paiement sécurisé en ligne, retrait aux heures d'ouverture.
 										</p>
 									</div>
 								</div>
@@ -192,65 +192,60 @@
 		</div>
 	</div>
 
-	 <script>
-			document.addEventListener('DOMContentLoaded', function () {
-				const citySelector = document.getElementById('order_form_city');
-				const pickupCheckbox = document.getElementById('order_form_isPickup');
-				const shippingCostElement = document.getElementById('shippingCost');
-				const cartPriceElement = document.getElementById('cartPrice');
-				const totalPriceElement = document.getElementById('totalPrice');
-	
-				function calculateTotal(cityId) {
-					if (!cityId) {
-						shippingCostElement.textContent = '0';
-						totalPriceElement.textContent = cartPriceElement.textContent;
-						return;
-					}
-	
-					shippingCostElement.innerHTML = '<ion-icon name="refresh-outline" class="animate-spin"></ion-icon>';
-					
-					fetch(`/city/${cityId}/shipping/cost`)
-						.then(response => response.json())
-						.then(data => {
-								if (parseInt(data.status) === 200) {
-								// if pickup is selected, shipping cost is 0
-								const shippingCost = (pickupCheckbox && pickupCheckbox.checked) ? 0 : parseFloat(data.content) || 0;
-								shippingCostElement.textContent = shippingCost;
-								const cartPrice = parseFloat(cartPriceElement.textContent) || 0;
-								totalPriceElement.textContent = (cartPrice + shippingCost).toFixed(2);
-							} else {
-								shippingCostElement.textContent = '0';
-								totalPriceElement.textContent = cartPriceElement.textContent;
-							}
-						})
-						.catch(error => {
-							console.error('Erreur lors du calcul des frais de livraison:', error);
-							shippingCostElement.textContent = '0';
-							totalPriceElement.textContent = cartPriceElement.textContent;
-						});
-				}
-	
-				// Calculer le total initial
-				if (citySelector && citySelector.value) {
-					calculateTotal(citySelector.value);
-				}
-	
-				// Écouter les changements de ville
-				if (citySelector) {
-					citySelector.addEventListener('change', function () {
-						calculateTotal(this.value);
-					});
-				}
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+const citySelector = document.getElementById('order_form_city');
+const pickupCheckbox = document.getElementById('order_form_isPickup');
+const shippingCostElement = document.getElementById('shippingCost');
+const cartPriceElement = document.getElementById('cartPrice');
+const totalPriceElement = document.getElementById('totalPrice');
 
-				// Écouter la checkbox de retrait en magasin
-				if (pickupCheckbox) {
-					pickupCheckbox.addEventListener('change', function () {
-						// Recalculate using current city value
-						const cityId = citySelector ? citySelector.value : null;
-						calculateTotal(cityId);
-					});
-				}
-			});
-		</script>
+function calculateTotal(cityId) {
+if (! cityId) {
+shippingCostElement.textContent = '0';
+totalPriceElement.textContent = cartPriceElement.textContent;
+return;
+}
+
+shippingCostElement.innerHTML = '<ion-icon name="refresh-outline" class="animate-spin"></ion-icon>';
+
+fetch (`/city/${cityId}/shipping/cost`).then(response => response.json()).then(data => {
+if (parseInt(data.status) === 200) { // if pickup is selected, shipping cost is 0
+const shippingCost = (pickupCheckbox && pickupCheckbox.checked) ? 0 : parseFloat(data.content) || 0;
+shippingCostElement.textContent = shippingCost;
+const cartPrice = parseFloat(cartPriceElement.textContent) || 0;
+totalPriceElement.textContent = (cartPrice + shippingCost).toFixed(2);
+} else {
+shippingCostElement.textContent = '0';
+totalPriceElement.textContent = cartPriceElement.textContent;
+}
+}).catch(error => {
+console.error('Erreur lors du calcul des frais de livraison:', error);
+shippingCostElement.textContent = '0';
+totalPriceElement.textContent = cartPriceElement.textContent;
+});
+}
+
+// Calculer le total initial
+if (citySelector && citySelector.value) {
+calculateTotal(citySelector.value);
+}
+
+// Écouter les changements de ville
+if (citySelector) {
+citySelector.addEventListener('change', function () {
+calculateTotal(this.value);
+});
+}
+
+// Écouter la checkbox de retrait en magasin
+if (pickupCheckbox) {
+pickupCheckbox.addEventListener('change', function () { // Recalculate using current city value
+const cityId = citySelector ? citySelector.value : null;
+calculateTotal(cityId);
+});
+}
+});
+	</script>
 
 {% endblock %}
