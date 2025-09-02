@@ -15,7 +15,7 @@
 			{% endif %}
 
 			{# Pages #}
-			<div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+			<div class="flex items-center overflow-hidden">
 				{% if pagesInRange[0] > 1 %}
 					<a href="{{ path(route, query|merge({(pageParameterName): 1})) }}" class="px-4 h-10 flex items-center justify-center text-gray-600 hover:bg-slate-50 hover:text-slate-600">
 						1
