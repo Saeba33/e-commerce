@@ -1,7 +1,3 @@
-## Must
-
--   Installer Tailwind et Daisy Ui avec AssetMapper.
-
 ## Should
 
 -   Ajouter le script des quantités dans toutes les pages qui utilisent la carte produit (produit détail, produit filter, produite recherhce, panier).

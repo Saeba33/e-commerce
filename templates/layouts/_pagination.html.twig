@@ -1,49 +1,55 @@
 {% if pageCount > 1 %}
 	<nav aria-label="Pagination Navigation" class="mt-20">
 		<div
-			class="flex justify-center items-center -space-x-px h-10">
+			class="flex justify-center items-center h-10 space-x-1">
 
 			{# Bouton précédent #}
-			{% set prevClasses = 'flex items-center justify-center px-2 h-10 leading-tight border border-gray-300 transition-all duration-200' ~
-			(previous is defined ? 'text-gray-500 bg-white rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white m-px' : 
-			'text-gray-400 bg-white rounded-s-lg cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-500 m-px') 
-		%}
-
 			{% if previous is defined %}
-				<a href="{{ path(route, query|merge({(pageParameterName):previous})) }}" class="{{ prevClasses }}">
+				<a href="{{ path(route, query|merge({(pageParameterName): previous})) }}" class="flex items-center justify-center w-10 h-10 rounded-full text-gray-600 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-500 transition">
 					<ion-icon name="chevron-back-outline"></ion-icon>
 				</a>
 			{% else %}
-				<button disabled class="{{ prevClasses }}">
+				<button disabled class="flex items-center justify-center w-10 h-10 rounded-full text-gray-300 cursor-not-allowed">
 					<ion-icon name="chevron-back-outline"></ion-icon>
 				</button>
 			{% endif %}
 
 			{# Pages #}
-			{% for page in pagesInRange %}
-				{% if page == current %}
-					<button class="z-10 flex items-center justify-center px-4 h-10 leading-tight text-white bg-gray-700 border-2 border-gray-700" aria-current="page">
-						{{ page }}
-					</button>
-				{% else %}
-					<a href="{{ path(route, query|merge({(pageParameterName):page})) }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-						{{ page }}
+			<div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+				{% if pagesInRange[0] > 1 %}
+					<a href="{{ path(route, query|merge({(pageParameterName): 1})) }}" class="px-4 h-10 flex items-center justify-center text-gray-600 hover:bg-slate-50 hover:text-slate-600">
+						1
+					</a>
+					<span class="px-3 text-gray-400">…</span>
+				{% endif %}
+
+				{% for page in pagesInRange %}
+					{% if page == current %}
+						<button aria-current="page" class="px-2 mx-2 h-10 flex items-center justify-center  text-3xl text-slate-600 font-bold border-b">
+							{{ page }}
+						</button>
+					{% else %}
+						<a href="{{ path(route, query|merge({(pageParameterName): page})) }}" class="px-4 h-10 flex items-center justify-center text-gray-600 hover:bg-slate-50 hover:text-slate-600">
+							{{ page }}
+						</a>
+					{% endif %}
+				{% endfor %}
+
+				{% if pagesInRange[pagesInRange|length - 1] < pageCount %}
+					<span class="px-3 text-gray-400">…</span>
+					<a href="{{ path(route, query|merge({(pageParameterName): pageCount})) }}" class="px-4 h-10 flex items-center justify-center text-gray-600 hover:bg-slate-50 hover:text-slate-600">
+						{{ pageCount }}
 					</a>
 				{% endif %}
-			{% endfor %}
+			</div>
 
 			{# Bouton suivant #}
-			{% set nextClasses = 'flex items-center justify-center px-2 h-10 leading-tight border border-gray-300 ' ~
-			(next is defined ? 'text-gray-500 bg-white rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white m-px' : 
-			'text-gray-400 bg-white rounded-e-lg cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-500 m-px') 
-		%}
-
 			{% if next is defined %}
-				<a href="{{ path(route, query|merge({(pageParameterName):next})) }}" class="{{ nextClasses }}">
+				<a href="{{ path(route, query|merge({(pageParameterName): next})) }}" class="flex items-center justify-center w-10 h-10 rounded-full text-gray-600 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-500 transition">
 					<ion-icon name="chevron-forward-outline"></ion-icon>
 				</a>
 			{% else %}
-				<button disabled class="{{ nextClasses }}">
+				<button disabled class="flex items-center justify-center w-10 h-10 rounded-full text-gray-300 cursor-not-allowed">
 					<ion-icon name="chevron-forward-outline"></ion-icon>
 				</button>
 			{% endif %}
