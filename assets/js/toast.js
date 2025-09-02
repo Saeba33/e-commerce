@@ -5,8 +5,10 @@ class Toasts {
         const toast = document.createElement("div");
         toast.className = `toast toast-${type}`;
         toast.innerHTML = `
+        <div class="flex items-center">
             <div class="toast-content">${message}</div>
             <button class="toast-close">&times;</button>
+            </div>
         `;
 
         // Close btn
@@ -35,7 +37,7 @@ class Toasts {
     }
 
     // Types
-    success(msg, duration = 3000) {
+    success(msg, duration = 5000) {
         return this.show(msg, "success", duration);
     }
     error(msg, duration = 8000) {

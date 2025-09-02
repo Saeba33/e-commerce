@@ -8,8 +8,7 @@
 -   Vérifier les menus visibles au niveau de la navbar (desktop et mobile).
 -   facture
 -   résultat de recherche
--   barre de recherche
--   flash message sous forme de toast
+
 
 ## Could
 
