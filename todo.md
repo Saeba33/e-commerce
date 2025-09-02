@@ -2,7 +2,6 @@
 
 -   Ajouter le script des quantités dans toutes les pages qui utilisent la carte produit (produit détail, produit filter, produite recherhce, panier).
 -   Revoir le design de ma carte
--   Revoir les boutons dans la gestion des commandes
 -   Espacement navbar
 -   Gérer les Flex-1 de mes différents tableaux (gestion des produits, des catégories, sous-cat, commandes, frais de livraison, utilisateurs)
 -   Supperposition de l'icone anier en mode tablette à corriger
