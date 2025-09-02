@@ -46,7 +46,7 @@
 							<table class="table table-zebra w-full border-2 border-base-300">
 								<thead class="bg-gray-300">
 									<tr>
-										<th class="text-center py-4 px-2 border-r border-base-300">Numéro</th>
+										<th class="text-center py-4 px-2 border-r border-base-300">Id</th>
 										<th class="text-left py-4 px-2 border-r border-base-300">Prénom</th>
 										<th class="text-left py-4 px-2 border-r border-base-300">Nom</th>
 										<th class="text-center py-4 px-2 border-r border-base-300">Téléphone</th>
@@ -80,46 +80,50 @@
 											<td class="text-center py-4 px-2 border-r-2 border-base-300">
 
 												{% if order.isDelivered == true %}
-													<span class="text-sm text-gray-600">Commande livrée</span>
+													<span class="text-sm text-green-600">Commande livrée</span>
 												{% else %}
 													<span class="text-sm text-gray-600">Commande non livrée</span>
 												{% endif %}
 											</td>
 
 											<td class="flex flex-col items-center justify-center gap-2 py-4 px-2">
-												<div class="dropdown dropdown-center relative">
-													<div tabindex="0" role="button" class="btn btn-primary">
-														<ion-icon name="ellipsis-vertical-outline"></ion-icon>
+												<div class="dropdown dropdown-center">
+													<div
+														tabindex="0" role="button" class="text-indigo-600 font-extrabold">
+														{# <ion-icon name="ellipsis-vertical-outline"></ion-icon> #}
+														<ion-icon name="apps-outline"></ion-icon>
 													</div>
 
-													<ul tabindex="0" class="dropdown-content absolute menu bg-base-100 rounded-box w-max z-1 p-2 shadow-lg border border-gray-200 gap-1">
+													<ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box w-max z-1 p-2 shadow-lg border border-gray-200 gap-1">
 														<li>
-															<a href="{{ path('app_order_show', {'id': order.id}) }}" class="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-lg text-blue-600 transition-colors">
-																<ion-icon name="eye-outline" class="text-lg"></ion-icon>
-																<span class="hidden xl:inline">Voir détails</span>
+															<a href="{{ path('app_order_show', {'id': order.id}) }}" class="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-lg transition-colors">
+																<ion-icon name="eye-outline" class=""></ion-icon>
+																<span class="hidden xl:inline text-sm">Voir détails</span>
 															</a>
 														</li>
 
+														<li>
+															<a href="{{ path('app_bill', {'id': order.id}) }}" target="_blank" class="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-lg transition-colors">
+																<ion-icon name="receipt-outline" class=""></ion-icon>
+																<span class="hidden xl:inline text-sm">Voir la facture</span>
+															</a>
+														</li>
+
+
 														{% if order.isDelivered == false %}
 															<li>
-																<a href="{{ path('app_orders_is_completed_update', {'id':order.id}) }}" class="flex items-center gap-2 px-3 py-2 hover:bg-green-50 rounded-lg text-green-600 transition-colors">
-																	<ion-icon name="checkmark-done-outline" class="text-lg"></ion-icon>
-																	<span class="hidden xl:inline">Marquer livrée</span>
+																<a href="{{ path('app_orders_is_completed_update', {'id':order.id}) }}" class="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-lg transition-colors">
+																	<ion-icon name="checkmark-done-outline" class="text-green-600"></ion-icon>
+																	<span class="hidden xl:inline text-sm">Marquer livrée</span>
 																</a>
 															</li>
 														{% endif %}
 
-														<li>
-															<a href="{{ path('app_bill', {'id': order.id}) }}" target="_blank" class="flex items-center gap-2 px-3 py-2 hover:bg-purple-50 rounded-lg text-purple-600 transition-colors">
-																<ion-icon name="receipt-outline" class="text-lg"></ion-icon>
-																<span class="hidden xl:inline">Voir la facture</span>
-															</a>
-														</li>
 
 														<li>
 															<a onclick="return confirm('Attention cette action est irréversible. Êtes-vous sûr de vouloir supprimer la commande numéro : {{ order.id }} ?')" href="{{ path('app_order_delete', {'id': order.id}) }}" class="flex items-center gap-2 px-3 py-2 hover:bg-red-50 rounded-lg text-red-600 transition-colors">
-																<ion-icon name="trash-outline" class="text-lg"></ion-icon>
-																<span class="hidden xl:inline">Supprimer</span>
+																<ion-icon name="trash-outline" class=""></ion-icon>
+																<span class="hidden xl:inline text-sm">Supprimer</span>
 															</a>
 														</li>
 													</ul>
@@ -138,7 +142,7 @@
 								<div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
 									<div class="flex justify-between items-start mb-3">
 										<div class="flex-1">
-											<p class="text-sm text-gray-600 mb-1">Commande #:
+											<p class="text-sm text-gray-600 mb-1">Commande #
 												{{ order.id }}</p>
 											<h3 class="font-semibold text-lg text-gray-900 mb-1">{{ order.firstname }}
 												{{ order.lastname }}</h3>
@@ -155,25 +159,21 @@
 									</div>
 
 									<div class="flex flex-wrap gap-2 mt-4">
-										<a href="{{ path('app_order_show', {'id': order.id}) }}" class="btn btn-sm btn-outline btn-primary flex-1 min-w-0">
-											<ion-icon name="eye-outline"></ion-icon>
+										<a href="{{ path('app_order_show', {'id': order.id}) }}" class="btn btn-sm btn-outline flex-1 min-w-0">
 											<span>Voir</span>
 										</a>
 
+										<a href="{{ path('app_bill', {'id': order.id}) }}" target="_blank" class="btn btn-sm btn-outline flex-1 min-w-0">
+											<span>Facture</span>
+										</a>
+
 										{% if order.isDelivered == false %}
-											<a href="{{ path('app_orders_is_completed_update', {'id':order.id}) }}" class="btn btn-sm btn-outline btn-success flex-1 min-w-0">
-												<ion-icon name="checkmark-done-outline"></ion-icon>
+											<a href="{{ path('app_orders_is_completed_update', {'id':order.id}) }}" class="btn btn-sm btn-outline flex-1 min-w-0">
 												<span>Livrer</span>
 											</a>
 										{% endif %}
 
-										<a href="{{ path('app_bill', {'id': order.id}) }}" target="_blank" class="btn btn-sm btn-outline btn-secondary flex-1 min-w-0">
-											<ion-icon name="receipt-outline"></ion-icon>
-											<span>Facture</span>
-										</a>
-
 										<a onclick="return confirm('Attention cette action est irréversible. Êtes-vous sûr de vouloir supprimer la commande numéro : {{ order.id }} ?')" href="{{ path('app_order_delete', {'id': order.id}) }}" class="btn btn-sm btn-outline btn-error flex-1 min-w-0">
-											<ion-icon name="trash-outline"></ion-icon>
 											<span>Supprimer</span>
 										</a>
 									</div>

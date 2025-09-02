@@ -6,7 +6,6 @@
 -   Espacement navbar
 -   Gérer les Flex-1 de mes différents tableaux (gestion des produits, des catégories, sous-cat, commandes, frais de livraison, utilisateurs)
 -   Supperposition de l'icone anier en mode tablette à corriger
--   paginator à améliorer visuellement (voir shadcn)
 -   Vérifier les menus visibles au niveau de la navbar (desktop et mobile).
 -   facture
 -   résultat de recherche
