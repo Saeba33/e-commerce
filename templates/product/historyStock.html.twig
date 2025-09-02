@@ -9,18 +9,30 @@
 		<div
 			class="content-container">
 			{# Header and back btn #}
-			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+			<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1 gap-4">
 				<div>
 					<h1 class="text-3xl font-bold text-gray-800 mb-2">Historique du stock</h1>
 					<p class="text-gray-600">Historique des mouvements de stock pour le produit
-						<span class="ml-2 font-semibold text-xl text-blue-800">{{ product.name }}</span>
+						<span class="ml-1 font-semibold text-xl text-blue-800">{{ product.name }}</span>
 					</p>
+
 				</div>
 				<a href="{{ path('app_product') }}" class="custom-btn-with-logo back-btn">
 					<ion-icon name="return-down-back-outline"></ion-icon>
 					Retour
 				</a>
 			</div>
+			<div class="mt-12 ml-1 mb-2">
+				<p class=" text-sm uppercase">
+					Stock actuel :
+					{% if product.stock == 0 %}
+						<span class="text-red-600 ml-2 font-semibold not-italic">épuisé</span>
+					{% else %}
+						<span class="bg-gray-300 ml-2 px-3 py-[2px] rounded not-italic font-semibold">{{product.stock}}</span>
+					{% endif %}
+				</p>
+			</div>
+
 
 			{# Messages flash #}
 			{% include 'layouts/_flash_message.html.twig' %}
