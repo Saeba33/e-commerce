@@ -5,10 +5,10 @@
 -   Espacement navbar
 -   Gérer les Flex-1 de mes différents tableaux (gestion des produits, des catégories, sous-cat, commandes, frais de livraison, utilisateurs)
 -   Supperposition de l'icone anier en mode tablette à corriger
--   Vérifier les menus visibles au niveau de la navbar (desktop et mobile).
 -   facture
 -   résultat de recherche
-
+-   Accent color pour filtres actifs, checkbox, pagination, icone (actions dans la gestion des commandes) à mettre en paramètre pour modification facile
+-   Limiter le ombre d epage visible en pagination
 
 ## Could
 
