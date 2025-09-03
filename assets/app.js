@@ -1,1 +1,2 @@
-import './styles/app.css';
+import "./js/navbar.js";
+import "./styles/app.css";

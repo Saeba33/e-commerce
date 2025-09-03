@@ -1,249 +1,220 @@
 {% block body %}
-	<div class="navbar bg-slate-800 navbar-custom px-6 py-4">
-		<div
-			class="navbar-start">
-			{# Version Mobile #}
-			<div class="dropdown">
-				<div tabindex="0" role="button" class="btn btn-ghost btn-circle lg:hidden">
-					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-					</svg>
-				</div>
-				<ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 w-52 p-2 shadow-lg mt-3">
-					<li>
-						<a href="{{ path('app_home') }}">Accueil</a>
-					</li>
-
-					{% if categories is defined and categories|length > 0 %}
-						<li>
-							<details>
-								<summary>Catégories</summary>
-								<ul class="z-[9999] max-h-96 overflow-y-auto">
-									{% for category in categories %}
-										<li>
-											<span class="font-semibold text-primary cursor-default px-2 py-1">{{ category.name }}</span>
-										</li>
-										{% for subCategory in category.subCategories %}
-											<li>
-												<a href="{{ path('app_home_product_filter', {'id': subCategory.id}) }}" class="pl-6 text-gray-600 hover:text-primary transition-colors">
-													{{ subCategory.name }}
-												</a>
-											</li>
-										{% endfor %}
-										{% if not loop.last %}
-											<li><hr class="my-1 border-gray-200"></li>
-										{% endif %}
-									{% endfor %}
-								</ul>
-							</details>
-						</li>
-					{% endif %}
-
-					{% if is_granted("ROLE_ADMIN") %}
-						<li>
-							<details>
-								<summary>Admin</summary>
-								<ul class="z-[9999]">
-									<li>
-										<a href="{{ path('app_category') }}">Gérer les catégories</a>
-									</li>
-									<li>
-										<a href="{{ path('app_sub_category') }}">Gérer les sous-catégories</a>
-									</li>
-									<li>
-										<a href="{{ path('app_product') }}">Gérer les produits</a>
-									</li>
-									<li>
-										<a href="{{ path('app_city') }}">Gérer les frais de livraison</a>
-									</li>
-									<li>
-										<a href="{{ path('app_user') }}">Gérer les utilisateurs</a>
-									</li>
-									<li>
-										<a href="{{ path('app_orders_show', {'type':'all'}) }}">Gestion des commandes</a>
-									</li>
-								</ul>
-							</details>
-						</li>
-					{% endif %}
-
-					{% if app.user %}
-						<li>
-							<a href="{{ path('app_logout') }}" class="custom-btn-with-logo logout-btn">
-
-								<ion-icon name="log-out-outline"></ion-icon>
-								Se déconnecter
-							</a>
-						</li>
-					{% else %}
-						<li>
-							<a href="{{ path('app_register') }}" class="custom-btn-with-logo register-btn">
-
-
-								<ion-icon name="person-add-outline"></ion-icon>
-								S'inscrire
-							</a>
-						</li>
-						<li>
-							<a href="{{ path('app_login') }}" class="custom-btn-with-logo login-btn">
-
-
-								<ion-icon name="log-in-outline"></ion-icon>
-								Se connecter
-							</a>
-						</li>
-					{% endif %}
-				</ul>
-			</div>
-			{# Nom du site #}
-			<a href="{{ path('app_home') }}" class="text-2xl font-bold text-white hover:text-gray-300">E-shop</a>
-		</div>
-
-		{# Version Desktop #}
-		<div class="navbar-center hidden lg:flex">
-			<ul class="menu lg:menu-horizontal rounded-box">
-				<li>
-					<a href="{{ path('app_home') }}" class="text-white">
-						Accueil
-					</a>
-				</li>
-
-				{% if categories is defined and categories|length > 0 %}
-					<li>
-						<details>
-							<summary class="text-white">
-								Catégories
-							</summary>
-							<ul class="w-64 whitespace-nowrap bg-base-100 shadow-lg max-h-96 overflow-y-auto">
-								{% for category in categories %}
-									<li>
-										<span class="font-semibold text-primary cursor-default px-4 py-2 block border-l-4 border-primary bg-gray-50">
-											{{ category.name }}
-										</span>
-									</li>
-									{% for subCategory in category.subCategories %}
-										<li>
-											<a href="{{ path('app_home_product_filter', {'id': subCategory.id}) }}" class="pl-8 pr-4 py-2 text-gray-600 hover:text-primary hover:bg-gray-100 transition-all duration-200 block">
-												{{ subCategory.name }}
-											</a>
-										</li>
-									{% endfor %}
-									{% if not loop.last %}
-										<li><hr class="my-2 border-gray-200"></li>
-									{% endif %}
-								{% endfor %}
-							</ul>
-						</details>
-					</li>
-				{% endif %}
-
-				{% if is_granted("ROLE_EDITOR") or is_granted("ROLE_ADMIN") %}{% endif %}
-				{% if is_granted("ROLE_ADMIN") %}
-					<li>
-						<details>
-							<summary class="text-white">
-								Admin
-							</summary>
-							<ul class="w-52 whitespace-nowrap z-[9999]">
-								<li>
-									<a href="{{ path('app_category') }}" class="text-nowrap">Gérer les catégories</a>
-								</li>
-								<li>
-									<a href="{{ path('app_sub_category') }}" class="text-nowrap">Gérer les sous-catégories</a>
-								</li>
-								<li>
-									<a href="{{ path('app_product') }}" class="text-nowrap">Gérer les produits</a>
-								</li>
-								<li>
-									<a href="{{ path('app_city') }}" class="text-nowrap">Gérer les frais de livraison</a>
-								</li>
-								<li>
-									<a href="{{ path('app_user') }}" class="text-nowrap">Gérer les utilisateurs</a>
-								</li>
-								<li>
-									<a href="{{ path('app_orders_show', {'type':'all'}) }}" class="text-nowrap">Gestion des commandes</a>
-								</li>
-							</ul>
-						</details>
-					</li>
-				{% endif %}
-
-				{% if is_granted("ROLE_EDITOR") or is_granted("ROLE_ADMIN") %}{% endif %}
-			</ul>
-		</div>
-
-		{# Section droite : recherche et connexion #}
-		<div class="navbar-end">
+	<header class="navbar-modern bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-xl border-b border-slate-700/50">
+		<div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
 			<div
-				class="flex items-center gap-4">
-				{# Icône panier #}
-				<a href="{{ path('app_cart') }}" class="btn btn-ghost btn-circle text-white text-lg hover:bg-gray-700 relative">
-					<ion-icon name="cart-outline"></ion-icon>
-					{% set cart_quantity = cart_service.getCartQuantity() %}
-					{% if cart_quantity > 0 %}
-						<span class="absolute -top-px left-6 bg-orange-500 px-1 text-xs rounded-full">
-							{{ cart_quantity }}
-						</span>
-					{% endif %}
-				</a>
+				class="flex items-center justify-between h-20">
 
-				{# Barre de recherche #}
-				<div class="hidden md:block mr-4">
-					<form method="get" action="{{ path('app_search') }}" class="relative">
-						<div class="flex items-center w-80  rounded-full overflow-hidden">
-							<input name="word" type="search" required placeholder="Rechercher un produit" class="flex-1 pl-4 pr-4 py-2 bg-white/15 text-white placeholder:text-gray-400 border-none focus:outline-none " autocomplete="off"/>
-							<button type="submit" class="border-l-[1px] border-gray-500 bg-white/15 text-white px-2 w-14 h-10 flex items-center justify-center hover:bg-white/30 cursor-pointer" aria-label="Rechercher">
-								<ion-icon name="search-outline" class="text-lg"></ion-icon>
-							</button>
+				{# Logo et nom du site - Section gauche #}
+				<div class="flex items-center space-x-12">
+					<a href="{{ path('app_home') }}" class="flex items-center space-x-3 group whitespace-nowrap">
+						<div class="flex items-center justify-center">
+							<ion-icon name="storefront-outline" class="text-white text-2xl"></ion-icon>
 						</div>
-					</form>
-				</div>
-
-				{# Bouton de recherche mobile #}
-				<div class="md:hidden">
-					<label for="mobileSearchToggle" class="btn btn-ghost btn-circle search-btn-mobile cursor-pointer">
-						<ion-icon name="search-outline" class="text-xl"></ion-icon>
-					</label>
-				</div>
-
-				{# Boutons de connexion/déconnexion & inscription #}
-				{% if app.user %}
-					<a href="{{ path('app_logout') }}" class="custom-btn-with-logo logout-btn">
-						<ion-icon name="log-out-outline"></ion-icon>
-						Se déconnecter
+						<span class="text-2xl font-bold text-white whitespace-nowrap">
+							E-shop
+						</span>
 					</a>
-				{% else %}
-					<div class="hidden lg:flex gap-3 px-4">
-						<a href="{{ path('app_register') }}" class="custom-btn-with-logo register-btn">
 
-
-							<ion-icon name="person-add-outline"></ion-icon>
-							S'inscrire
+					{# Navigation principale - Desktop uniquement #}
+					<nav class="hidden lg:flex items-center space-x-2">
+						<a href="{{ path('app_home') }}" class="nav-link px-4 py-2 rounded-lg text-gray-300 hover:text-white transition-all duration-200 font-medium">
+							Accueil
 						</a>
-						<a href="{{ path('app_login') }}" class="custom-btn-with-logo login-btn">
 
+						{% if categories is defined and categories|length > 0 %}
+							<div class="relative group">
+								<button class="nav-link px-4 py-2 rounded-lg text-gray-300 hover:text-white transition-all duration-200 font-medium flex items-center space-x-1">
+									<span>Catégories</span>
+									<ion-icon name="chevron-down-outline" class="text-sm group-hover:rotate-180 transition-transform duration-200"></ion-icon>
+								</button>
 
-							<ion-icon name="log-in-outline"></ion-icon>
-							Se connecter
-						</a>
+								{# Mega menu pour les catégories #}
+								<div class="mega-menu absolute left-0 top-full mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
+									<div class="p-4">
+										<div class="grid gap-1 max-h-96 overflow-y-auto custom-scrollbar">
+											{% for category in categories %}
+												<div class="category-section">
+													<div class="category-header flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border-l-4 border-blue-500 mb-2">
+														<ion-icon name="folder-outline" class="text-blue-600 text-sm"></ion-icon>
+														<span class="font-semibold text-gray-800 text-sm">{{ category.name }}</span>
+													</div>
+													<div class="subcategories-list ml-4 space-y-1">
+														{% for subCategory in category.subCategories %}
+															<a href="{{ path('app_home_product_filter', {'id': subCategory.id}) }}" class="subcategory-link flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 group/sub">
+																<ion-icon name="chevron-forward-outline" class="text-xs opacity-50 group-hover/sub:opacity-100 group-hover/sub:text-blue-600 transition-all duration-200"></ion-icon>
+																<span class="text-sm">{{ subCategory.name }}</span>
+															</a>
+														{% endfor %}
+													</div>
+												</div>
+												{% if not loop.last %}
+													<hr class="my-3 border-gray-200">
+												{% endif %}
+											{% endfor %}
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+						{% if is_granted("ROLE_ADMIN") %}
+							<div class="relative group">
+								<button class="nav-link px-4 py-2 rounded-lg text-gray-300 hover:text-white transition-all duration-200 font-medium flex items-center space-x-1">
+									<ion-icon name="settings-outline" class="text-sm"></ion-icon>
+									<span>Administration</span>
+									<ion-icon name="chevron-down-outline" class="text-sm group-hover:rotate-180 transition-transform duration-200"></ion-icon>
+								</button>
+
+								<div class="dropdown-menu absolute left-0 top-full mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
+									<div class="p-2">
+										<a href="{{ path('app_category') }}" class="admin-link flex items-center space-x-3 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
+											<ion-icon name="file-tray-outline" class="text-blue-500"></ion-icon>
+											<span class="text-sm font-medium">Gérer les catégories</span>
+										</a>
+										<a href="{{ path('app_sub_category') }}" class="admin-link flex items-center space-x-3 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
+											<ion-icon name="file-tray-stacked-outline" class="text-blue-500"></ion-icon>
+											<span class="text-sm font-medium">Gérer les sous-catégories</span>
+										</a>
+										<a href="{{ path('app_product') }}" class="admin-link flex items-center space-x-3 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
+											<ion-icon name="cube-outline" class="text-blue-500"></ion-icon>
+											<span class="text-sm font-medium">Gérer les produits</span>
+										</a>
+										<a href="{{ path('app_city') }}" class="admin-link flex items-center space-x-3 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
+											<ion-icon name="location-outline" class="text-blue-500"></ion-icon>
+											<span class="text-sm font-medium">Frais de livraison</span>
+										</a>
+										<a href="{{ path('app_user') }}" class="admin-link flex items-center space-x-3 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
+											<ion-icon name="people-outline" class="text-blue-500"></ion-icon>
+											<span class="text-sm font-medium">Gérer les utilisateurs</span>
+										</a>
+										<hr class="my-2 border-gray-200">
+										<a href="{{ path('app_orders_show', {'type':'all'}) }}" class="admin-link flex items-center space-x-3 px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-all duration-200">
+											<ion-icon name="receipt-outline" class="text-amber-500"></ion-icon>
+											<span class="text-sm font-medium">Gestion des commandes</span>
+										</a>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+					</nav>
+				</div>
+
+				{# Section droite - Actions utilisateur #}
+				<div
+					class="flex items-center space-x-4">
+
+					{# Barre de recherche moderne #}
+					<div class="hidden md:block">
+						<form method="get" action="{{ path('app_search') }}" class="relative">
+							<div class="search-container relative">
+								<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+									<ion-icon name="search-outline" class="text-gray-400 text-lg"></ion-icon>
+								</div>
+								<input name="word" type="search" required placeholder="Rechercher des produits..." class="search-input w-80 h-12 pl-10 pr-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder:text-gray-400 transition-all duration-300 hover:bg-white/15 focus:outline-none" autocomplete="off"/>
+								<button type="submit" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors duration-200" aria-label="Rechercher">
+									<ion-icon name="arrow-forward-outline" class="text-lg"></ion-icon>
+								</button>
+							</div>
+						</form>
 					</div>
-				{% endif %}
+
+					{# Panier avec animation #}
+					<a href="{{ path('app_cart') }}" class="cart-button relative group">
+						<div class="cart-icon bg-white/10 backdrop-blur-sm h-12 w-12 rounded-xl border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300 flex items-center justify-center">
+							<ion-icon name="bag-outline" class="text-white text-xl"></ion-icon>
+							{% set cart_quantity = cart_service.getCartQuantity() %}
+							{% if cart_quantity > 0 %}
+								<span class="cart-badge absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg animate-pulse">
+									{{ cart_quantity }}
+								</span>
+							{% endif %}
+						</div>
+					</a>
+
+					{# Actions utilisateur #}
+					{% if app.user %}
+						{# Menu utilisateur connecté #}
+						<div class="relative group">
+							<button class="user-menu-trigger flex items-center space-x-2 bg-white/10 backdrop-blur-sm h-12 px-4 rounded-xl border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300">
+								<div class="avatar-placeholder bg-white/10 backdrop-blur-sm border border-white/20 p-1.5 rounded-lg">
+									<ion-icon name="person-outline" class="text-white text-sm"></ion-icon>
+								</div>
+								<span class="hidden lg:block text-white text-sm font-medium">{{ app.user.firstname|default('Utilisateur') }}</span>
+								<ion-icon name="chevron-down-outline" class="text-white text-sm group-hover:rotate-180 transition-transform duration-200"></ion-icon>
+							</button>
+
+							<div class="user-dropdown absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
+								<div class="p-2">
+									<div class="user-info px-3 py-2 border-b border-gray-100 mb-2">
+										<p class="text-sm font-medium text-gray-900">{{ app.user.firstname|default('') }}
+											{{ app.user.lastname|default('') }}</p>
+										<p class="text-xs text-gray-500">{{ app.user.email|default('') }}</p>
+									</div>
+									<a href="{{ path('app_logout') }}" class="logout-link flex items-center space-x-3 px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200">
+										<ion-icon name="log-out-outline" class="text-red-500"></ion-icon>
+										<span class="text-sm font-medium">Se déconnecter</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					{% else %}
+						{# Boutons connexion/inscription #}
+						<div class="auth-buttons flex items-center space-x-3">
+							<a href="{{ path('app_login') }}" class="auth-btn login-btn bg-white/10 backdrop-blur-sm h-12 px-4 rounded-md border border-white/20 text-white hover:bg-blue-600 hover:border-blue-600 transition-all duration-300 flex items-center space-x-2 group">
+								<ion-icon name="log-in-outline" class="group-hover:scale-110 transition-transform duration-200"></ion-icon>
+								<span class="hidden lg:block text-sm font-medium">Connexion</span>
+							</a>
+							<a href="{{ path('app_register') }}" class="auth-btn register-btn bg-gradient-to-r from-blue-600 to-purple-600 h-12 px-4 rounded-md text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl group">
+								<ion-icon name="person-add-outline" class="group-hover:scale-110 transition-transform duration-200"></ion-icon>
+								<span class="hidden lg:block text-sm font-medium">S'inscrire</span>
+							</a>
+						</div>
+					{% endif %}
+
+					{# Bouton menu mobile #}
+					<div class="lg:hidden">
+						<button id="mobile-menu-toggle" class="mobile-menu-btn bg-white/10 backdrop-blur-sm h-12 w-12 rounded-xl border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300 flex items-center justify-center">
+							<ion-icon name="menu-outline" class="text-white text-xl"></ion-icon>
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
 
-	{# Barre de recherche mobile #}
-	<input id="mobileSearchToggle" class="peer hidden" type="checkbox"/>
+		{# Menu mobile overlay (caché par défaut) #}
+		<div id="mobile-menu-overlay" class="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 opacity-0 invisible transition-all duration-300">
+			<div class="mobile-menu bg-white h-full w-80 transform -translate-x-full transition-transform duration-300">
+				<div class="p-4 border-b border-gray-200">
+					<div class="flex items-center justify-between">
+						<h2 class="text-lg font-semibold text-gray-900">Menu</h2>
+						<button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+							<ion-icon name="close-outline" class="text-gray-600 text-xl"></ion-icon>
+						</button>
+					</div>
+				</div>
 
-	<div id="mobileSearch" class="hidden peer-checked:block md:hidden bg-base-200 px-4 py-3 border-t border-base-300">
-		<form method="get" action="{{ path('app_search') }}">
-			<div class="flex items-center gap-2 bg-white/10 rounded-full overflow-hidden">
-				<input name="word" type="search" required placeholder="Rechercher ..." class="flex-1 pl-4 pr-4 py-2 bg-transparent text-white placeholder:text-gray-200 focus:outline-none" autocomplete="off"/>
-				<button type="submit" class="bg-slate-700 text-white w-9 h-9 flex items-center justify-center hover:bg-slate-600" aria-label="Rechercher">
-					<ion-icon name="search-outline" class="text-base"></ion-icon>
-				</button>
+				<div
+					class="p-4 space-y-4">
+					{# Navigation mobile... (garder la structure existante mais stylisée) #}
+					<a href="{{ path('app_home') }}" class="mobile-nav-link flex items-center space-x-3 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
+						<ion-icon name="home-outline" class="text-blue-500"></ion-icon>
+						<span>Accueil</span>
+					</a>
+
+					{# Barre de recherche mobile #}
+					<div class="mobile-search bg-gray-50 rounded-lg p-3">
+						<form method="get" action="{{ path('app_search') }}">
+							<div class="relative">
+								<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+									<ion-icon name="search-outline" class="text-gray-400"></ion-icon>
+								</div>
+								<input name="word" type="search" required placeholder="Rechercher..." class="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent" autocomplete="off"/>
+							</div>
+						</form>
+					</div>
+				</div>
 			</div>
-		</form>
-	</div>
+		</div>
+	</header>
 
 {% endblock %}

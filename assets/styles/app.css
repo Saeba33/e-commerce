@@ -18,7 +18,220 @@ details ul {
     padding: 1.5rem;
 }
 
-/* NAVBAR */
+/* NAVBAR MODERNE */
+.navbar-modern {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* Logo et branding */
+.logo-brand .logo-icon {
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+.logo-brand:hover .logo-icon {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+}
+
+/* Navigation links */
+.nav-link {
+    position: relative;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Mega menu et dropdowns */
+.mega-menu,
+.dropdown-menu {
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.category-header {
+    background: linear-gradient(135deg, #eff6ff 0%, #f3e8ff 100%);
+}
+
+.subcategory-link:hover {
+    transform: translateX(4px);
+}
+
+/* Scrollbar personnalisée */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+    border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #1d4ed8, #7c3aed);
+}
+
+/* Barre de recherche */
+.search-input::placeholder {
+    transition: opacity 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    border-radius: 0.75rem; /* Correspond à rounded-xl */
+}
+
+/* Panier animé */
+.cart-button .cart-icon {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cart-badge {
+    animation: cartPulse 2s infinite;
+}
+
+@keyframes cartPulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Menu utilisateur */
+.user-menu-trigger {
+    transition: all 0.3s ease;
+}
+
+.user-menu-trigger:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-placeholder {
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+}
+
+.user-menu-trigger:hover .avatar-placeholder {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Uniformisation des hauteurs - tous les éléments à 48px (h-12) */
+.search-input,
+.cart-icon,
+.user-menu-trigger,
+.auth-btn,
+.mobile-menu-btn {
+    height: 48px;
+    min-height: 48px;
+}
+
+.cart-icon,
+.mobile-menu-btn {
+    width: 48px;
+    min-width: 48px;
+}
+
+/* Boutons d'authentification */
+.auth-btn {
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.register-btn {
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
+}
+
+.register-btn:hover {
+    box-shadow: 0 8px 25px 0 rgba(59, 130, 246, 0.4);
+}
+
+/* Menu mobile */
+.mobile-menu {
+    box-shadow: -10px 0 25px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-nav-link {
+    transition: all 0.2s ease;
+}
+
+.mobile-nav-link:hover {
+    transform: translateX(4px);
+}
+
+/* États actifs et focus */
+.nav-link:focus,
+.auth-btn:focus {
+    outline: none;
+}
+
+/* Animations d'entrée */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -20px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.mega-menu.show,
+.dropdown-menu.show,
+.user-dropdown.show {
+    animation: fadeInDown 0.3s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .navbar-modern {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .logo-brand span {
+        font-size: 1.5rem;
+    }
+}
+
+/* NAVBAR LEGACY (conservé pour compatibilité) */
 .navbar-custom {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
         0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -240,8 +453,6 @@ ion-icon {
 .checkbox-style-common {
     accent-color: #3b82f6;
 }
-
-
 
 /* ADD FILE */
 .add-image-btn {
