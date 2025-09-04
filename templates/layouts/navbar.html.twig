@@ -1,5 +1,5 @@
 {% block body %}
-	<header class="navbar-modern bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-xl border-b border-slate-700/50">
+	<header class="navbar-modern bg-slate-900 shadow-xl border-b border-slate-700/50">
 		<div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
 			<div
 				class="flex items-center justify-between h-20">
@@ -16,7 +16,7 @@
 					</a>
 
 					{# Navigation principale - Desktop uniquement #}
-					<nav class="hidden lg:flex items-center space-x-2">
+					<nav class="hidden xl:flex items-center space-x-2">
 						<a href="{{ path('app_home') }}" class="nav-link px-4 py-2 rounded-lg text-gray-300 hover:text-white transition-all duration-200 font-medium">
 							Accueil
 						</a>
@@ -28,28 +28,25 @@
 									<ion-icon name="chevron-down-outline" class="text-sm group-hover:rotate-180 transition-transform duration-200"></ion-icon>
 								</button>
 
-								{# Mega menu pour les catégories #}
+								{# Menu épuré pour les catégories - Style mobile adapté #}
 								<div class="mega-menu absolute left-0 top-full mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
 									<div class="p-4">
-										<div class="grid gap-1 max-h-96 overflow-y-auto custom-scrollbar">
+										<div class="space-y-3 max-h-96 overflow-y-auto custom-scrollbar">
 											{% for category in categories %}
 												<div class="category-section">
-													<div class="category-header flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border-l-4 border-blue-500 mb-2">
-														<ion-icon name="folder-outline" class="text-blue-600 text-sm"></ion-icon>
-														<span class="font-semibold text-gray-800 text-sm">{{ category.name }}</span>
+													<div class="category-header flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg mb-2">
+														<ion-icon name="folder-outline" class="text-gray-500 text-sm"></ion-icon>
+														<span>{{ category.name }}</span>
 													</div>
-													<div class="subcategories-list ml-4 space-y-1">
+													<div class="subcategories-list ml-2 space-y-1">
 														{% for subCategory in category.subCategories %}
-															<a href="{{ path('app_home_product_filter', {'id': subCategory.id}) }}" class="subcategory-link flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 group/sub">
-																<ion-icon name="chevron-forward-outline" class="text-xs opacity-50 group-hover/sub:opacity-100 group-hover/sub:text-blue-600 transition-all duration-200"></ion-icon>
+															<a href="{{ path('app_home_product_filter', {'id': subCategory.id}) }}" class="subcategory-link flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
+																<ion-icon name="chevron-forward-outline" class="text-xs text-gray-400"></ion-icon>
 																<span class="text-sm">{{ subCategory.name }}</span>
 															</a>
 														{% endfor %}
 													</div>
 												</div>
-												{% if not loop.last %}
-													<hr class="my-3 border-gray-200">
-												{% endif %}
 											{% endfor %}
 										</div>
 									</div>
@@ -99,12 +96,12 @@
 					</nav>
 				</div>
 
-				{# Section droite - Actions utilisateur #}
+				{# Section droite #}
 				<div
 					class="flex items-center space-x-4">
 
-					{# Barre de recherche moderne #}
-					<div class="hidden md:block">
+					{# Barre de recherche #}
+					<div class="hidden xl:block">
 						<form method="get" action="{{ path('app_search') }}" class="relative">
 							<div class="search-container relative">
 								<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -118,13 +115,13 @@
 						</form>
 					</div>
 
-					{# Panier avec animation #}
+					{# Panier #}
 					<a href="{{ path('app_cart') }}" class="cart-button relative group">
 						<div class="cart-icon bg-white/10 backdrop-blur-sm h-12 w-12 rounded-xl border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300 flex items-center justify-center">
 							<ion-icon name="bag-outline" class="text-white text-xl"></ion-icon>
 							{% set cart_quantity = cart_service.getCartQuantity() %}
 							{% if cart_quantity > 0 %}
-								<span class="cart-badge absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg animate-pulse">
+								<span class="cart-badge absolute -top-2 -right-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center">
 									{{ cart_quantity }}
 								</span>
 							{% endif %}
@@ -133,13 +130,13 @@
 
 					{# Actions utilisateur #}
 					{% if app.user %}
-						{# Menu utilisateur connecté #}
-						<div class="relative group">
+						{# Menu utilisateur connecté - Desktop uniquement #}
+						<div class="relative group hidden xl:block">
 							<button class="user-menu-trigger flex items-center space-x-2 bg-white/10 backdrop-blur-sm h-12 px-4 rounded-xl border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300">
-								<div class="avatar-placeholder bg-white/10 backdrop-blur-sm border border-white/20 p-1.5 rounded-lg">
+								<div class="">
 									<ion-icon name="person-outline" class="text-white text-sm"></ion-icon>
 								</div>
-								<span class="hidden lg:block text-white text-sm font-medium">{{ app.user.firstname|default('Utilisateur') }}</span>
+								<span class="hidden xl:block text-white text-sm font-medium">{{ app.user.firstname|default('Utilisateur') }}</span>
 								<ion-icon name="chevron-down-outline" class="text-white text-sm group-hover:rotate-180 transition-transform duration-200"></ion-icon>
 							</button>
 
@@ -158,21 +155,21 @@
 							</div>
 						</div>
 					{% else %}
-						{# Boutons connexion/inscription #}
-						<div class="auth-buttons flex items-center space-x-3">
-							<a href="{{ path('app_login') }}" class="auth-btn login-btn bg-white/10 backdrop-blur-sm h-12 px-4 rounded-md border border-white/20 text-white hover:bg-blue-600 hover:border-blue-600 transition-all duration-300 flex items-center space-x-2 group">
-								<ion-icon name="log-in-outline" class="group-hover:scale-110 transition-transform duration-200"></ion-icon>
-								<span class="hidden lg:block text-sm font-medium">Connexion</span>
+						{# Boutons d'authentification - Desktop uniquement #}
+						<div class="hidden xl:flex items-center space-x-3">
+							<a href="{{ path('app_login') }}" class="auth-btn flex items-center space-x-2 bg-blue-700 text-white h-12 px-4 rounded-lg hover:bg-blue-600 transition-all duration-300 font-medium">
+								<ion-icon name="log-in-outline"></ion-icon>
+								<span>Se connecter</span>
 							</a>
-							<a href="{{ path('app_register') }}" class="auth-btn register-btn bg-gradient-to-r from-blue-600 to-purple-600 h-12 px-4 rounded-md text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl group">
-								<ion-icon name="person-add-outline" class="group-hover:scale-110 transition-transform duration-200"></ion-icon>
-								<span class="hidden lg:block text-sm font-medium">S'inscrire</span>
+							<a href="{{ path('app_register') }}" class="auth-btn flex items-center space-x-2 bg-green-700 hover:bg-green-600 text-white h-12 px-4 rounded-lg transition-all duration-300 font-medium">
+								<ion-icon name="person-add-outline"></ion-icon>
+								<span>S'inscrire</span>
 							</a>
 						</div>
 					{% endif %}
 
 					{# Bouton menu mobile #}
-					<div class="lg:hidden">
+					<div class="xl:hidden">
 						<button id="mobile-menu-toggle" class="mobile-menu-btn bg-white/10 backdrop-blur-sm h-12 w-12 rounded-xl border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300 flex items-center justify-center">
 							<ion-icon name="menu-outline" class="text-white text-xl"></ion-icon>
 						</button>
@@ -182,35 +179,143 @@
 		</div>
 
 		{# Menu mobile overlay (caché par défaut) #}
-		<div id="mobile-menu-overlay" class="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 opacity-0 invisible transition-all duration-300">
-			<div class="mobile-menu bg-white h-full w-80 transform -translate-x-full transition-transform duration-300">
-				<div class="p-4 border-b border-gray-200">
+		<div id="mobile-menu-overlay" class="xl:hidden fixed inset-0 bg-black/90 z-[9999] h-full opacity-0 invisible transition-all duration-300">
+			<div class="mobile-menu bg-white h-full w-80 transform -translate-x-full transition-transform duration-300 shadow-2xl backdrop-blur-none">
+				<div class="p-4 border-b border-slate-700/50 bg-slate-900">
 					<div class="flex items-center justify-between">
-						<h2 class="text-lg font-semibold text-gray-900">Menu</h2>
-						<button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-							<ion-icon name="close-outline" class="text-gray-600 text-xl"></ion-icon>
+						<div class="flex items-center space-x-3">
+							<ion-icon name="storefront-outline" class="text-white text-2xl"></ion-icon>
+							<h2 class="text-2xl font-bold text-white">E-shop</h2>
+						</div>
+						<button id="mobile-menu-close" class="flex items-center justify-center p-3 rounded-xl hover:bg-white/10 transition-all duration-200">
+							<ion-icon name="close-outline" class="text-white text-xl"></ion-icon>
 						</button>
 					</div>
 				</div>
 
 				<div
-					class="p-4 space-y-4">
-					{# Navigation mobile... (garder la structure existante mais stylisée) #}
-					<a href="{{ path('app_home') }}" class="mobile-nav-link flex items-center space-x-3 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
-						<ion-icon name="home-outline" class="text-blue-500"></ion-icon>
-						<span>Accueil</span>
-					</a>
+					class="p-4 space-y-4 overflow-y-auto h-[calc(100vh-80px)] bg-white">
+					{# Navigation principale mobile #}
+					<div class="space-y-2">
+						<a href="{{ path('app_home') }}" class=" flex items-center justify-between w-full px-4 py-3 text-gray-800 font-semibold hover:bg-gray-50 rounded-xl transition-all duration-200">
+							<div class="flex items-center space-x-3">
+								<ion-icon name="home-outline" class="text-blue-500 text-lg"></ion-icon>
+								<span>Accueil</span>
+							</div>
+						</a>
 
-					{# Barre de recherche mobile #}
-					<div class="mobile-search bg-gray-50 rounded-lg p-3">
+						{# Catégories en mobile #}
+						{% if categories is defined and categories|length > 0 %}
+							<div class="mobile-categories">
+								<button class="mobile-categories-toggle flex items-center justify-between w-full px-4 py-3 text-gray-800 font-semibold hover:bg-gray-50 rounded-xl transition-all duration-200 " onclick="toggleMobileDropdown('categories')">
+									<div class="flex items-center space-x-3">
+										<ion-icon name="apps-outline" class="text-blue-500 text-lg"></ion-icon>
+										<span>Catégories</span>
+									</div>
+									<ion-icon name="chevron-down-outline" class="text-gray-500 transition-transform duration-200" id="categories-chevron"></ion-icon>
+								</button>
+								<div class="mobile-categories-content ml-4 space-y-1 max-h-0 overflow-hidden transition-all duration-300" id="categories-content">
+									{% for category in categories %}
+										<div class="category-mobile-section">
+											<div class="flex items-center space-x-2  py-2 text-sm font-medium text-gray-600 my-1">
+												<ion-icon name="folder-outline" class="text-gray-500 text-sm"></ion-icon>
+												<span>{{ category.name }}</span>
+											</div>
+											{% for subCategory in category.subCategories %}
+												<a href="{{ path('app_home_product_filter', {'id': subCategory.id}) }}" class="mobile-subcategory-link flex items-center space-x-2 px-2 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 ml-2">
+													<ion-icon name="chevron-forward-outline" class="text-xs text-gray-400"></ion-icon>
+													<span class="text-sm">{{ subCategory.name }}</span>
+												</a>
+											{% endfor %}
+										</div>
+									{% endfor %}
+								</div>
+							</div>
+						{% endif %}
+
+						{# Administration en mobile #}
+						{% if is_granted("ROLE_ADMIN") %}
+							<div class="mobile-admin">
+								<button class="mobile-admin-toggle flex items-center justify-between w-full px-4 py-3 text-gray-800 font-semibold hover:bg-gray-50 rounded-xl transition-all duration-200" onclick="toggleMobileDropdown('admin')">
+									<div class="flex items-center space-x-3">
+										<ion-icon name="settings-outline" class="text-blue-500 text-lg"></ion-icon>
+										<span>Administration</span>
+									</div>
+									<ion-icon name="chevron-down-outline" class="text-gray-500 transition-transform duration-200" id="admin-chevron"></ion-icon>
+								</button>
+								<div class="mobile-admin-content ml-4 space-y-1 max-h-0 overflow-hidden transition-all duration-300" id="admin-content">
+									<a href="{{ path('app_category') }}" class="mobile-admin-link">
+										<ion-icon name="file-tray-outline"></ion-icon>
+										<span class="text-sm">Catégories</span>
+									</a>
+									<a href="{{ path('app_sub_category') }}" class="mobile-admin-link">
+										<ion-icon name="file-tray-stacked-outline"></ion-icon>
+										<span class="text-sm">Sous-catégories</span>
+									</a>
+									<a href="{{ path('app_product') }}" class="mobile-admin-link">
+										<ion-icon name="cube-outline"></ion-icon>
+										<span class="text-sm">Produits</span>
+									</a>
+									<a href="{{ path('app_city') }}" class="mobile-admin-link">
+										<ion-icon name="location-outline"></ion-icon>
+										<span class="text-sm">Frais de livraison</span>
+									</a>
+									<a href="{{ path('app_user') }}" class="mobile-admin-link">
+										<ion-icon name="people-outline"></ion-icon>
+										<span class="text-sm">Utilisateurs</span>
+									</a>
+									<a href="{{ path('app_orders_show', {'type':'all'}) }}" class="mobile-admin-link ">
+										<ion-icon name="receipt-outline"></ion-icon>
+										<span class="text-sm">Commandes</span>
+									</a>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+
+					{# Barre de recherche mobile améliorée #}
+					<div class="mobile-search pt-8">
 						<form method="get" action="{{ path('app_search') }}">
 							<div class="relative">
 								<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 									<ion-icon name="search-outline" class="text-gray-400"></ion-icon>
 								</div>
-								<input name="word" type="search" required placeholder="Rechercher..." class="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent" autocomplete="off"/>
+								<input name="word" type="search" required placeholder="Rechercher des produits" class="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent shadow-sm" autocomplete="off"/>
 							</div>
 						</form>
+					</div>
+
+					{# Actions utilisateur mobile #}
+					<div class="mobile-user-actions border-t border-gray-200 pt-4 mt-6">
+						{% if app.user %}
+							<div class="bg-gray-50 rounded-xl p-4 border border-gray-200 mb-4">
+								<div class="flex items-center space-x-3 mb-3">
+									<div class="bg-white p-2 rounded-lg shadow-sm border border-gray-200">
+										<ion-icon name="person-outline" class="text-gray-500"></ion-icon>
+									</div>
+									<div>
+										<p class="text-sm font-medium text-gray-900">{{ app.user.firstname|default('') }}
+											{{ app.user.lastname|default('') }}</p>
+										<p class="text-xs text-gray-500">{{ app.user.email|default('') }}</p>
+									</div>
+								</div>
+								<a href="{{ path('app_logout') }}" class="flex items-center justify-center space-x-2 w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors duration-200">
+									<ion-icon name="log-out-outline"></ion-icon>
+									<span class="text-sm font-medium">Se déconnecter</span>
+								</a>
+							</div>
+						{% else %}
+							<div class="space-y-3">
+								<a href="{{ path('app_login') }}" class="flex items-center justify-center space-x-2 w-full bg-blue-700 hover:bg-blue-600 text-white h-12 px-4 rounded-md transition-all duration-300">
+									<ion-icon name="log-in-outline"></ion-icon>
+									<span class="font-medium">Se connecter</span>
+								</a>
+								<a href="{{ path('app_register') }}" class="flex items-center justify-center space-x-2 w-full bg-green-700 hover:bg-green-600 text-white h-12 px-4 rounded-md transition-all duration-300">
+									<ion-icon name="person-add-outline"></ion-icon>
+									<span class="font-medium">S'inscrire</span>
+								</a>
+							</div>
+						{% endif %}
 					</div>
 				</div>
 			</div>

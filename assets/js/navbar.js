@@ -45,6 +45,27 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Gestion des dropdowns mobiles
+    window.toggleMobileDropdown = function (type) {
+        const content = document.getElementById(type + "-content");
+        const chevron = document.getElementById(type + "-chevron");
+
+        if (content && chevron) {
+            const isOpen =
+                content.style.maxHeight && content.style.maxHeight !== "0px";
+
+            if (isOpen) {
+                // Fermer
+                content.style.maxHeight = "0px";
+                chevron.style.transform = "rotate(0deg)";
+            } else {
+                // Ouvrir
+                content.style.maxHeight = content.scrollHeight + "px";
+                chevron.style.transform = "rotate(180deg)";
+            }
+        }
+    };
+
     // Gestion des menus déroulants desktop avec un meilleur contrôle
     const dropdownTriggers = document.querySelectorAll(".group");
 

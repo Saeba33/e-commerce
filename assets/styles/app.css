@@ -111,19 +111,7 @@ details ul {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.cart-badge {
-    animation: cartPulse 2s infinite;
-}
 
-@keyframes cartPulse {
-    0%,
-    100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-}
 
 /* Menu utilisateur */
 .user-menu-trigger {
@@ -162,29 +150,14 @@ details ul {
     min-width: 48px;
 }
 
-/* Boutons d'authentification */
-.auth-btn {
-    font-weight: 600;
-    letter-spacing: 0.025em;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
 
-.auth-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.register-btn {
-    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
-}
-
-.register-btn:hover {
-    box-shadow: 0 8px 25px 0 rgba(59, 130, 246, 0.4);
-}
 
 /* Menu mobile */
 .mobile-menu {
     box-shadow: -10px 0 25px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    background-color: white !important;
+    backdrop-filter: none !important;
 }
 
 .mobile-nav-link {
@@ -193,6 +166,57 @@ details ul {
 
 .mobile-nav-link:hover {
     transform: translateX(4px);
+}
+
+/* Amélioration mobile */
+.mobile-menu-overlay {
+    z-index: 9999 !important;
+    background-color: rgba(0, 0, 0, 0.95) !important;
+    backdrop-filter: blur(3px) !important;
+}
+
+.category-mobile-section {
+    margin-bottom: 0.75rem;
+}
+
+.mobile-subcategory-link:hover {
+    transform: translateX(2px);
+}
+
+.mobile-admin-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    color: #4b5563;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+.mobile-admin-link:hover {
+    transform: translateX(2px);
+    color: #2563eb;
+    background-color: #eff6ff;
+}
+
+.mobile-a
+
+
+/* Scrollbar pour mobile menu */
+.mobile-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.mobile-menu::-webkit-scrollbar-track {
+    background: #f8fafc;
+}
+
+.mobile-menu::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 2px;
+}
+
+.mobile-menu::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
 
 /* États actifs et focus */
